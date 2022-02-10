@@ -22,10 +22,31 @@
 9. Экран редактирования продукта.
 
 ## Описание методов REST приложения.
-1. users (List, Add, Delete (by id), Edit (by id), View (by id))
-2. products (List, Add, Delete (by id), Edit (by id), View (by id))
-3. fridges (List, Add, Delete (by id), Edit (by id), View (by id))
-4. product_history (Add (by fridge id), List (by fridge id))
+
+### users
+* GET / - список пользователей
+* GET /{id} - просмотр конкретного пользователя
+* POST / - добавление нового пользователя
+* PUT /{id} - редактирование пользователя
+* DELETE /{id} - удаление пользователя
+
+### products
+* GET / - список продуктов
+* GET /{id} - просмотр конкретного продукта
+* POST / - добавление нового продукта
+* PUT /{id} - редактирование продукта
+* DELETE /{id} - удаление продукта
+
+### fridges
+* GET / - список холодильника
+* GET /{id} - просмотр конкретного холодильника
+* POST / - добавление нового холодильника
+* PUT /{id} - редактирование холодильника
+* DELETE /{id} - удаление холодильника
+
+### products/history
+* GET / - история продуктов
+* POST / - добавление новой записи в историю
 
 ## Описание сущностей
 
