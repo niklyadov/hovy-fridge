@@ -1,4 +1,6 @@
-﻿namespace HovyFridge.Api.Entity
+﻿using HovyFridge.Api.Entity.Common;
+
+namespace HovyFridge.Api.Entity
 {
     public class Product : IEntity
     {

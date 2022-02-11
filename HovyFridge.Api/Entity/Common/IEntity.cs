@@ -1,4 +1,4 @@
-﻿namespace HovyFridge.Api.Entity
+﻿namespace HovyFridge.Api.Entity.Common
 {
     public interface IEntity
     {
