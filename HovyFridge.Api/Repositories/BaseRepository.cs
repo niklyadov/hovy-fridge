@@ -7,43 +7,43 @@ namespace HovyFridge.Api.Repositories
         where TEntity : class, IEntity
         where TContext : ApplicationContext
     {
-        private readonly TContext _dbContext;
+        protected readonly TContext Context;
         protected BaseRepository(TContext dbContext)
         {
-            _dbContext = dbContext;
+            Context = dbContext;
         }
 
         public async Task<List<TEntity>> GetAll() =>
-            await _dbContext.Set<TEntity>().ToListAsync();
+            await Context.Set<TEntity>().ToListAsync();
 
         public async Task<TEntity> GetById(int id) => 
-            await _dbContext.Set<TEntity>().FindAsync(id);
+            await Context.Set<TEntity>().FindAsync(id);
 
         public async Task<bool> Contains(int id) =>
-            await _dbContext.Set<TEntity>().AnyAsync(x => x.Id == id);
+            await Context.Set<TEntity>().AnyAsync(x => x.Id == id);
 
         public async Task<TEntity> Add(TEntity entity)
         {
-            var entry = _dbContext.Set<TEntity>().Add(entity);
-            await _dbContext.SaveChangesAsync();
+            var entry = Context.Set<TEntity>().Add(entity);
+            await Context.SaveChangesAsync();
             return entry.Entity;
         }
 
         public async Task<TEntity> Update(TEntity entity)
         {
-            _dbContext.Entry(entity).State = EntityState.Modified;
-            await _dbContext.SaveChangesAsync();
+            Context.Entry(entity).State = EntityState.Modified;
+            await Context.SaveChangesAsync();
             return entity;
         }
 
         public async Task<TEntity> Delete(int id)
         {
-            var entity = await _dbContext.Set<TEntity>().FindAsync(id);
+            var entity = await Context.Set<TEntity>().FindAsync(id);
 
             if (entity != null)
             {
-                _dbContext.Set<TEntity>().Remove(entity);
-                await _dbContext.SaveChangesAsync();
+                Context.Set<TEntity>().Remove(entity);
+                await Context.SaveChangesAsync();
             }
 
             return entity;

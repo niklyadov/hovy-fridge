@@ -1,26 +1,28 @@
 using HovyFridge.Api.Entity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 
 namespace HovyFridge.Api.Controllers;
 
 [ApiController]
-public class ProductsController : ControllerBase
+public class ProductsController : BaseController<FridgesController>
 {
-    private readonly ILogger<FridgesController> _logger;
-
-    public ProductsController(ILogger<FridgesController> logger)
+    public ProductsController(IServiceProvider serviceProvider, IOptions<Configuration> configuration, 
+        ILoggerFactory loggerFactory) : base(serviceProvider, configuration, loggerFactory)
     {
-        _logger = logger;
     }
 
     [HttpGet]
     [Route("[controller]")]
-    public ICollection<Product> GetAll()
+    public async Task<ICollection<Product>> GetAll()
     {
-        return new List<Product>()
-            {
-                new Product() { Name = "Anchovy"}
-            };
+        var status = await ProductsService.GetProductsList();
+        if(status.Success && status.Result != null)
+        {
+            return status.Result;
+        }
+
+        return new List<Product>();
     }
 
     [HttpGet]
@@ -32,9 +34,15 @@ public class ProductsController : ControllerBase
 
     [HttpDelete]
     [Route("[controller]/{id}")]
-    public bool DeleteProduct([FromRoute] int id)
+    public async Task<ICollection<Product>> DeleteProduct([FromRoute] int id)
     {
-        return true;
+        var status = await ProductsService.DeleteProductById(id);
+        if (status.Success && status.Result != null)
+        {
+            return status.Result;
+        }
+
+        return new List<Product>();
     }
 
     [HttpPut]
@@ -46,8 +54,14 @@ public class ProductsController : ControllerBase
 
     [HttpPost]
     [Route("[controller]")]
-    public Product AddProduct([FromBody] Product product)
+    public async Task<ICollection<Product>> AddProduct([FromBody] Product product)
     {
-        return product;
+        var status = await ProductsService.AddProduct(product);
+        if (status.Success && status.Result != null)
+        {
+            return status.Result;
+        }
+
+        return new List<Product>();
     }
 }

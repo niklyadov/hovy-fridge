@@ -1,6 +1,8 @@
 using HovyFridge.Api;
 using HovyFridge.Api.Entity;
 using HovyFridge.Api.Entity.Common;
+using HovyFridge.Api.Repositories;
+using HovyFridge.Api.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 
@@ -59,6 +61,13 @@ namespace HovyFridge
                     new MariaDbServerVersion(dbVersion)));
 
             #endregion
+
+            services.AddScoped<FridgesRepository>();
+            services.AddScoped<ProductsRepository>();
+            services.AddScoped<ProductsHistoryRepository>();
+
+            services.AddScoped<FridgesService>();
+            services.AddScoped<ProductsService>();
         }
 
         public void Configure(IApplicationBuilder applicationBuilder, IWebHostEnvironment webHostEnvironment, ILoggerFactory loggerFactory)
@@ -69,8 +78,11 @@ namespace HovyFridge
                 applicationBuilder.UseSwaggerUI();
             }
 
+            applicationBuilder.UseRouting();
+
             applicationBuilder.UseHttpsRedirection();
             applicationBuilder.UseAuthorization();
+
 
             applicationBuilder.UseEndpoints(endpoints =>
                         endpoints.MapControllerRoute(

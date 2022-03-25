@@ -17,4 +17,8 @@
       <Folder Include="Workers\" />
     </ItemGroup>
 
+    <ItemGroup>
+      <None Include="..\.editorconfig" Link=".editorconfig" />
+    </ItemGroup>
+
 </Project>

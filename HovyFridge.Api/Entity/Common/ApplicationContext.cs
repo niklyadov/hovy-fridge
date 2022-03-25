@@ -17,28 +17,21 @@ namespace HovyFridge.Api.Entity.Common
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.Entity<Fridge>()
-                .HasMany(n => n.Products);
+                .HasMany(f => f.Products)
+                .WithMany(p => p.LocatedIn);
 
-            modelBuilder.Entity<Fridge>()
-                .HasMany(n => n.AllowedUsers);
 
-            modelBuilder.Entity<Fridge>()
-                .HasOne(n => n.Products);
+            //modelBuilder.Entity<Fridge>()
+            //    .HasMany(n => n.AllowedUsers);
 
-            modelBuilder.Entity<Product>()
-                .HasOne(n => n.Owner);
+            //modelBuilder.Entity<Product>()
+            //    .HasOne(n => n.Owner);
 
-            modelBuilder.Entity<User>()
-                .HasOne(n => n.FavoriteFridge);
+            //modelBuilder.Entity<User>()
+            //    .HasOne(n => n.FavoriteFridge);
 
-            modelBuilder.Entity<ProductHistory>()
-                .HasOne(n => n.User);
-
-            modelBuilder.Entity<ProductHistory>()
-                .HasOne(n => n.Fridge);
-
-            modelBuilder.Entity<ProductHistory>()
-                .HasOne(n => n.Product);
+            //modelBuilder.Entity<ProductHistory>()
+            //    .HasOne(n => n.User);
         }
     }
 }

@@ -1,41 +1,54 @@
 using HovyFridge.Api.Entity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 
 namespace HovyFridge.Api.Controllers;
 
 [ApiController]
-public class FridgesController : ControllerBase
+public class FridgesController : BaseController<FridgesController>
 {
-    private readonly ILogger<FridgesController> _logger;
-
-    public FridgesController(ILogger<FridgesController> logger)
+    public FridgesController(IServiceProvider serviceProvider, IOptions<Configuration> configuration, 
+        ILoggerFactory loggerFactory) : base(serviceProvider, configuration, loggerFactory)
     {
-        _logger = logger;
     }
-
 
     [HttpGet]
     [Route("[controller]")]
-    public ICollection<Fridge> GetAll()
+    public async Task<ICollection<Fridge>> GetAll()
     {
-        return new List<Fridge>()
-            {
-                new Fridge() { Name = "Anchovy"}
-            };
+        var status = await FridgesService.GetFridgesListAsync();
+        if (status.Success && status.Result != null)
+        {
+            return status.Result;
+        }
+
+        return new List<Fridge>();
     }
 
     [HttpGet]
     [Route("[controller]/{id}")]
-    public Fridge GetFridge([FromRoute] int id)
+    public async Task<Fridge?> GetFridge([FromRoute] int id)
     {
-        return new Fridge() { Name = "Anchovy" };
+        var status = await FridgesService.GetFridgeByIdAsync(id);
+        if (status.Success && status.Result != null)
+        {
+            return status.Result;
+        }
+
+        return null;
     }
 
     [HttpDelete]
     [Route("[controller]/{id}")]
-    public bool DeleteFridge([FromRoute] int id)
+    public async Task<ICollection<Fridge>> DeleteFridge([FromRoute] int id)
     {
-        return true;
+        var status = await FridgesService.DeleteFridgeByIdAsync(id);
+        if (status.Success && status.Result != null)
+        {
+            return status.Result;
+        }
+
+        return new List<Fridge>();
     }
 
     [HttpPut]
@@ -47,8 +60,36 @@ public class FridgesController : ControllerBase
 
     [HttpPost]
     [Route("[controller]")]
-    public Fridge AddFridge([FromBody] Fridge product)
+    public async Task<ICollection<Fridge>> AddFridge([FromBody] Fridge fridge)
     {
-        return product;
+        var status = await FridgesService.CreateFridgeAsync(fridge);
+        if (status.Success && status.Result != null)
+        {
+            return status.Result;
+        }
+
+        return new List<Fridge>();
+    }
+
+    [HttpPost]
+    [Route("[controller]/{fridgeId}/products")]
+    public async Task<IActionResult> PushProductToFridge([FromQuery] int fridgeId, [FromBody] int productId)
+    {
+        var status = await FridgesService.PushProductIntoFridgeAsync(fridgeId, productId);
+
+        if (status.Success) return Ok(status.Result);
+
+        return NotFound();
+    }
+
+    [HttpDelete]
+    [Route("[controller]/{fridgeId}/products")]
+    public async Task<IActionResult> PopProductFromFridge([FromQuery] int fridgeId, [FromBody] int productId)
+    {
+        var status = await FridgesService.PopProductFromFridgeAsync(fridgeId, productId);
+
+        if (status.Success) return Ok(status.Result);
+
+        return NotFound();
     }
 }
