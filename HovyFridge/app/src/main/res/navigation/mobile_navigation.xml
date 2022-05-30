@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@id/navigation_fridges_list">
+
+    <fragment
+        android:id="@+id/navigation_fridges_list"
+        android:name="com.niklyadov.hovyfridge.ui.fridges_list.FridgesListFragment"
+        android:label="@string/my_fridges"
+        tools:layout="@layout/fridges_list_fragment" >
+        <action
+            android:id="@+id/action_navigation_fridges_list_to_navigation_fridge_detailed"
+            app:destination="@id/navigation_fridge_detailed" />
+        <action
+            android:id="@+id/action_navigation_fridges_list_to_productsListFragment"
+            app:destination="@id/navigation_products_list" />
+        <action
+            android:id="@+id/action_navigation_fridges_list_to_navigation_settings"
+            app:destination="@id/navigation_settings" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_fridge_detailed"
+        android:name="com.niklyadov.hovyfridge.ui.fridge_details.DetailedFridgeFragment"
+        android:label="@string/my_fridge"
+        tools:layout="@layout/detailed_fridge_fragment" >
+        <action
+            android:id="@+id/action_navigation_fridge_detailed_to_navigation_code_scanner"
+            app:destination="@id/navigation_code_scanner" />
+        <action
+            android:id="@+id/action_navigation_fridge_detailed_to_navigation_settings"
+            app:destination="@id/navigation_settings" />
+        <action
+            android:id="@+id/action_navigation_fridge_detailed_to_navigation_product_details_fridge"
+            app:destination="@id/navigation_product_details_fridge" />
+    </fragment>
+    <fragment
+        android:id="@+id/navigation_code_scanner"
+        android:name="com.niklyadov.hovyfridge.ui.scanner.ProductScanFragment"
+        android:label="@string/scan_product"
+        tools:layout="@layout/code_scanner_fragment" >
+        <action
+            android:id="@+id/action_navigation_code_scanner_to_navigation_products_list"
+            app:destination="@id/navigation_products_list" />
+        <action
+            android:id="@+id/action_navigation_code_scanner_to_navigation_fridges_list"
+            app:destination="@id/navigation_fridges_list" />
+        <action
+            android:id="@+id/action_navigation_code_scanner_to_navigation_settings"
+            app:destination="@id/navigation_settings" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_settings"
+        android:name="com.niklyadov.hovyfridge.ui.settings.SettingsFragment"
+        android:label="@string/settings"
+        tools:layout="@layout/fragment_settings"/>
+
+    <fragment
+        android:id="@+id/navigation_products_list"
+        android:name="com.niklyadov.hovyfridge.ui.products_list.ProductsListFragment"
+        android:label="@string/products_book"
+        tools:layout="@layout/fragment_products_list">
+        <action
+            android:id="@+id/action_navigation_products_list_to_navigation_code_scanner"
+            app:destination="@id/navigation_code_scanner" />
+        <action
+            android:id="@+id/action_navigation_products_list_to_navigation_settings"
+            app:destination="@id/navigation_settings" />
+        <action
+            android:id="@+id/action_navigation_products_list_to_navigation_product_details"
+            app:destination="@id/navigation_product_details" />
+    </fragment>
+    <fragment
+        android:id="@+id/navigation_product_details"
+        android:name="com.niklyadov.hovyfridge.ui.product_details.ProductDetailsFragment"
+        android:label="@string/product_details"
+        tools:layout="@layout/fragment_product_details" />
+    <fragment
+        android:id="@+id/navigation_product_details_fridge"
+        android:name="com.niklyadov.hovyfridge.ui.product_details.fridge.ProductDetailsFridgeFragment"
+        android:label="@string/product_details"
+        tools:layout="@layout/fragment_product_details_fridge" />
+</navigation>

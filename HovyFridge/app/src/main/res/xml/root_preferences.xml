@@ -1,0 +1,47 @@
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <PreferenceCategory
+        app:title="@string/basic_settings_header"
+        app:icon="@drawable/ic_cogs"
+        app:iconTint="@color/design_default_color_surface">
+
+        <SwitchPreferenceCompat
+            app:key="use_dark_theme"
+            app:title="@string/dark_theme_title" />
+
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        app:title="API">
+
+        <EditTextPreference
+            app:key="api_url"
+            app:title="@string/api_url_title"
+            app:defaultValue=""
+            app:useSimpleSummaryProvider="true" />
+
+        <EditTextPreference
+            app:key="api_token"
+            app:title="@string/api_token"
+            app:useSimpleSummaryProvider="true" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        app:title="Debug And Dev">
+
+        <SwitchPreferenceCompat
+            app:key="show_errors"
+            app:defaultValue="true"
+            app:title="@string/show_errors"
+            app:summary="@string/show_errors_summary" />
+
+        <SwitchPreferenceCompat
+            app:key="send_errors"
+            app:defaultValue="false"
+            app:title="@string/send_errors"
+            app:summary="@string/send_errors_summary"/>
+
+    </PreferenceCategory>
+</PreferenceScreen>

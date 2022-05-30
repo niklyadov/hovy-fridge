@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/fridge_details_action_bar_add_product_item"
+        android:icon="@drawable/ic_barcode"
+        app:iconTint="@color/design_default_color_surface"
+        android:title="@string/addProduct"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/fridge_details_action_bar_edit_fridge_item"
+        app:iconTint="@color/design_default_color_surface"
+        android:title="@string/edit_fridge"
+        app:showAsAction="" />
+
+    <item
+        android:id="@+id/fridge_details_action_bar_delete_fridge_item"
+        app:iconTint="@color/design_default_color_surface"
+        android:title="@string/delete_fridge"
+        app:showAsAction="" />
+</menu>

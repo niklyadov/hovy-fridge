@@ -1,3 +1,40 @@
 <resources>
-    <string name="app_name">TestApp</string>
+    <string name="app_name">Hovy Fridge</string>
+    <string name="title_home">Home</string>
+    <string name="addProduct">Add Product</string>
+    <string name="product_name">Product Name</string>
+    <string name="product_description">Product Description</string>
+    <string name="product_icon">Product Icon</string>
+    <string name="fridge_name">Fridge Name</string>
+    <string name="fridge_description">Fridge Description</string>
+    <string name="fridge_icon">Fridge Icon</string>
+    <!-- Preference Titles -->
+    <string name="basic_settings_header">Basic settings</string>
+
+    <!-- Basic settings -->
+    <string name="api_url_title">Api Url</string>
+    <string name="dark_theme_title">Enable dark theme</string>
+
+    <string name="fridges">Fridges</string>
+    <string name="settings">Settings</string>
+    <string name="search_for_product">Search For Product</string>
+    <string name="products">Products</string>
+    <string name="scan_product">Scan product</string>
+    <string name="my_fridge">My fridge</string>
+    <string name="my_fridges">My Fridges</string>
+    <string name="edit_fridge">Edit fridge</string>
+    <string name="delete_fridge">Delete fridge</string>
+    <string name="enter_the_product_name">Enter the product name:</string>
+    <string name="enter_the_fridge_name">Enter the fridge name:</string>
+    <string name="add_new_fridge">Add new fridge</string>
+    <string name="edit_product">Edit product</string>
+    <string name="product_details">Product details</string>
+    <string name="products_book">Products Book</string>
+    <string name="check_for_updates">Check for updates</string>
+    <string name="download_last_update">Download last update</string>
+    <string name="api_token">Token for access API</string>
+    <string name="send_errors_summary">Helps for us catch errors faster and fix it</string>
+    <string name="send_errors">Send errors on a server</string>
+    <string name="show_errors">Show errors</string>
+    <string name="show_errors_summary" >Show error message dialog when error occurred</string>
 </resources>

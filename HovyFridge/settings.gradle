@@ -1,3 +1,2 @@
-
-rootProject.name = "HovyFridge"
 include ':app'
+rootProject.name = "Hovy Fridge"

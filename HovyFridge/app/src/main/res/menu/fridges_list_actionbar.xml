@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item android:id="@+id/fridges_list_add_item"
+        android:icon="@drawable/ic_pen_plus"
+        app:iconTint="@color/design_default_color_surface"
+        android:title="@string/add_new_fridge"
+        app:showAsAction="always"/>
+</menu>

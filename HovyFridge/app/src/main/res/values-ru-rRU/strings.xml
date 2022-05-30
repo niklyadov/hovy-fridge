@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Hovy Fridge</string>
+    <string name="title_home">Начало</string>
+    <string name="addProduct">Добавить продукт</string>
+    <string name="product_name">Имя продукта</string>
+    <string name="product_description">Описание продукта</string>
+    <string name="product_icon">Иконка продукта</string>
+    <string name="fridge_name">Название холодильника</string>
+    <string name="fridge_description">Описание холодильника</string>
+    <string name="fridge_icon">Иконка холодильника</string>
+    <!-- Preference Titles -->
+    <string name="basic_settings_header">Основные настройки</string>
+
+    <!-- Basic settings -->
+    <string name="api_url_title">Адрес до API</string>
+    <string name="dark_theme_title">Включить темную тему</string>
+
+    <string name="fridges">Холодильники</string>
+    <string name="settings">Настройки</string>
+
+    <string name="search_for_product">Поиск по продуктам</string>
+    <string name="products">Продукты</string>
+    <string name="scan_product">Сканировать продукт</string>
+    <string name="my_fridge">Мой холодильник</string>
+    <string name="my_fridges">Мои холодильники</string>
+    <string name="edit_fridge">Отредактировать холодильник</string>
+    <string name="delete_fridge">Удалить холодильник</string>
+    <string name="enter_the_product_name">Введите название продукта:</string>
+    <string name="enter_the_fridge_name">Введите название холодильника:</string>
+    <string name="add_new_fridge">Добавить новый холодильник</string>
+    <string name="edit_product">Отредактировать продукт</string>
+    <string name="product_details">Просмотр продукта</string>
+    <string name="products_book">Книга продуктов</string>
+    <string name="check_for_updates">Проверка обновлений</string>
+    <string name="download_last_update">Обновление приложения</string>
+    <string name="api_token">Token для доступа API</string>
+    <string name="send_errors_summary">Помогает нам быстрее исправлять ошибки при их возникновении</string>
+    <string name="send_errors">Отправлять ошибки на сервер</string>
+    <string name="show_errors">Показывать сообщения ошибок</string>
+    <string name="show_errors_summary">Показывает диалог с сообщением об ошибке, при возникновении любой ошибки</string>
+</resources>
