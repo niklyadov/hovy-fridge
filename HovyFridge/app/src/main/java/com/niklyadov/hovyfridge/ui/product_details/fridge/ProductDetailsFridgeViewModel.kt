@@ -22,7 +22,9 @@ class ProductDetailsFridgeViewModel @Inject constructor(
     fun loadProductInfo(productId : Int) {
         viewModelScope.launch {
             product.apply {
-                value = productsService.getProduct(productId).onFailure {
+                value = productsService.getProduct(productId).onSuccess {
+                    product.value = it
+                }.onFailure {
                     error.value = it
                 }.getOrNull()
             }
@@ -39,5 +41,19 @@ class ProductDetailsFridgeViewModel @Inject constructor(
 
     fun addSharedViewModel(sharedViewModel : ProductDetailsFridgeSharedViewModel ) {
         _sharedViewModel = sharedViewModel
+    }
+
+
+    fun renameProduct(productName: String) {
+        viewModelScope.launch {
+            //loadInProgress.value = true;
+
+            productsService.renameProduct(product.value!!.id, productName).onFailure {
+                error.value = it
+            }
+            loadProductInfo(product.value!!.id)
+
+            //loadInProgress.value = false;
+        }
     }
 }

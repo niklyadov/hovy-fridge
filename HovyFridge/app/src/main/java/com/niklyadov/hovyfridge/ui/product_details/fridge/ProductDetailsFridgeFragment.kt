@@ -1,26 +1,29 @@
 package com.niklyadov.hovyfridge.ui.product_details.fridge
 
+import android.app.AlertDialog
 import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.niklyadov.hovyfridge.R
+import com.niklyadov.hovyfridge.databinding.DialogProductEditBinding
 import com.niklyadov.hovyfridge.databinding.FragmentProductDetailsBinding
+import com.niklyadov.hovyfridge.databinding.FragmentProductDetailsFridgeBinding
 import com.niklyadov.hovyfridge.ui.base.BaseFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class ProductDetailsFridgeFragment : BaseFragment() {
-    private lateinit var _binding : FragmentProductDetailsBinding
+    private lateinit var _binding : FragmentProductDetailsFridgeBinding
     private val _viewModel : ProductDetailsFridgeViewModel by viewModels()
-    private val _productDetailsSharedViewModel : ProductDetailsFridgeSharedViewModel by activityViewModels()
+    private val _productDetailsFridgeSharedViewModel : ProductDetailsFridgeSharedViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentProductDetailsBinding.inflate(inflater)
+        _binding = FragmentProductDetailsFridgeBinding.inflate(inflater)
 
         setHasOptionsMenu(true)
         setViewModel(_viewModel)
@@ -31,13 +34,14 @@ class ProductDetailsFridgeFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        _viewModel.addSharedViewModel(_productDetailsSharedViewModel)
+        _viewModel.addSharedViewModel(_productDetailsFridgeSharedViewModel)
 
         _viewModel.product.observe(viewLifecycleOwner) {
-            _binding.productDetails.text = "${it.name} ${it.id} ${it.barcode}"
+            _binding.fridgeProductDetailsName.text = "${it.name} (id ${it.id})"
+            _binding.fridgeProductDetailsBarcode.text =  it.barcode
         }
 
-        _viewModel.loadProductInfo(_productDetailsSharedViewModel.productId)
+        _viewModel.loadProductInfo(_productDetailsFridgeSharedViewModel.productId)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -54,7 +58,7 @@ class ProductDetailsFridgeFragment : BaseFragment() {
             true
         }
         R.id.product_details_edit -> {
-
+            showEditProductDialog()
             true
         }
         android.R.id.home -> {
@@ -66,5 +70,30 @@ class ProductDetailsFridgeFragment : BaseFragment() {
             // Invoke the superclass to handle it.
             super.onOptionsItemSelected(item)
         }
+    }
+
+    private fun showEditProductDialog() {
+        val product = _viewModel.product.value ?: return
+        val dialogAddProductBinding = DialogProductEditBinding.inflate(requireActivity().layoutInflater)
+        dialogAddProductBinding.productEditDialogProductName.setText(product.name)
+
+        val alertDialog: AlertDialog = activity.let {
+            val builder = AlertDialog.Builder(it)
+            builder.apply {
+                setView(dialogAddProductBinding.root)
+                setPositiveButton("Ok") { dialog, id ->
+                    val productName = dialogAddProductBinding.productEditDialogProductName.text.toString()
+                    if(productName.isNotBlank() && productName.isNotEmpty()) {
+                        _viewModel.renameProduct(productName)
+                    }
+                }
+                setNegativeButton("Cancel") {
+                        dialog, id -> dialog.dismiss()
+                }
+            }
+            builder.create()
+        }
+
+        alertDialog.show()
     }
 }

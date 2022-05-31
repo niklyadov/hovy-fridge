@@ -37,4 +37,6 @@
     <string name="send_errors">Send errors on a server</string>
     <string name="show_errors">Show errors</string>
     <string name="show_errors_summary" >Show error message dialog when error occurred</string>
+    <string name="bar_code">Code:</string>
+    <string name="new_product_name">Enter the new product name</string>
 </resources>

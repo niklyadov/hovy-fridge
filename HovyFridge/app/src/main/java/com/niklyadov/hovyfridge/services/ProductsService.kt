@@ -18,4 +18,6 @@ interface ProductsService {
     suspend fun addProductToList(product: Product) : Result<Product>
 
     suspend fun getProductByBarcode(barcode : String) : Result<Product>
+
+    suspend fun renameProduct(id: Int, productName: String): Result<Product>
 }

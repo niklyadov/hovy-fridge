@@ -3,8 +3,8 @@ package com.niklyadov.hovyfridge.data.repository
 import com.niklyadov.hovyfridge.data.api.RetrofitServices
 import com.niklyadov.hovyfridge.data.entities.Product
 import com.niklyadov.hovyfridge.di.ProductDao
-import java.lang.Exception
 import javax.inject.Inject
+import kotlin.Exception
 
 class ProductsRepositoryImpl @Inject constructor(
     private val apiService : RetrofitServices,
@@ -26,8 +26,13 @@ class ProductsRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun getProductWithBarcode(barcode: String): Product {
-        return apiService.getProductWithBarcode(barcode)
+    override suspend fun getProductWithBarcode(barcode: String): Product? {
+        try {
+            return apiService.getProductWithBarcode(barcode)
+        }
+        catch (ex : Exception) {
+            return null
+        }
     }
 
     override suspend fun getProduct(id: Int): Product {
@@ -38,11 +43,9 @@ class ProductsRepositoryImpl @Inject constructor(
             productDao.insert(product)
 
             return product
-
-        } catch (ex : Exception) {
-
-            return productDao.getById(id)
-
+        }
+        catch (ex : Throwable) {
+            return productDao.getById(id) ?: throw Exception("Product is not found in database")
         }
     }
 

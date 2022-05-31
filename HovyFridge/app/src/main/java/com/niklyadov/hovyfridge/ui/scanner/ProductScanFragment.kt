@@ -1,5 +1,6 @@
 package com.niklyadov.hovyfridge.ui.scanner
 
+import android.Manifest
 import android.app.AlertDialog
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -17,6 +18,7 @@ import com.niklyadov.hovyfridge.databinding.CodeScannerFragmentBinding
 import com.niklyadov.hovyfridge.databinding.DialogAddProductBinding
 import com.niklyadov.hovyfridge.enums.BarcodeScanResult
 import com.niklyadov.hovyfridge.ui.base.BaseFragment
+import com.tbruyelle.rxpermissions2.RxPermissions
 import dagger.hilt.android.AndroidEntryPoint
 
 
@@ -46,16 +48,6 @@ class ProductScanFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val scannerView = _binding.scannerView
         val activity = requireActivity()
-        _codeScanner = CodeScanner(activity, scannerView)
-        _codeScanner.decodeCallback = DecodeCallback {
-            activity.runOnUiThread {
-                _binding.loadingProgress.visibility = View.VISIBLE
-                _productScanViewModel.onCodeScanned(it.text);
-            }
-        }
-        scannerView.setOnClickListener {
-            _codeScanner.startPreview()
-        }
 
         _productScanViewModel.scanStatusResult.observe(viewLifecycleOwner, Observer {
             _binding.loadingProgress.visibility = View.GONE
@@ -85,6 +77,27 @@ class ProductScanFragment : BaseFragment() {
                 }
             }
         });
+
+        RxPermissions(activity).request(Manifest.permission.CAMERA)
+            .subscribe { granted: Boolean ->
+                if (granted) {
+
+                    _codeScanner = CodeScanner(activity, scannerView)
+                    _codeScanner.decodeCallback = DecodeCallback {
+                        activity.runOnUiThread {
+                            _binding.loadingProgress.visibility = View.VISIBLE
+                            _productScanViewModel.onCodeScanned(it.text);
+                        }
+                    }
+                    scannerView.setOnClickListener {
+                        _codeScanner.startPreview()
+                    }
+
+                } else {
+                    Toast.makeText(activity, "Cancelled", Toast.LENGTH_LONG).show()
+                    findNavController().popBackStack()
+                }
+            }
     }
 
     private fun showAddNewProductDialog() {

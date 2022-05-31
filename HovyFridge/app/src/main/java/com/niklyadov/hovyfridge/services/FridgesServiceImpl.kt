@@ -4,7 +4,7 @@ import com.niklyadov.hovyfridge.data.entities.Fridge
 import com.niklyadov.hovyfridge.data.entities.Product
 import com.niklyadov.hovyfridge.data.repository.FridgesRepository
 import javax.inject.Inject
-import kotlin.Exception
+import kotlin.Throwable
 
 class FridgesServiceImpl @Inject constructor(
     private val fridgeRepository : FridgesRepository
@@ -16,7 +16,7 @@ class FridgesServiceImpl @Inject constructor(
 
             return Result.success(fridgesList)
 
-        } catch (ex : Exception) {
+        } catch (ex : Throwable) {
             return Result.failure(ex)
         }
     }
@@ -28,7 +28,7 @@ class FridgesServiceImpl @Inject constructor(
 
             return Result.success(fridge)
 
-        } catch (ex : Exception) {
+        } catch (ex : Throwable) {
             return Result.failure(ex)
         }
     }
@@ -40,7 +40,7 @@ class FridgesServiceImpl @Inject constructor(
 
             return Result.success(updatedFridge)
 
-        } catch (ex : Exception) {
+        } catch (ex : Throwable) {
             return Result.failure(ex)
         }
     }
@@ -52,7 +52,7 @@ class FridgesServiceImpl @Inject constructor(
 
             return Result.success(deletedFridge)
 
-        } catch (ex : Exception) {
+        } catch (ex : Throwable) {
 
             return Result.failure(ex)
 
@@ -66,7 +66,7 @@ class FridgesServiceImpl @Inject constructor(
 
             return Result.success(restoredFridge)
 
-        } catch (ex : Exception) {
+        } catch (ex : Throwable) {
 
             return Result.failure(ex)
 
@@ -80,7 +80,7 @@ class FridgesServiceImpl @Inject constructor(
 
             return Result.success(addedProduct)
 
-        } catch (ex : Exception) {
+        } catch (ex : Throwable) {
 
             return Result.failure(ex)
 
@@ -94,7 +94,7 @@ class FridgesServiceImpl @Inject constructor(
 
             return Result.success(removedProduct)
 
-        } catch (ex : Exception) {
+        } catch (ex : Throwable) {
 
             return Result.failure(ex)
 
@@ -111,7 +111,7 @@ class FridgesServiceImpl @Inject constructor(
 
             return Result.success(addedFridge)
 
-        } catch (ex : Exception) {
+        } catch (ex : Throwable) {
 
             return Result.failure(ex)
 
@@ -125,7 +125,7 @@ class FridgesServiceImpl @Inject constructor(
 
             return Result.success(fridge)
 
-        } catch (ex : Exception) {
+        } catch (ex : Throwable) {
             return Result.failure(ex)
         }
     }
@@ -137,7 +137,7 @@ class FridgesServiceImpl @Inject constructor(
 
             return Result.success(removedProduct)
 
-        } catch (ex : Exception) {
+        } catch (ex : Throwable) {
 
             return Result.failure(ex)
 

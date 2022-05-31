@@ -10,6 +10,9 @@ data class Fridge (
     @SerializedName("id")
     val id : Int,
 
+    @SerializedName("is_deleted")
+    val isDeleted : Boolean = false,
+
     @ColumnInfo(name = "name")
     @SerializedName("name")
     var name : String,

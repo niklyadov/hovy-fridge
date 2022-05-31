@@ -3,6 +3,7 @@ package com.niklyadov.hovyfridge.data.api
 import com.niklyadov.hovyfridge.data.entities.Fridge
 import com.niklyadov.hovyfridge.data.entities.Product
 import com.niklyadov.hovyfridge.data.entities.VersionInfo
+import retrofit2.Call
 import retrofit2.http.*
 
 interface RetrofitServices {
@@ -42,8 +43,11 @@ interface RetrofitServices {
     @PUT("fridges/{id}/product")
     suspend fun putProductIntoFridge(@Path("id") fridgeId : Int, @Body productId: Int) : Product
 
-    @DELETE("fridges/{id}/product")
-    suspend fun removeProductFromFridge(@Path("id") fridgeId : Int, @Body productId: Int) : Product
+    @PUT("fridges/{id}/product/restore")
+    suspend fun restoreProductInFridge(@Path("id") fridgeId : Int, @Body productId: Int) : Product
+
+    @DELETE("fridges/{id}/product/{productId}")
+    suspend fun removeProductFromFridge(@Path("id") fridgeId : Int, @Path("productId") productId: Int) : Product
 
     @GET("fridges/")
     suspend fun getFridgesList() : List<Fridge>

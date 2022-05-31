@@ -5,7 +5,7 @@ import com.niklyadov.hovyfridge.data.entities.Product
 interface ProductsRepository {
     suspend fun getProductsList(): List<Product>
 
-    suspend fun getProductWithBarcode(barcode : String): Product
+    suspend fun getProductWithBarcode(barcode : String): Product?
 
     suspend fun getProduct(id : Int): Product
 

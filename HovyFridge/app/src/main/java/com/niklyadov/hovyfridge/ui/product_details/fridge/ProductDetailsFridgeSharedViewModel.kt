@@ -6,6 +6,6 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ProductDetailsFridgeSharedViewModel @Inject constructor() : ViewModel() {
-    val fridgeId : Int = 0
+    var fridgeId : Int = 0
     var productId : Int = 0
 }

@@ -27,7 +27,7 @@ class FridgesListViewModel @Inject constructor(
 
     fun addNewFridgeWithName(fridgeName : String) {
         viewModelScope.launch {
-            fridgesService.addNewFridge(Fridge(0, fridgeName))
+            fridgesService.addNewFridge(Fridge(0, false, fridgeName))
             updateFridgesList()
         }
     }

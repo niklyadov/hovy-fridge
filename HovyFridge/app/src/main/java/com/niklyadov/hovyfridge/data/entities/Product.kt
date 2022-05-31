@@ -11,6 +11,9 @@ data class Product(
     @SerializedName("id")
     val id : Int,
 
+    @SerializedName("is_deleted")
+    val isDeleted : Boolean = false,
+
     @ColumnInfo(name = "fridge_id")
     @SerializedName("fridgeId")
     var fridgeId : Int,
@@ -21,5 +24,5 @@ data class Product(
 
     @ColumnInfo(name = "name")
     @SerializedName("name")
-    val name : String
+    var name : String
 )

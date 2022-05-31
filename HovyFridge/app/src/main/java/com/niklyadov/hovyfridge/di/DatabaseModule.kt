@@ -32,7 +32,7 @@ internal class DatabaseModule {
 
 }
 
-@Database(entities = [Fridge::class, Product::class], version = 2, exportSchema = false)
+@Database(entities = [Fridge::class, Product::class], version = 3, exportSchema = false)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun productDao(): ProductDao
     abstract fun fridgeDao(): FridgeDao
@@ -40,14 +40,14 @@ abstract class AppDatabase : RoomDatabase() {
 
 @Dao
 interface ProductDao {
-    @Query("SELECT * FROM Product")
+    @Query("SELECT * FROM Product WHERE isDeleted = 0")
     fun getAll(): List<Product>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertAll(products: List<Product>)
 
-    @Query("SELECT * FROM Product WHERE id = :id")
-    fun getById(id : Int): Product
+    @Query("SELECT * FROM Product WHERE id = :id and isDeleted = 0")
+    fun getById(id : Int): Product?
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(product: Product)
@@ -56,17 +56,17 @@ interface ProductDao {
 @Dao
 interface FridgeDao {
     @Transaction
-    @Query("SELECT * FROM Fridge")
+    @Query("SELECT * FROM Fridge WHERE isDeleted = 0")
     fun getAll(): List<FridgeWithProducts>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertAll(fridges: List<Fridge>)
 
     @Transaction
-    @Query("SELECT * FROM Fridge WHERE id = :id")
+    @Query("SELECT * FROM Fridge WHERE id = :id AND isDeleted = 0")
     fun getById(id : Int): FridgeWithProducts
 
-    @Query("SELECT * FROM Fridge WHERE id = :id")
+    @Query("SELECT * FROM Fridge WHERE id = :id AND isDeleted = 0")
     fun getByFridgeId(id : Int): Fridge
 
 
@@ -76,7 +76,7 @@ interface FridgeDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertAllProducts(products: List<Product>)
 
-    @Query("SELECT * FROM Product WHERE fridge_id =:fridgeId")
+    @Query("SELECT * FROM Product WHERE fridge_id =:fridgeId AND isDeleted = 0")
     fun getProductsList(fridgeId: Int): List<Product>
 
     fun insertFridgeWithProducts(user: Fridge) {

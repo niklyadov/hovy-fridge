@@ -14,6 +14,8 @@ import com.niklyadov.hovyfridge.databinding.DetailedFridgeFragmentBinding
 import com.niklyadov.hovyfridge.databinding.DialogFridgeEditBinding
 import com.niklyadov.hovyfridge.ui.base.BaseFragment
 import com.niklyadov.hovyfridge.ui.product_details.ProductDetailsSharedViewModel
+import com.niklyadov.hovyfridge.ui.product_details.fridge.ProductDetailsFridgeSharedViewModel
+import com.niklyadov.hovyfridge.ui.product_details.fridge.ProductDetailsFridgeViewModel
 import com.niklyadov.hovyfridge.ui.scanner.ProductScanSharedViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -25,6 +27,7 @@ class DetailedFridgeFragment : BaseFragment() {
     private val _fridgeIdSharedViewModel : FridgeIdSharedViewModel by activityViewModels()
     private val _productScanSharedViewModel : ProductScanSharedViewModel by activityViewModels()
     private val _productDetailsSharedViewModel : ProductDetailsSharedViewModel by activityViewModels()
+    private val _productDetailsFridgeSharedViewModel : ProductDetailsFridgeSharedViewModel by activityViewModels()
 
     private val _fridgeProductListAdapter : FridgeProductListAdapter = FridgeProductListAdapter()
 
@@ -48,7 +51,10 @@ class DetailedFridgeFragment : BaseFragment() {
         _fridgeProductListAdapter.setOnClickListener(object : FridgeProductListAdapter.OnItemListeners{
             override fun onClick(position: Int) {
                 val product = _fridgeProductListAdapter.currentList[position]
-                _productDetailsSharedViewModel.productId = product.id
+                if (_viewModel.fridge.value != null) {
+                    _productDetailsFridgeSharedViewModel.fridgeId = _viewModel.fridge.value!!.id
+                }
+                _productDetailsFridgeSharedViewModel.productId = product.id
                 findNavController().navigate(R.id.action_navigation_fridge_detailed_to_navigation_product_details_fridge)
             }
 

@@ -1,5 +1,6 @@
 package com.niklyadov.hovyfridge.services
 
+import android.util.Log
 import com.niklyadov.hovyfridge.data.entities.Product
 import com.niklyadov.hovyfridge.data.repository.ProductsRepository
 import java.util.*
@@ -7,12 +8,12 @@ import javax.inject.Inject
 import kotlin.Exception
 
 class ProductsServiceImpl @Inject constructor(
-    private val productsService: ProductsRepository
+    private val productsRepository: ProductsRepository
     ) : ProductsService  {
 
     override suspend fun getProductsList(queryString: String?) : Result<List<Product>> {
         try {
-            var products = productsService.getProductsList().toMutableList()
+            var products = productsRepository.getProductsList().toMutableList()
             if(queryString != null) {
                 val queryStringPrepared = queryString.toLowerCase(Locale.ROOT).trim()
 
@@ -30,7 +31,7 @@ class ProductsServiceImpl @Inject constructor(
 
     override suspend fun updateProduct(product: Product): Result<Product> {
         try {
-            val updatedProduct = productsService.updateProduct(product)
+            val updatedProduct = productsRepository.updateProduct(product)
 
             return Result.success(updatedProduct)
 
@@ -41,7 +42,7 @@ class ProductsServiceImpl @Inject constructor(
 
     override suspend fun getProduct(productId: Int): Result<Product> {
         try {
-            val product = productsService.getProduct(productId)
+            val product = productsRepository.getProduct(productId)
             return Result.success(product)
 
         } catch (ex : Exception) {
@@ -51,7 +52,7 @@ class ProductsServiceImpl @Inject constructor(
 
     override suspend fun deleteProduct(productId: Int): Result<Product> {
         try {
-            val deletedProduct = productsService.deleteProduct(productId)
+            val deletedProduct = productsRepository.deleteProduct(productId)
 
             return Result.success(deletedProduct)
 
@@ -62,7 +63,7 @@ class ProductsServiceImpl @Inject constructor(
 
     override suspend fun restoreProduct(productId: Int): Result<Product> {
         try {
-            val restoredProduct = productsService.restoreProduct(productId)
+            val restoredProduct = productsRepository.restoreProduct(productId)
 
             return Result.success(restoredProduct)
 
@@ -77,7 +78,7 @@ class ProductsServiceImpl @Inject constructor(
 
     override suspend fun addProductToList(product: Product) : Result<Product> {
         try {
-            val addedProduct = productsService.addProductToList(product)
+            val addedProduct = productsRepository.addProductToList(product)
 
             return Result.success(addedProduct)
 
@@ -88,9 +89,24 @@ class ProductsServiceImpl @Inject constructor(
 
     override suspend fun getProductByBarcode(barcode : String) : Result<Product> {
         try {
-            val product = productsService.getProductWithBarcode(barcode)
+            val product = productsRepository.getProductWithBarcode(barcode)
+            if(product == null) {
+                Log.d("getProductByBarcode", "product was not found")
+                return Result.failure(Exception("Product was not found"))
+            }
 
             return Result.success(product)
+
+        } catch (ex : Exception) {
+            return Result.failure(ex)
+        }
+    }
+
+    override suspend fun renameProduct(id: Int, productName: String): Result<Product> {
+        try {
+            val product = productsRepository.getProduct(id)
+            product.name = productName;
+            return Result.success(productsRepository.updateProduct(product))
 
         } catch (ex : Exception) {
             return Result.failure(ex)

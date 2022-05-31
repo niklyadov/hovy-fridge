@@ -41,4 +41,17 @@ class ProductDetailsViewModel @Inject constructor(
             }
         }
     }
+
+    fun renameProduct(productName: String) {
+        viewModelScope.launch {
+            //loadInProgress.value = true;
+
+            productsService.renameProduct(product.value!!.id, productName).onFailure {
+                error.value = it
+            }
+            loadProductInfo(product.value!!.id)
+
+            //loadInProgress.value = false;
+        }
+    }
 }

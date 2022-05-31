@@ -15,15 +15,13 @@ class FridgesRepositoryImpl @Inject constructor(
         try {
 
             val fridge = apiService.getFridge(id)
-            //fridgeDao.insert(FridgeWithProducts(fridge, fridge.products))
+
             fridgeDao.insertFridgeWithProducts(fridge)
             return fridge
 
-        } catch (ex : Exception) {
-
+        }
+        catch (ex : Exception) {
             return fridgeDao.getFridgeWithProducts(id)!!
-            //return fridgeDao.getById(id).toFridge()
-
         }
     }
 
@@ -73,6 +71,6 @@ class FridgesRepositoryImpl @Inject constructor(
     }
 
     override suspend fun restoreProductInFridge(fridgeId: Int, productId: Int): Product {
-        return  apiService.putProductIntoFridge(fridgeId, productId)
+        return  apiService.restoreProductInFridge(fridgeId, productId)
     }
 }

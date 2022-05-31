@@ -1,5 +1,6 @@
 package com.niklyadov.hovyfridge.ui.scanner
 
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.niklyadov.hovyfridge.enums.BarcodeScanResult
@@ -31,9 +32,7 @@ class ProductScanViewModel @Inject constructor(
 
             val addToFridge = _fridgeId != 0
 
-            val product = productsService.getProductByBarcode(code).onFailure {
-                error.value = it
-            }.getOrNull()
+            val product = productsService.getProductByBarcode(code).getOrNull()
 
             if(product == null) {
                 scanStatusResult.value = BarcodeScanResult.ProductWasNotFound
@@ -67,7 +66,7 @@ class ProductScanViewModel @Inject constructor(
 
             val code = lastScannedCode.value ?: return@launch;
             val addToFridge = _fridgeId != 0
-            val product = productsService.addProductToList(Product(0,0, code, productName)).onFailure {
+            val product = productsService.addProductToList(Product(0,false,0, code, productName)).onFailure {
                 error.value = it
             }.getOrNull()
 

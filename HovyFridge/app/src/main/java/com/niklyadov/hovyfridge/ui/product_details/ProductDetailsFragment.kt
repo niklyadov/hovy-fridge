@@ -1,19 +1,21 @@
 package com.niklyadov.hovyfridge.ui.product_details
 
+import android.app.AlertDialog
 import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.niklyadov.hovyfridge.R
-import com.niklyadov.hovyfridge.databinding.FragmentProductDetailsFridgeBinding
+import com.niklyadov.hovyfridge.databinding.DialogFridgeEditBinding
+import com.niklyadov.hovyfridge.databinding.DialogProductEditBinding
+import com.niklyadov.hovyfridge.databinding.FragmentProductDetailsBinding
 import com.niklyadov.hovyfridge.ui.base.BaseFragment
-import com.niklyadov.hovyfridge.ui.product_details.fridge.ProductDetailsFridgeViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class ProductDetailsFragment : BaseFragment() {
-    private lateinit var _binding : FragmentProductDetailsFridgeBinding
+    private lateinit var _binding : FragmentProductDetailsBinding
     private val _viewModel : ProductDetailsViewModel by viewModels()
     private val _productDetailsSharedViewModel : ProductDetailsSharedViewModel by activityViewModels()
 
@@ -21,7 +23,7 @@ class ProductDetailsFragment : BaseFragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentProductDetailsFridgeBinding.inflate(inflater)
+        _binding = FragmentProductDetailsBinding.inflate(inflater)
 
         setHasOptionsMenu(true)
         setViewModel(_viewModel)
@@ -33,7 +35,8 @@ class ProductDetailsFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         _viewModel.product.observe(viewLifecycleOwner) {
-            _binding.productDetailsFridge.text = it.name
+            _binding.productDetailsName.text = "${it.name} (id ${it.id})"
+            _binding.productDetailsBarcode.text =  it.barcode
         }
 
         _viewModel.loadProductInfo(_productDetailsSharedViewModel.productId)
@@ -54,7 +57,7 @@ class ProductDetailsFragment : BaseFragment() {
             true
         }
         R.id.product_details_edit -> {
-
+            showEditProductDialog();
             true
         }
         android.R.id.home -> {
@@ -66,5 +69,30 @@ class ProductDetailsFragment : BaseFragment() {
             // Invoke the superclass to handle it.
             super.onOptionsItemSelected(item)
         }
+    }
+
+    private fun showEditProductDialog() {
+        val product = _viewModel.product.value ?: return
+        val dialogAddProductBinding = DialogProductEditBinding.inflate(requireActivity().layoutInflater)
+        dialogAddProductBinding.productEditDialogProductName.setText(product.name)
+
+        val alertDialog: AlertDialog = activity.let {
+            val builder = AlertDialog.Builder(it)
+            builder.apply {
+                setView(dialogAddProductBinding.root)
+                setPositiveButton("Ok") { dialog, id ->
+                    val productName = dialogAddProductBinding.productEditDialogProductName.text.toString()
+                    if(productName.isNotBlank() && productName.isNotEmpty()) {
+                        _viewModel.renameProduct(productName)
+                    }
+                }
+                setNegativeButton("Cancel") {
+                        dialog, id -> dialog.dismiss()
+                }
+            }
+            builder.create()
+        }
+
+        alertDialog.show()
     }
 }
