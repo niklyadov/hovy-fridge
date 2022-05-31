@@ -1,5 +1,6 @@
 package com.niklyadov.hovyfridge.ui.settings
 
+import android.Manifest
 import android.os.Bundle
 import android.view.*
 import android.widget.Toast
@@ -11,6 +12,7 @@ import androidx.preference.PreferenceManager
 import com.niklyadov.hovyfridge.R
 import com.niklyadov.hovyfridge.databinding.FragmentSettingsBinding
 import com.niklyadov.hovyfridge.ui.base.BaseFragment
+import com.tbruyelle.rxpermissions2.RxPermissions
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -57,7 +59,13 @@ class SettingsFragment : PreferenceFragmentCompat() {
 
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
         R.id.setting_download_last_update -> {
-            _viewModel.checkUpdates()
+            RxPermissions(requireActivity()).request(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                .subscribe { granted: Boolean ->
+                    if (granted) _viewModel.checkUpdates()
+                    else {
+                        Toast.makeText(requireActivity(), "Please, provide the permission",Toast.LENGTH_SHORT).show();
+                    }
+                }
             true
         }
         android.R.id.home -> {

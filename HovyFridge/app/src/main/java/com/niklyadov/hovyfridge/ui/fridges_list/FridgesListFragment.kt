@@ -39,6 +39,11 @@ class FridgesListFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        _viewModel.loadInProgress.observe(viewLifecycleOwner) {
+            _binding.progressBarLoading.visibility =
+                if (it) View.VISIBLE else View.GONE
+        }
+
         _fridgesListAdapter.setOnClickListener(object : FridgesListAdapter.OnItemListeners {
             override fun onClick(position: Int) {
                 val fridge = _fridgesListAdapter.currentList[position]

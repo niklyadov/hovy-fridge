@@ -14,14 +14,17 @@ class FridgesListViewModel @Inject constructor(
     private val fridgesService: FridgesService
 )  : BaseViewModel() {
     val fridges : MutableLiveData<MutableList<Fridge>> = MutableLiveData()
+    val loadInProgress: MutableLiveData<Boolean> = MutableLiveData()
 
     fun updateFridgesList() {
+        loadInProgress.value = true
         viewModelScope.launch {
             fridges.apply {
                 value = fridgesService.getFridges().onFailure {
                     error.value = it
                 }.getOrNull()?.toMutableList()
             }
+            loadInProgress.value = false
         }
     }
 

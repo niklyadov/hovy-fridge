@@ -44,6 +44,11 @@ class ProductsListFragment : BaseFragment() {
 
         recyclerViewSwipeHandle()
 
+        _viewModel.loadInProgress.observe(viewLifecycleOwner) {
+            _binding.progressBarLoading.visibility =
+                if (it) View.VISIBLE else View.GONE
+        }
+
         _productListAdapter.setOnClickListener(object : ProductsListAdapter.OnItemListeners {
             override fun onClick(position: Int) {
                 val product = _productListAdapter.currentList[position]

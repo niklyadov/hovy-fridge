@@ -16,14 +16,17 @@ class ProductsListViewModel  @Inject constructor(
     private val fridgesService: FridgesService
 ): BaseViewModel() {
     val products : MutableLiveData<MutableList<Product>> = MutableLiveData()
+    val loadInProgress: MutableLiveData<Boolean> = MutableLiveData()
 
     fun updateProductsList(queryString: String? = null) {
+        loadInProgress.value = true
         viewModelScope.launch {
             products.apply {
                 value = productsService.getProductsList(queryString).onFailure {
                     error.value = it
                 }.getOrNull()?.toMutableList()
             }
+            loadInProgress.value = false
         }
     }
 

@@ -4,11 +4,13 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.6088775634765626" />
+        <entry key="app/src/main/res/layout/detailed_fridge_fragment.xml" value="0.2078125" />
         <entry key="app/src/main/res/layout/dialog_product_edit.xml" value="0.2776268115942029" />
         <entry key="app/src/main/res/layout/fragment_product_details.xml" value="0.35598958333333336" />
         <entry key="app/src/main/res/layout/fragment_product_details_fridge.xml" value="0.2776268115942029" />
         <entry key="app/src/main/res/layout/fragment_product_scan.xml" value="0.13134057971014493" />
         <entry key="app/src/main/res/layout/fragment_product_scan_dialog.xml" value="0.16422805247225025" />
+        <entry key="app/src/main/res/layout/fragment_products_list.xml" value="0.2078125" />
         <entry key="app/src/main/res/layout/fridges_list_fragment.xml" value="0.2776268115942029" />
         <entry key="app/src/main/res/layout/item_product.xml" value="0.2776268115942029" />
         <entry key="app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.2045" />
