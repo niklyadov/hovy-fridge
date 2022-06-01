@@ -4,7 +4,7 @@ import com.niklyadov.hovyfridge.data.entities.Fridge
 import com.niklyadov.hovyfridge.data.entities.Product
 
 interface FridgesRepository {
-    suspend fun getFridge(id : Int) : Fridge
+    suspend fun getFridge(id : Int) : Fridge?
 
     suspend fun updateFridge(fridge : Fridge) : Fridge
 
@@ -20,7 +20,7 @@ interface FridgesRepository {
 
     suspend fun addFridge(fridge: Fridge) : Fridge
 
-    suspend fun renameFridge(fridgeId: Int, fridgeName: String): Fridge
+    suspend fun renameFridge(fridgeId: Int, fridgeName: String): Fridge?
 
-    suspend fun restoreProductInFridge(fridgeId: Int, productId: Int): Product
+    suspend fun restoreProductInFridge(fridgeId: Int, productId: Int): Product?
 }

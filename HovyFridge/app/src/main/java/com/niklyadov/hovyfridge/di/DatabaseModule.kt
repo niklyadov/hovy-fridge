@@ -67,7 +67,7 @@ interface FridgeDao {
     fun getById(id : Int): FridgeWithProducts
 
     @Query("SELECT * FROM Fridge WHERE id = :id AND isDeleted = 0")
-    fun getByFridgeId(id : Int): Fridge
+    fun getByFridgeId(id : Int): Fridge?
 
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
@@ -89,10 +89,13 @@ interface FridgeDao {
     }
 
     fun getFridgeWithProducts(id: Int): Fridge? {
-        val fridge: Fridge = getByFridgeId(id)
-        val products: List<Product> = getProductsList(id)
-        fridge.products = products
-        return fridge
+        getByFridgeId(id)?.let {
+            val products: List<Product> = getProductsList(id)
+            it.products = products
+            return it
+        }
+
+        throw Exception("Fridge with id $id is not found")
     }
 
     fun insertFridgesWithProducts(fridges: List<Fridge>) {
@@ -100,7 +103,7 @@ interface FridgeDao {
             insertFridgeWithProducts(fridge)
         }
     }
-    fun getFridgesWithProducts():  List<Fridge> {
+    fun getFridgesWithProducts():  List<Fridge>? {
         val fridges = getAll().map {
             fridgeWithProducts -> fridgeWithProducts.toFridge()
         }

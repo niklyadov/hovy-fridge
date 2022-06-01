@@ -5,6 +5,7 @@ import com.niklyadov.hovyfridge.data.entities.Product
 import com.niklyadov.hovyfridge.data.repository.FridgesRepository
 import javax.inject.Inject
 import kotlin.Throwable
+import kotlin.math.E
 
 class FridgesServiceImpl @Inject constructor(
     private val fridgeRepository : FridgesRepository
@@ -24,9 +25,11 @@ class FridgesServiceImpl @Inject constructor(
     override suspend fun getFridge(fridgeId: Int): Result<Fridge> {
         try {
 
-            val fridge = fridgeRepository.getFridge(fridgeId)
+            fridgeRepository.getFridge(fridgeId)?.let {
+                return Result.success(it)
+            }
 
-            return Result.success(fridge)
+            throw Exception("Fridge with id $fridgeId is not found")
 
         } catch (ex : Throwable) {
             return Result.failure(ex)
@@ -121,9 +124,11 @@ class FridgesServiceImpl @Inject constructor(
     override suspend fun renameFridge(fridgeId: Int, fridgeName: String): Result<Fridge> {
         try {
 
-            val fridge = fridgeRepository.renameFridge(fridgeId, fridgeName)
+            fridgeRepository.renameFridge(fridgeId, fridgeName)?.let {
+                return Result.success(it)
+            }
 
-            return Result.success(fridge)
+            throw Exception("Fridge with id $fridgeId is not found")
 
         } catch (ex : Throwable) {
             return Result.failure(ex)
@@ -133,9 +138,11 @@ class FridgesServiceImpl @Inject constructor(
     override suspend fun restoreProductInFridge(fridgeId: Int, product: Product): Result<Product> {
         try {
 
-            val removedProduct = fridgeRepository.restoreProductInFridge(fridgeId, product.id)
+            fridgeRepository.restoreProductInFridge(fridgeId, product.id)?.let {
+                return Result.success(it)
+            }
 
-            return Result.success(removedProduct)
+            throw Exception("Fridge with id $fridgeId is not found")
 
         } catch (ex : Throwable) {
 

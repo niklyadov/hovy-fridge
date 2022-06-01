@@ -4,6 +4,7 @@ import com.niklyadov.hovyfridge.data.entities.Fridge
 import com.niklyadov.hovyfridge.data.entities.Product
 import com.niklyadov.hovyfridge.data.entities.VersionInfo
 import retrofit2.Call
+import retrofit2.Response
 import retrofit2.http.*
 
 interface RetrofitServices {
@@ -29,31 +30,31 @@ interface RetrofitServices {
     suspend fun addProductToList(@Body product: Product) : Product
 
     @GET("fridges/{id}")
-    suspend fun getFridge(@Path("id") id : Int) : Fridge
+    suspend fun getFridge(@Path("id") id : Int) : Response<Fridge>
 
     @PUT("fridges/")
-    suspend fun updateFridge(@Body fridge : Fridge) : Fridge
+    suspend fun updateFridge(@Body fridge : Fridge) : Response<Fridge>
 
     @DELETE("fridges/{id}")
-    suspend fun deleteFridge(@Path("id") id : Int) : Fridge
+    suspend fun deleteFridge(@Path("id") id : Int) : Response<Fridge>
 
     @PUT("fridge/{id}/restore")
-    suspend fun restoreFridge(@Path("id") id : Int) : Fridge
+    suspend fun restoreFridge(@Path("id") id : Int) : Response<Fridge>
 
     @PUT("fridges/{id}/product")
-    suspend fun putProductIntoFridge(@Path("id") fridgeId : Int, @Body productId: Int) : Product
+    suspend fun putProductIntoFridge(@Path("id") fridgeId : Int, @Body productId: Int) : Response<Product>
 
     @PUT("fridges/{id}/product/restore")
-    suspend fun restoreProductInFridge(@Path("id") fridgeId : Int, @Body productId: Int) : Product
+    suspend fun restoreProductInFridge(@Path("id") fridgeId : Int, @Body productId: Int) : Response<Product>
 
     @DELETE("fridges/{id}/product/{productId}")
-    suspend fun removeProductFromFridge(@Path("id") fridgeId : Int, @Path("productId") productId: Int) : Product
+    suspend fun removeProductFromFridge(@Path("id") fridgeId : Int, @Path("productId") productId: Int) : Response<Product>
 
     @GET("fridges/")
-    suspend fun getFridgesList() : List<Fridge>
+    suspend fun getFridgesList() : Response<List<Fridge>>
 
     @POST("fridges/")
-    suspend fun addFridge(@Body fridge: Fridge) : Fridge
+    suspend fun addFridge(@Body fridge: Fridge) : Response<Fridge>
 
     @GET("versions/{id}")
     suspend fun getUpdateInfo(@Path("id") versionId : String) : VersionInfo

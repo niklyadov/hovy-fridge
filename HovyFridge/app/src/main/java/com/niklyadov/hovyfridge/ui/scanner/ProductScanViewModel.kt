@@ -62,8 +62,6 @@ class ProductScanViewModel @Inject constructor(
 
     fun onNewProductCodeScanned(productName: String) {
         viewModelScope.launch {
-            delay(1000)
-
             val code = lastScannedCode.value ?: return@launch;
             val addToFridge = _fridgeId != 0
             val product = productsService.addProductToList(Product(0,false,0, code, productName)).onFailure {
