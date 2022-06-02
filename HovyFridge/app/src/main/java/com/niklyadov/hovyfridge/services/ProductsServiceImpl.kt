@@ -91,7 +91,6 @@ class ProductsServiceImpl @Inject constructor(
         try {
             val product = productsRepository.getProductWithBarcode(barcode)
             if(product == null) {
-                Log.d("getProductByBarcode", "product was not found")
                 return Result.failure(Exception("Product was not found"))
             }
 
@@ -106,6 +105,21 @@ class ProductsServiceImpl @Inject constructor(
         try {
             val product = productsRepository.getProduct(id)
             product.name = productName;
+            return Result.success(productsRepository.updateProduct(product))
+
+        } catch (ex : Exception) {
+            return Result.failure(ex)
+        }
+    }
+
+    override suspend fun changeAmountOfProduct(id: Int, newAmount: Short): Result<Product> {
+        try {
+            if (newAmount < 0 ) {
+                return Result.failure(Exception("Amount of product should be greater than zero. Current value: $newAmount"))
+            }
+
+            val product = productsRepository.getProduct(id)
+            product.amount = newAmount;
             return Result.success(productsRepository.updateProduct(product))
 
         } catch (ex : Exception) {

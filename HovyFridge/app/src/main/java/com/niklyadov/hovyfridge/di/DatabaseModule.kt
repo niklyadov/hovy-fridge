@@ -32,7 +32,7 @@ internal class DatabaseModule {
 
 }
 
-@Database(entities = [Fridge::class, Product::class], version = 3, exportSchema = false)
+@Database(entities = [Fridge::class, Product::class], version = 4, exportSchema = false)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun productDao(): ProductDao
     abstract fun fridgeDao(): FridgeDao

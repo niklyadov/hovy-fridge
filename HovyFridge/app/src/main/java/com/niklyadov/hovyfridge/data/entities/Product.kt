@@ -16,7 +16,7 @@ data class Product(
 
     @ColumnInfo(name = "fridge_id")
     @SerializedName("fridgeId")
-    var fridgeId : Int,
+    var fridgeId : Int?,
 
     @ColumnInfo(name = "bar_code")
     @SerializedName("barCode")
@@ -24,5 +24,13 @@ data class Product(
 
     @ColumnInfo(name = "name")
     @SerializedName("name")
-    var name : String
+    var name : String,
+
+    @ColumnInfo(name = "amount")
+    @SerializedName("amount")
+    var amount : Short,
+
+    @ColumnInfo(name = "created_date_time")
+    @SerializedName("createdTimestamp")
+    var createdTimestamp : Long? = null
 )

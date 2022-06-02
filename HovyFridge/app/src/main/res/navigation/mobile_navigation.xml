@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/navigation_fridges_list"
-        android:name="com.niklyadov.hovyfridge.ui.fridges_list.FridgesListFragment"
+        android:name="com.niklyadov.hovyfridge.presentation.ui.fridges_list.FridgesListFragment"
         android:label="@string/my_fridges"
         tools:layout="@layout/fridges_list_fragment" >
         <action
@@ -23,7 +23,7 @@
 
     <fragment
         android:id="@+id/navigation_fridge_detailed"
-        android:name="com.niklyadov.hovyfridge.ui.fridge_details.DetailedFridgeFragment"
+        android:name="com.niklyadov.hovyfridge.presentation.ui.fridge_details.DetailedFridgeFragment"
         android:label="@string/my_fridge"
         tools:layout="@layout/detailed_fridge_fragment" >
         <action
@@ -38,7 +38,7 @@
     </fragment>
     <fragment
         android:id="@+id/navigation_code_scanner"
-        android:name="com.niklyadov.hovyfridge.ui.scanner.ProductScanFragment"
+        android:name="com.niklyadov.hovyfridge.presentation.ui.scanner.ProductScanFragment"
         android:label="@string/scan_product"
         tools:layout="@layout/code_scanner_fragment" >
         <action
@@ -54,13 +54,13 @@
 
     <fragment
         android:id="@+id/navigation_settings"
-        android:name="com.niklyadov.hovyfridge.ui.settings.SettingsFragment"
+        android:name="com.niklyadov.hovyfridge.presentation.ui.settings.SettingsFragment"
         android:label="@string/settings"
         tools:layout="@layout/fragment_settings"/>
 
     <fragment
         android:id="@+id/navigation_products_list"
-        android:name="com.niklyadov.hovyfridge.ui.products_list.ProductsListFragment"
+        android:name="com.niklyadov.hovyfridge.presentation.ui.products_list.ProductsListFragment"
         android:label="@string/products_book"
         tools:layout="@layout/fragment_products_list">
         <action
@@ -75,12 +75,12 @@
     </fragment>
     <fragment
         android:id="@+id/navigation_product_details"
-        android:name="com.niklyadov.hovyfridge.ui.product_details.ProductDetailsFragment"
+        android:name="com.niklyadov.hovyfridge.presentation.ui.product_details.ProductDetailsFragment"
         android:label="@string/product_details"
         tools:layout="@layout/fragment_product_details" />
     <fragment
         android:id="@+id/navigation_product_details_fridge"
-        android:name="com.niklyadov.hovyfridge.ui.product_details.fridge.ProductDetailsFridgeFragment"
+        android:name="com.niklyadov.hovyfridge.presentation.ui.product_details.fridge.ProductDetailsFridgeFragment"
         android:label="@string/product_details"
         tools:layout="@layout/fragment_product_details_fridge" />
 </navigation>

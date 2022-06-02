@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".ui.product_details.ProductDetailsFragment">
+    tools:context=".presentation.ui.product_details.ProductDetailsFragment">
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/product_details"

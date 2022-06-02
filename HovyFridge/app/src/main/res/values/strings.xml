@@ -39,4 +39,6 @@
     <string name="show_errors_summary" >Show error message dialog when error occurred</string>
     <string name="bar_code">Code:</string>
     <string name="new_product_name">Enter the new product name</string>
+    <string name="amount_of_product">Amount</string>
+    <string name="added_at">Added at:</string>
 </resources>

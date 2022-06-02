@@ -20,4 +20,6 @@ interface ProductsService {
     suspend fun getProductByBarcode(barcode : String) : Result<Product>
 
     suspend fun renameProduct(id: Int, productName: String): Result<Product>
+
+    suspend fun changeAmountOfProduct(id: Int, newAmount: Short): Result<Product>
 }

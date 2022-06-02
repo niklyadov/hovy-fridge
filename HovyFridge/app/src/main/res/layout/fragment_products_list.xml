@@ -31,7 +31,7 @@
             app:layout_constraintEnd_toEndOf="@id/main_card_test"
             app:layout_constraintStart_toStartOf="@id/main_card_test"
             app:layout_constraintTop_toBottomOf="@id/main_card_test"
-            tools:context=".ui.products_list.ProductsListFragment"
+            tools:context=".presentation.ui.products_list.ProductsListFragment"
             tools:listitem="@layout/item_product" />
 
         <ProgressBar

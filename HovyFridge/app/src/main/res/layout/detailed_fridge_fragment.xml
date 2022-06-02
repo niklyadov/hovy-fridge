@@ -46,7 +46,7 @@
                 app:layout_constraintEnd_toEndOf="@id/detailed_fridge_fragment_card_inner"
                 app:layout_constraintStart_toStartOf="@id/detailed_fridge_fragment_card_inner"
                 app:layout_constraintTop_toBottomOf="@+id/detailed_fridge_fragment_fridge_name"
-                tools:context=".ui.fridge_details.DetailedFridgeFragment"
+                tools:context=".presentation.ui.fridge_details.DetailedFridgeFragment"
                 tools:listitem="@layout/item_fridge_product" />
 
 
