@@ -35,7 +35,7 @@ class ProductsListAdapter  : ListAdapter<Product, ProductsListAdapter.ViewHolder
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = currentList[position]
         holder.productName.text = item.name
-        holder.productDescription.text = "barcode: ${item.barcode}"
+        holder.productDescription.text = "id: ${item.id}, barcode: ${item.barcode}"
     }
 
     override fun getItemCount(): Int = currentList.size

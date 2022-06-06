@@ -44,7 +44,7 @@ class ProductDetailsFridgeFragment : BaseFragment() {
             _binding.amountOfProductSlider.progress = productAmount
             _binding.amountOfProductSliderValue.text = "$productAmount %"
 
-            _binding.fridgeProductDetailsAddedDatetime.text = it.createdDateTime.toString()
+            //_binding.fridgeProductDetailsAddedDatetime.text = it.createdDateTime.toString()
         }
 
         _binding.amountOfProductSlider.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {

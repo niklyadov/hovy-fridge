@@ -59,23 +59,25 @@ class SettingsFragment : PreferenceFragmentCompat() {
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
         R.id.setting_download_last_update -> {
 
-            if (Build.VERSION.SDK_INT <= 28) {
-                RxPermissions(requireActivity()).request(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE)
-                    .subscribe { granted: Boolean ->
-                        if (granted) _viewModel.checkUpdates()
-                        else {
-                            Toast.makeText(requireActivity(), "Please, provide the permission",Toast.LENGTH_SHORT).show();
-                        }
-                    }
-            } else {
-                RxPermissions(requireActivity()).request(Manifest.permission.MANAGE_EXTERNAL_STORAGE)
-                    .subscribe { granted: Boolean ->
-                        if (granted) _viewModel.checkUpdates()
-                        else {
-                            Toast.makeText(requireActivity(), "Please, provide the permission",Toast.LENGTH_SHORT).show();
-                        }
-                    }
+            val permissions : MutableList<String> = mutableListOf()
+
+            if (Build.VERSION.SDK_INT <= 29) {
+                permissions.add(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                permissions.add(Manifest.permission.READ_EXTERNAL_STORAGE)
             }
+
+            if (Build.VERSION.SDK_INT > 29) {
+                permissions.add(Manifest.permission.MANAGE_EXTERNAL_STORAGE)
+            }
+
+            RxPermissions(requireActivity()).request(*permissions.toTypedArray())
+                .subscribe { granted: Boolean ->
+                    if (granted) _viewModel.checkUpdates()
+                    else {
+                        Toast.makeText(requireActivity(), "Please, provide the permissions", Toast.LENGTH_SHORT).show();
+                    }
+                }
+
             true
         }
         android.R.id.home -> {

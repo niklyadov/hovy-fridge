@@ -17,7 +17,7 @@ class SettingsViewModel @Inject constructor(
 
     fun checkUpdates() {
         viewModelScope.launch {
-            updatesService.downloadUpdate("3fa85f64-5717-4562-b3fc-2c963f66afa6").onSuccess {
+            updatesService.downloadUpdate().onSuccess {
                 checkUpdatesResponse.value = it
             }.onFailure {
                 error.value = it

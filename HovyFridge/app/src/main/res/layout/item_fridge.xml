@@ -29,7 +29,8 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 android:src="@drawable/ic_snowflake_36dp"
-                android:contentDescription="@string/fridge_icon" />
+                android:contentDescription="@string/fridge_icon"
+                app:tint="@color/design_default_color_primary_variant"/>
             
             <TextView
                 android:id="@+id/fridge_name"

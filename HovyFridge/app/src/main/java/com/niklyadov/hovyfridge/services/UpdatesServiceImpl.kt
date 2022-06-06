@@ -16,9 +16,9 @@ class UpdatesServiceImpl @Inject constructor(
     private val apiServices: RetrofitServices,
     @ApplicationContext private val context: Context
 ) : UpdatesService {
-    override suspend fun downloadUpdate(versionId: String): Result<Boolean> {
+    override suspend fun downloadUpdate(): Result<Boolean> {
         try {
-            val versionInfo = apiServices.getUpdateInfo(versionId)
+            val versionInfo = apiServices.getLastUpdateInfo()
 
             if(!versionInfo.isGreaterThan(App.VERSION_INFO)) {
                 return Result.success(false)

@@ -36,7 +36,7 @@ class FridgeProductListAdapter() : ListAdapter<Product, FridgeProductListAdapter
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = currentList[position]
         holder.productName.text = item.name
-        holder.productDescription.text = "barcode ${item.barcode}, id ${item.id}"
+        holder.productDescription.text = "${item.amount} % | barcode ${item.barcode}, id ${item.id}"
     }
 
     override fun getItemCount(): Int = currentList.size

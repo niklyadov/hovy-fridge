@@ -2,10 +2,8 @@ package com.niklyadov.hovyfridge.presentation.models
 
 import android.annotation.SuppressLint
 import com.niklyadov.hovyfridge.data.entities.Product
-import java.time.Instant
-import java.time.LocalDateTime
-import java.time.ZoneOffset
-import java.util.*
+//import kotlinx.datetime.LocalDateTime
+//import kotlinx.datetime.TimeZone
 
 data class ProductModel(
     var id : Int,
@@ -14,29 +12,25 @@ data class ProductModel(
     var barcode : String,
     var name : String,
     var amount : Short,
-    var createdDateTime: LocalDateTime?
+    //var createdDateTime: LocalDateTime?
 ) {
 
     @SuppressLint("NewApi")
     fun toEntity(): Product {
-        val t = createdDateTime?.atZone(ZoneOffset.UTC)?.toEpochSecond()
-        return Product(id, isDeleted, fridgeId, barcode, name, amount, t)
+        //val t = createdDateTime?.toInstant(TimeZone.UTC)?.epochSeconds
+        return Product(id, isDeleted, fridgeId, barcode, name, amount, null)
     }
 
     companion object {
-        @SuppressLint("NewApi")
         fun fromEntity(entity : Product) : ProductModel {
 
-            var t : LocalDateTime? = null
-
+            //var t : LocalDateTime? = null
             entity.createdTimestamp?.let {
-                t = LocalDateTime.ofInstant(
-                    Instant.ofEpochSecond(it),
-                    TimeZone.getDefault().toZoneId()
-                )
+                //t = Instant.fromEpochSeconds(it, 0)
+                //    .toLocalDateTime(TimeZone.currentSystemDefault())
             }
 
-            return ProductModel(entity.id, entity.isDeleted, entity.fridgeId, entity.barcode, entity.name,entity.amount, t?:null)
+            return ProductModel(entity.id, entity.isDeleted, entity.fridgeId, entity.barcode, entity.name,entity.amount/*, t?:null*/)
         }
     }
 }

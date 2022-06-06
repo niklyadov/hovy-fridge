@@ -21,4 +21,8 @@ data class Fridge (
     @Ignore
     @SerializedName("products")
     var products: List<Product> = listOf()
+
+    @Ignore
+    @SerializedName("productsAmount")
+    var productsAmount: Int = 0
 }
