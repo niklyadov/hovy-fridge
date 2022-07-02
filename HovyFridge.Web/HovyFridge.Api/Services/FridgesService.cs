@@ -1,168 +1,283 @@
-﻿using HovyFridge.Api.Data;
+﻿using FluentResults;
+using HovyFridge.Api.Data;
 using HovyFridge.Api.Data.Entity;
+using HovyFridge.Api.Data.Repository.GenericRepositoryPattern;
 using Microsoft.EntityFrameworkCore;
 
 namespace HovyFridge.Api.Services;
 
 public class FridgesService
 {
+    private readonly FridgesRepository _fridgesRepository;
+    private readonly ProductsRepository _productsRepository;
+    private readonly FridgeAccessLevelsRepository _fridgeAccessLevelsRepository;
+
     private ApplicationContext _db;
-    private DbSet<Product> _products;
-    private DbSet<Fridge> _fridges;
-    public FridgesService(ApplicationContext applicationContext)
+    private DbSet<FridgeAccessLevel> _fridgeAccessLevels;
+    public FridgesService(ApplicationContext applicationContext, FridgesRepository fridgesRepository, ProductsRepository productsRepository, FridgeAccessLevelsRepository fridgeAccessLevelsRepository)
     {
         _db = applicationContext;
-        _products = applicationContext.Products;
-        _fridges = applicationContext.Fridges;
+        _fridgeAccessLevels = applicationContext.FridgeAccessLevels;
+
+        _fridgesRepository = fridgesRepository;
+        _productsRepository = productsRepository;
+        _fridgeAccessLevelsRepository = fridgeAccessLevelsRepository;
     }
 
-    public List<Product>? GetProducts(int fridgeId)
+    public async Task<Result<Fridge>> GetByIdAsync(long id)
     {
-        var fridge = _fridges.FirstOrDefault(f => f.Id == fridgeId);
-
-        if (fridge == null)
+        try
         {
-            return null;
+            var fridge = await _fridgesRepository.GetById(id);
+
+            if (fridge == null)
+                return Result.Fail($"Fridge with id {id} is not found!");
+
+            fridge.Products = fridge.Products.Where(p => !p.IsDeleted).ToList();
+
+            return Result.Ok(fridge);
+
+        } catch (Exception ex)
+        {
+            return Result.Fail(ex.Message);
         }
-
-
-        return fridge.Products;
     }
 
-    public Fridge? GetById(int id)
+    public async Task<Result<Fridge>> UpdateFridge(Fridge fridge)
     {
-        var fridge = _fridges.Include(f => f.Products)
-            .FirstOrDefault(f => f.Id == id);
-
-
-        fridge.Products = fridge.Products.Where(p => !p.IsDeleted).ToList();
-
-        return fridge;
-    }
-
-    internal Fridge UpdateFridge(Fridge fridge)
-    {
-        var updatedFridge = _fridges.Update(fridge).Entity;
-
-        _db.SaveChanges();
-
-        return updatedFridge;
-    }
-
-
-    public List<Fridge> GetList()
-    {
-        return _fridges.Include(f => f.Products).Where(f => !f.IsDeleted).Select(o => new Fridge()
+        try
         {
-            Id = o.Id,
-            IsDeleted = o.IsDeleted,
-            Name = o.Name,
-            Products = new List<Product>(),
-            ProductsAmount = o.Products.Where(p => !p.IsDeleted).ToList().Count
-        }).ToList();
-    }
+            var updatedFridge = await _fridgesRepository.Update(fridge);
 
-    public Fridge? AddFridge(Fridge fridge)
-    {
-        var addedFridge = _fridges.Add(fridge);
-
-        _db.SaveChanges();
-
-        return addedFridge.Entity;
-    }
-
-    public Product PutProduct(int id, int productId)
-    {
-        var fridge = _fridges.FirstOrDefault(f => f.Id == id);
-        var product = _products.FirstOrDefault(p => p.Id == productId);
-
-        if (fridge == null) throw new InvalidOperationException("Fridge is not found!");
-        if (product == null) throw new InvalidOperationException("Product is not found!");
-
-        var newProduct = new Product()
+            return Result.Ok(updatedFridge);
+        }
+        catch (Exception ex)
         {
-            FridgeId = id,
-            BarCode = product.BarCode,
-            Name = product.Name,
-            IsDeleted = false,
-            CreatedTimestamp = new DateTimeOffset(DateTime.UtcNow).ToUnixTimeSeconds()
-        };
-
-        newProduct = _db.Products.Add(newProduct).Entity;
-
-        fridge.Products.Add(newProduct);
-
-        _db.Fridges.Update(fridge);
-        _db.SaveChanges();
-
-        return newProduct;
+            return Result.Fail(ex.Message);
+        }
     }
 
-    public Product RemoveProductFromFridge(int id, int productId)
+
+    public async Task<Result<List<Fridge>>> GetList()
     {
-        var fridge = _fridges.FirstOrDefault(f => f.Id == id);
-        var product = _products.FirstOrDefault(p => p.Id == productId);
+        try
+        {
 
-        if (fridge == null) throw new InvalidOperationException("Fridge is not found!");
-        if (product == null) throw new InvalidOperationException("Product is not found!");
-
-        product.IsDeleted = true;
-
-        var productUpdated = _db.Products.Update(product).Entity;
-
-        //fridge.Products.Remove(productUpdated);
-        //_db.Fridges.Update(fridge);
-
-        _db.SaveChanges();
-
-        return productUpdated;
+            return Result.Ok(await _fridgesRepository.GetAll());
+        }
+        catch (Exception ex)
+        {
+            return Result.Fail(ex.Message);
+        }
     }
 
-    public Product RestoreProductInFridge(int id, int productId)
+    public async Task<Result<Fridge>> AddFridgeAsync(Fridge fridge)
     {
-        var fridge = _fridges.FirstOrDefault(f => f.Id == id);
-        var product = _products.FirstOrDefault(p => p.Id == productId);
-
-        if (fridge == null) throw new InvalidOperationException("Fridge is not found!");
-        if (product == null) throw new InvalidOperationException("Product is not found!");
-
-        product.IsDeleted = false;
-
-        var productUpdated = _db.Products.Update(product).Entity;
-
-        //fridge.Products.Remove(productUpdated);
-        //_db.Fridges.Update(fridge);
-
-        _db.SaveChanges();
-
-        return productUpdated;
+        try
+        {
+            return Result.Ok(await _fridgesRepository.Add(fridge));
+        }
+        catch (Exception ex)
+        {
+            return Result.Fail(ex.Message);
+        }
     }
 
-    public Fridge? DeleteFridge(int fridgeId)
+    public async Task<Result<Product>> PutProduct(long id, long productId)
     {
-        var fridge = _fridges.FirstOrDefault(f => f.Id == fridgeId);
+        try
+        {
+            var fridge = await _fridgesRepository.GetById(id);
+            var product = await _productsRepository.GetById(productId);
+
+            if (fridge == null) throw new InvalidOperationException("Fridge is not found!");
+            if (product == null) throw new InvalidOperationException("Product is not found!");
+
+            var newProduct = new Product()
+            {
+                FridgeId = id,
+                BarCode = product.BarCode,
+                Name = product.Name,
+                IsDeleted = false,
+                CreatedTimestamp = new DateTimeOffset(DateTime.UtcNow).ToUnixTimeSeconds()
+            };
+
+            newProduct = await _productsRepository.Add(newProduct);
+
+            fridge.Products.Add(newProduct);
+
+            await _fridgesRepository.Update(fridge);
+
+            return Result.Ok(newProduct);
+        }
+        catch (Exception ex)
+        {
+            return Result.Fail(ex.Message);
+        }
+    }
+
+    public async Task<Result<Product>> RemoveProductFromFridge(long id, long productId)
+    {
+        try
+        {
+
+            var fridge = await _fridgesRepository.GetById(id);
+            var product = await _productsRepository.GetById(productId);
+
+            if (fridge == null) throw new InvalidOperationException("Fridge is not found!");
+            if (product == null) throw new InvalidOperationException("Product is not found!");
+
+            var deletedProduct = await _productsRepository.Delete(product);
+
+            return Result.Ok(deletedProduct);
+        }
+        catch (Exception ex)
+        {
+            return Result.Fail(ex.Message);
+        }
+    }
+
+    public async Task<Result<Product>> RestoreProductInFridge(long id, long productId)
+    {
+        try
+        {
+            var fridge = await _fridgesRepository.GetById(id);
+            var product = await _productsRepository.GetById(productId);
+
+            if (fridge == null) throw new InvalidOperationException("Fridge is not found!");
+            if (product == null) throw new InvalidOperationException("Product is not found!");
+
+            var restoredProduct = await _productsRepository.Restore(product);
+
+            return Result.Ok(restoredProduct);
+        }
+        catch (Exception ex)
+        {
+            return Result.Fail(ex.Message);
+        }
+    }
+
+    public async Task<Result<Fridge>> DeleteFridge(long fridgeId)
+    {
+        try
+        {
+            return Result.Ok(await _fridgesRepository.DeleteById(fridgeId));
+        }
+        catch (Exception ex)
+        {
+            return Result.Fail(ex.Message);
+        }
+    }
+
+    public async Task<Result<Fridge>> RestoreFridge(long fridgeId)
+    {
+        try
+        {
+            var fridge = await _fridgesRepository.RestoreById(fridgeId);
+
+            return Result.Ok(fridge);
+        }
+        catch (Exception ex)
+        {
+            return Result.Fail(ex.Message);
+        }
+    }
+
+    public Result<List<FridgeAccessLevel>> GetFridgeAccessLevels(long fridgeId)
+    {
+        var accessLevels = GetFridgeAccessLevelsByFridgeId(fridgeId);
+
+        return Result.Ok(accessLevels);
+    }
+
+    public Result<FridgeAccessLevel> AddFridgeAccessLevel(long fridgeId, FridgeAccessLevel newAccessLevel)
+    {
+        var fridge = GetByIdAsync(fridgeId);
+
         if (fridge == null)
-            return null;
+            return Result.Fail($"Fridge with id {fridgeId} is not found!");
 
-        fridge.IsDeleted = true;
+        var accessLevel = GetFridgeAccessLevelByUserId(newAccessLevel.UserId);
 
-        _fridges.Update(fridge);
+        if (accessLevel != null)
+            return Result.Fail($"Fridge access level with id {accessLevel} already exists for fridge with id {fridgeId}!");
+
+        var addedAccessLevelResult = _fridgeAccessLevels.Add(newAccessLevel);
+
         _db.SaveChanges();
 
-        return fridge;
+        return Result.Ok(addedAccessLevelResult.Entity);
     }
 
-    public Fridge? RestoreFridge(int fridgeId)
+    public Result<FridgeAccessLevel> UpdateFridgeAccessLevel(long fridgeId, FridgeAccessLevel newAccessLevel)
     {
-        var fridge = _fridges.FirstOrDefault(f => f.Id == fridgeId);
+        var fridge = GetByIdAsync(fridgeId);
+
         if (fridge == null)
-            return null;
+            return Result.Fail($"Fridge with id {fridgeId} is not found!");
 
-        fridge.IsDeleted = false;
+        var accessLevel = GetFridgeAccessLevelByUserId(newAccessLevel.UserId);
 
-        _fridges.Update(fridge);
+        if (accessLevel == null)
+            return Result.Fail($"Fridge access level with id {accessLevel} is not found for fridge with id {fridgeId}!");
+
+        var addedAccessLevelResult = _fridgeAccessLevels.Update(newAccessLevel);
+
         _db.SaveChanges();
 
-        return fridge;
+        return Result.Ok(addedAccessLevelResult.Entity);
+    }
+
+    public Result<FridgeAccessLevel> DeleteFridgeAccessLevel(long accessLevelId)
+    {
+        var accessLevel = GetFridgeAccessLevelById(accessLevelId);
+
+        if (accessLevel == null)
+            return Result.Fail($"Fridge access level with id {accessLevelId} is not found!");
+
+        var addedAccessLevelResult = _fridgeAccessLevels.Remove(accessLevel);
+
+        _db.SaveChanges();
+
+        return Result.Ok(addedAccessLevelResult.Entity);
+    }
+
+    private List<FridgeAccessLevel> GetFridgeAccessLevelsByFridgeId(long fridgeId)
+    {
+        var fridge = GetByIdAsync(fridgeId);
+
+        if (fridge == null)
+            throw new Exception($"Fridge with id {fridgeId} is not found!");
+
+        var accessLevel = _fridgeAccessLevels.Where(a => a.FridgeId == fridgeId).ToList();
+
+        if (accessLevel.Count > 0)
+            return accessLevel;
+
+        return new List<FridgeAccessLevel>();
+    }
+
+    private FridgeAccessLevel? GetFridgeAccessLevelById(long accessToFridgeId)
+    {
+        var accessLevel = _fridgeAccessLevels.Where(a => a.Id == accessToFridgeId).FirstOrDefault();
+
+        if (accessLevel != null)
+            return accessLevel;
+
+        return null;
+
+        //throw new Exception($"Fridge access level with id {accessToFridgeId} is not found!");
+    }
+
+    private FridgeAccessLevel? GetFridgeAccessLevelByUserId(long userId)
+    {
+        var accessLevel = _fridgeAccessLevels.Where(a => a.UserId == userId).FirstOrDefault();
+
+        if (accessLevel != null)
+            return accessLevel;
+
+        return null;
+
+        //throw new Exception($"Fridge access level as associated with user id {userId} is not found!");
     }
 }

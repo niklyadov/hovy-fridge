@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.32126.317
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HovyFridge", "HovyFridge\HovyFridge.csproj", "{79D15DA6-94CA-4ADE-B068-81D161E44677}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HovyFridge", "HovyFridge\HovyFridge.csproj", "{79D15DA6-94CA-4ADE-B068-81D161E44677}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HovyFridge.Api", "HovyFridge.Api\HovyFridge.Api.csproj", "{5865A66C-9475-4F33-9A2C-A25ABBB2DD86}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HovyFridge.Api", "HovyFridge.Api\HovyFridge.Api.csproj", "{5865A66C-9475-4F33-9A2C-A25ABBB2DD86}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HovyFridge.Web", "HovyFridge.Web\HovyFridge.Web.csproj", "{48038EC5-4471-4810-A36E-2FB77E695264}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HovyFridge.Web", "HovyFridge.Web\HovyFridge.Web.csproj", "{48038EC5-4471-4810-A36E-2FB77E695264}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

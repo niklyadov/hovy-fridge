@@ -1,6 +1,6 @@
 ﻿namespace HovyFridge.Api.Data.Entity
 {
-    public abstract class Entity : IEntity
+    public interface IEntity
     {
         public long Id { get; set; }
         public bool IsDeleted { get; set; }

@@ -5,8 +5,9 @@ using Microsoft.AspNetCore.Mvc;
 namespace HovyFridge.Api.Controllers
 {
     [ApiController]
-    [ApiVersion("1.0")]
-    [Route("api/v{version:apiVersion}/[controller]")]
+    //[ApiVersion("1.0")]
+    //[Route("api/v{version:apiVersion}/[controller]")]
+    [Route("[controller]")]
     public class FridgesController : BaseController
     {
         private readonly ProductsService _productsService;
@@ -22,130 +23,185 @@ namespace HovyFridge.Api.Controllers
 
         [HttpGet]
         [Route("fridges/{id}")]
-        public IActionResult GetFridge([FromRoute] int id)
+        public async Task<IActionResult> GetFridge([FromRoute] long id)
         {
-            try
+            var result = await _fridgesService.GetByIdAsync(id);
+
+            if(result.IsSuccess)
             {
-                return Ok(_fridgesService.GetById(id));
+                return Ok(result.Value);
             }
-            catch (Exception ex)
-            {
-                return Problem($"{ex.Message} {ex.StackTrace}");
-            }
+
+            return Problem(string.Join(',', result.Errors));
         }
 
         [HttpPut]
         [Route("fridges")]
-        public IActionResult UpdateFridge([FromBody] Fridge fridge)
+        public async Task<IActionResult> UpdateFridge([FromBody] Fridge fridge)
         {
-            try
+            var result = await _fridgesService.UpdateFridge(fridge);
+
+            if (result.IsSuccess)
             {
-                return Ok(_fridgesService.UpdateFridge(fridge));
+                return Ok(result.Value);
             }
-            catch (Exception ex)
-            {
-                return Problem($"{ex.Message} {ex.StackTrace}");
-            }
+
+            return Problem(string.Join(',', result.Errors));
         }
 
         [HttpGet]
         [Route("fridges")]
-        public IActionResult GetFridges()
+        public async Task<IActionResult> GetFridges()
         {
-            try
-            {
-                var headers = Request.Headers.ToList();
+            var result = await _fridgesService.GetList();
 
-                return Ok(_fridgesService.GetList());
-            }
-            catch (Exception ex)
+            if (result.IsSuccess)
             {
-                return Problem($"{ex.Message} {ex.StackTrace}");
+                return Ok(result.Value);
             }
+
+            return Problem(string.Join(',', result.Errors));
         }
 
         [HttpPost]
         [Route("fridges")]
-        public IActionResult AddFridge([FromBody] Fridge fridge)
+        public async Task<IActionResult> AddFridge([FromBody] Fridge fridge)
         {
-            try
+            var result = await _fridgesService.AddFridgeAsync(fridge);
+
+            if (result.IsSuccess)
             {
-                return Ok(_fridgesService.AddFridge(fridge));
+                return Ok(result.Value);
             }
-            catch (Exception ex)
-            {
-                return Problem($"{ex.Message} {ex.StackTrace}");
-            }
+
+            return Problem(string.Join(',', result.Errors));
         }
 
         [HttpPut]
         [Route("fridges/{id}/product")]
-        public IActionResult PutProductToFridge([FromRoute] int id, [FromBody] int productId)
+        public async Task<IActionResult> PutProductToFridge([FromRoute] long id, [FromBody] long productId)
         {
-            try
+            var result = await _fridgesService.PutProduct(id, productId);
+
+            if (result.IsSuccess)
             {
-                return Ok(_fridgesService.PutProduct(id, productId));
+                return Ok(result.Value);
             }
-            catch (Exception ex)
-            {
-                return Problem($"{ex.Message} {ex.StackTrace}");
-            }
+
+            return Problem(string.Join(',', result.Errors));
         }
 
         [HttpPut]
         [Route("fridges/{id}/product/restore")]
-        public IActionResult RestoreProductInFridge([FromRoute] int id, [FromBody] int productId)
+        public async Task<IActionResult> RestoreProductInFridge([FromRoute] long id, [FromBody] long productId)
         {
-            try
+            var result = await _fridgesService.RestoreProductInFridge(id, productId);
+
+            if (result.IsSuccess)
             {
-                return Ok(_fridgesService.RestoreProductInFridge(id, productId));
+                return Ok(result.Value);
             }
-            catch (Exception ex)
-            {
-                return Problem($"{ex.Message} {ex.StackTrace}");
-            }
+
+            return Problem(string.Join(',', result.Errors));
         }
 
         [HttpDelete]
         [Route("fridges/{id}/product/{productId}")]
-        public IActionResult RemoveProductFromFridge([FromRoute] int id, [FromRoute] int productId)
+        public async Task<IActionResult> RemoveProductFromFridge([FromRoute] long id, [FromRoute] long productId)
         {
-            try
+            var result = await _fridgesService.RemoveProductFromFridge(id, productId);
+
+            if (result.IsSuccess)
             {
-                return Ok(_fridgesService.RemoveProductFromFridge(id, productId));
+                return Ok(result.Value);
             }
-            catch (Exception ex)
-            {
-                return Problem($"{ex.Message} {ex.StackTrace}");
-            }
+
+            return Problem(string.Join(',', result.Errors));
         }
 
         [HttpDelete]
         [Route("fridges/{id}")]
-        public IActionResult DeleteFridge([FromRoute] int id)
+        public async Task<IActionResult> DeleteFridge([FromRoute] long id)
         {
-            try
+            var result = await _fridgesService.DeleteFridge(id);
+
+            if (result.IsSuccess)
             {
-                return Ok(_fridgesService.DeleteFridge(id));
+                return Ok(result.Value);
             }
-            catch (Exception ex)
-            {
-                return Problem($"{ex.Message} {ex.StackTrace}");
-            }
+
+            return Problem(string.Join(',', result.Errors));
         }
 
         [HttpPut]
         [Route("fridges/{id}/restore")]
-        public IActionResult RestoreFridge([FromRoute] int id)
+        public async Task<IActionResult> RestoreFridge([FromRoute] long id)
         {
-            try
+
+            var result = await _fridgesService.RestoreFridge(id);
+
+            if (result.IsSuccess)
             {
-                return Ok(_fridgesService.RestoreFridge(id));
+                return Ok(result.Value);
             }
-            catch (Exception ex)
+
+            return Problem(string.Join(',', result.Errors));
+        }
+
+        [HttpGet]
+        [Route("fridges/{fridgeId}/access")]
+        public async Task<IActionResult> GetAccessLevels([FromRoute] long fridgeId)
+        {
+            var result = _fridgesService.GetFridgeAccessLevels(fridgeId);
+
+            if (result.IsSuccess)
             {
-                return Problem($"{ex.Message} {ex.StackTrace}");
+                return Ok(result.Value);
             }
+
+            return Problem(string.Join(',', result.Errors));
+        }
+
+        [HttpPost]
+        [Route("fridges/{fridgeId}/access")]
+        public async Task<IActionResult> AddAccessLevel([FromRoute] long fridgeId, [FromBody] FridgeAccessLevel accessLevel)
+        {
+            var result = _fridgesService.AddFridgeAccessLevel(fridgeId, accessLevel);
+
+            if (result.IsSuccess)
+            {
+                return Ok(result.Value);
+            }
+
+            return Problem(string.Join(',', result.Errors));
+        }
+
+        [HttpPut]
+        [Route("fridges/{fridgeId}/access")]
+        public async Task<IActionResult> UpdateAccessLevel([FromRoute] long fridgeId, [FromBody] FridgeAccessLevel accessLevel)
+        {
+            var result = _fridgesService.UpdateFridgeAccessLevel(fridgeId, accessLevel);
+
+            if (result.IsSuccess)
+            {
+                return Ok(result.Value);
+            }
+
+            return Problem(string.Join(',', result.Errors));
+        }
+
+        [HttpDelete]
+        [Route("fridges/{fridgeId}/access/{accessLevelId}")]
+        public IActionResult DeleteAccessLevel([FromRoute] long fridgeId, [FromRoute] long accessLevelId)
+        {
+            var result = _fridgesService.DeleteFridgeAccessLevel(accessLevelId);
+
+            if (result.IsSuccess)
+            {
+                return Ok(result.Value);
+            }
+
+            return Problem(string.Join(',', result.Errors));
         }
     }
 }

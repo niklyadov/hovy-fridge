@@ -10,6 +10,8 @@ namespace HovyFridge.Api.Data
         public DbSet<Product> Products { get; set; }
         public DbSet<ProductSuggestion> ProductSuggestion { get; set; }
 
+        public DbSet<FridgeAccessLevel> FridgeAccessLevels { get; set; }
+
         public ApplicationContext(DbContextOptions options) : base(options)
         {
             //Database.EnsureDeleted();

@@ -12,6 +12,6 @@ namespace HovyFridge.Api.Data.Entity
 
         [NotMapped]
         public int ProductsAmount { get; set; }
-        public int? OwnerId { get; set; }
+        public long? OwnerId { get; set; }
     }
 }
