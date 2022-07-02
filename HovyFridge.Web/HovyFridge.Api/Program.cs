@@ -1,7 +1,6 @@
 using HovyFridge.Api.Data;
 using HovyFridge.Api.Data.Repository.GenericRepositoryPattern;
 using HovyFridge.Api.Services;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -29,6 +28,9 @@ builder.Services.AddScoped<ProductsService>();
 builder.Services.AddScoped<FridgesService>();
 builder.Services.AddScoped<VersionsService>();
 builder.Services.AddScoped<JwtTokensService>();
+builder.Services.AddScoped<UsersService>();
+builder.Services.AddScoped<FridgeAccessLevelsService>();
+builder.Services.AddScoped<ProductSuggestionsService>();
 
 builder.Services.AddControllers();
 //builder.Services.AddApiVersioning(cfg =>

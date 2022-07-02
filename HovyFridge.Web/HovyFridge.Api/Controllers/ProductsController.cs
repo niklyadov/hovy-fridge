@@ -24,7 +24,7 @@ namespace HovyFridge.Api.Controllers
         [HttpGet("products/")]
         public async Task<IActionResult> GetProducts([FromQuery] string? searchQuery = null)
         {
-            var result = await _productsService.GetProducts(searchQuery);
+            var result = await _productsService.GetAllAsync(searchQuery);
 
             if (result.IsSuccess)
             {
@@ -37,7 +37,7 @@ namespace HovyFridge.Api.Controllers
         [HttpGet("products/{id}")]
         public async Task<IActionResult> GetProduct([FromRoute] int id)
         {
-            var result = await _productsService.GetProductWithId(id);
+            var result = await _productsService.GetByIdAsync(id);
 
             if (result.IsSuccess)
             {
@@ -50,7 +50,7 @@ namespace HovyFridge.Api.Controllers
         [HttpGet("products/barcode/{barcode}")]
         public async Task<IActionResult> GetProductWithBarcode([FromRoute] string barcode)
         {
-            var result = await _productsService.GetProductWithBarcode(barcode);
+            var result = await _productsService.GetByBarcodeAsync(barcode);
 
             if (result.IsSuccess)
             {
@@ -65,7 +65,7 @@ namespace HovyFridge.Api.Controllers
         public async Task<IActionResult> AddProduct([FromBody] Product product)
         {
 
-            var result = await _productsService.AddProduct(product);
+            var result = await _productsService.AddAsync(product);
 
             if (result.IsSuccess)
             {
@@ -80,7 +80,7 @@ namespace HovyFridge.Api.Controllers
         public async Task<IActionResult> UpdateProduct([FromBody] Product product)
         {
 
-            var result = await _productsService.UpdateProduct(product);
+            var result = await _productsService.UpdateAsync(product);
 
             if (result.IsSuccess)
             {
@@ -94,7 +94,7 @@ namespace HovyFridge.Api.Controllers
         [HttpDelete("products/{id}")]
         public async Task<IActionResult> DeleteProduct([FromRoute] int id)
         {
-            var result = await _productsService.DeleteProduct(id);
+            var result = await _productsService.DeleteByIdAsync(id);
 
             if (result.IsSuccess)
             {
@@ -108,7 +108,7 @@ namespace HovyFridge.Api.Controllers
         [HttpPut("products/{id}/restore")]
         public async Task<IActionResult> RestoreProduct([FromRoute] int id)
         {
-            var result = await _productsService.RestoreProduct(id);
+            var result = await _productsService.RestoreByIdAsync(id);
             if (result.IsSuccess)
             {
                 return Ok(result.Value);

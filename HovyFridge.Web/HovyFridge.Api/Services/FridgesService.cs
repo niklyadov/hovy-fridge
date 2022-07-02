@@ -10,18 +10,10 @@ public class FridgesService
 {
     private readonly FridgesRepository _fridgesRepository;
     private readonly ProductsRepository _productsRepository;
-    private readonly FridgeAccessLevelsRepository _fridgeAccessLevelsRepository;
-
-    private ApplicationContext _db;
-    private DbSet<FridgeAccessLevel> _fridgeAccessLevels;
     public FridgesService(ApplicationContext applicationContext, FridgesRepository fridgesRepository, ProductsRepository productsRepository, FridgeAccessLevelsRepository fridgeAccessLevelsRepository)
     {
-        _db = applicationContext;
-        _fridgeAccessLevels = applicationContext.FridgeAccessLevels;
-
         _fridgesRepository = fridgesRepository;
         _productsRepository = productsRepository;
-        _fridgeAccessLevelsRepository = fridgeAccessLevelsRepository;
     }
 
     public async Task<Result<Fridge>> GetByIdAsync(long id)
@@ -37,13 +29,14 @@ public class FridgesService
 
             return Result.Ok(fridge);
 
-        } catch (Exception ex)
+        }
+        catch (Exception ex)
         {
             return Result.Fail(ex.Message);
         }
     }
 
-    public async Task<Result<Fridge>> UpdateFridge(Fridge fridge)
+    public async Task<Result<Fridge>> UpdateAsync(Fridge fridge)
     {
         try
         {
@@ -58,11 +51,10 @@ public class FridgesService
     }
 
 
-    public async Task<Result<List<Fridge>>> GetList()
+    public async Task<Result<List<Fridge>>> GetListAsync()
     {
         try
         {
-
             return Result.Ok(await _fridgesRepository.GetAll());
         }
         catch (Exception ex)
@@ -71,7 +63,7 @@ public class FridgesService
         }
     }
 
-    public async Task<Result<Fridge>> AddFridgeAsync(Fridge fridge)
+    public async Task<Result<Fridge>> AddAsync(Fridge fridge)
     {
         try
         {
@@ -83,7 +75,7 @@ public class FridgesService
         }
     }
 
-    public async Task<Result<Product>> PutProduct(long id, long productId)
+    public async Task<Result<Product>> PutProductAsync(long id, long productId)
     {
         try
         {
@@ -116,11 +108,10 @@ public class FridgesService
         }
     }
 
-    public async Task<Result<Product>> RemoveProductFromFridge(long id, long productId)
+    public async Task<Result<Product>> RemoveProductAsync(long id, long productId)
     {
         try
         {
-
             var fridge = await _fridgesRepository.GetById(id);
             var product = await _productsRepository.GetById(productId);
 
@@ -137,7 +128,7 @@ public class FridgesService
         }
     }
 
-    public async Task<Result<Product>> RestoreProductInFridge(long id, long productId)
+    public async Task<Result<Product>> RestoreProductAsync(long id, long productId)
     {
         try
         {
@@ -157,7 +148,7 @@ public class FridgesService
         }
     }
 
-    public async Task<Result<Fridge>> DeleteFridge(long fridgeId)
+    public async Task<Result<Fridge>> DeleteByIdAsync(long fridgeId)
     {
         try
         {
@@ -169,7 +160,7 @@ public class FridgesService
         }
     }
 
-    public async Task<Result<Fridge>> RestoreFridge(long fridgeId)
+    public async Task<Result<Fridge>> RestoreByIdAsync(long fridgeId)
     {
         try
         {
@@ -181,103 +172,5 @@ public class FridgesService
         {
             return Result.Fail(ex.Message);
         }
-    }
-
-    public Result<List<FridgeAccessLevel>> GetFridgeAccessLevels(long fridgeId)
-    {
-        var accessLevels = GetFridgeAccessLevelsByFridgeId(fridgeId);
-
-        return Result.Ok(accessLevels);
-    }
-
-    public Result<FridgeAccessLevel> AddFridgeAccessLevel(long fridgeId, FridgeAccessLevel newAccessLevel)
-    {
-        var fridge = GetByIdAsync(fridgeId);
-
-        if (fridge == null)
-            return Result.Fail($"Fridge with id {fridgeId} is not found!");
-
-        var accessLevel = GetFridgeAccessLevelByUserId(newAccessLevel.UserId);
-
-        if (accessLevel != null)
-            return Result.Fail($"Fridge access level with id {accessLevel} already exists for fridge with id {fridgeId}!");
-
-        var addedAccessLevelResult = _fridgeAccessLevels.Add(newAccessLevel);
-
-        _db.SaveChanges();
-
-        return Result.Ok(addedAccessLevelResult.Entity);
-    }
-
-    public Result<FridgeAccessLevel> UpdateFridgeAccessLevel(long fridgeId, FridgeAccessLevel newAccessLevel)
-    {
-        var fridge = GetByIdAsync(fridgeId);
-
-        if (fridge == null)
-            return Result.Fail($"Fridge with id {fridgeId} is not found!");
-
-        var accessLevel = GetFridgeAccessLevelByUserId(newAccessLevel.UserId);
-
-        if (accessLevel == null)
-            return Result.Fail($"Fridge access level with id {accessLevel} is not found for fridge with id {fridgeId}!");
-
-        var addedAccessLevelResult = _fridgeAccessLevels.Update(newAccessLevel);
-
-        _db.SaveChanges();
-
-        return Result.Ok(addedAccessLevelResult.Entity);
-    }
-
-    public Result<FridgeAccessLevel> DeleteFridgeAccessLevel(long accessLevelId)
-    {
-        var accessLevel = GetFridgeAccessLevelById(accessLevelId);
-
-        if (accessLevel == null)
-            return Result.Fail($"Fridge access level with id {accessLevelId} is not found!");
-
-        var addedAccessLevelResult = _fridgeAccessLevels.Remove(accessLevel);
-
-        _db.SaveChanges();
-
-        return Result.Ok(addedAccessLevelResult.Entity);
-    }
-
-    private List<FridgeAccessLevel> GetFridgeAccessLevelsByFridgeId(long fridgeId)
-    {
-        var fridge = GetByIdAsync(fridgeId);
-
-        if (fridge == null)
-            throw new Exception($"Fridge with id {fridgeId} is not found!");
-
-        var accessLevel = _fridgeAccessLevels.Where(a => a.FridgeId == fridgeId).ToList();
-
-        if (accessLevel.Count > 0)
-            return accessLevel;
-
-        return new List<FridgeAccessLevel>();
-    }
-
-    private FridgeAccessLevel? GetFridgeAccessLevelById(long accessToFridgeId)
-    {
-        var accessLevel = _fridgeAccessLevels.Where(a => a.Id == accessToFridgeId).FirstOrDefault();
-
-        if (accessLevel != null)
-            return accessLevel;
-
-        return null;
-
-        //throw new Exception($"Fridge access level with id {accessToFridgeId} is not found!");
-    }
-
-    private FridgeAccessLevel? GetFridgeAccessLevelByUserId(long userId)
-    {
-        var accessLevel = _fridgeAccessLevels.Where(a => a.UserId == userId).FirstOrDefault();
-
-        if (accessLevel != null)
-            return accessLevel;
-
-        return null;
-
-        //throw new Exception($"Fridge access level as associated with user id {userId} is not found!");
     }
 }

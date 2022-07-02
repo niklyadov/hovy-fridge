@@ -2,7 +2,6 @@
 using HovyFridge.Api.Data;
 using HovyFridge.Api.Data.Entity;
 using HovyFridge.Api.Data.Repository.GenericRepositoryPattern;
-using Microsoft.EntityFrameworkCore;
 
 
 namespace HovyFridge.Api.Services;
@@ -12,19 +11,13 @@ public class ProductsService
     private readonly FridgesRepository _fridgesRepository;
     private readonly ProductsRepository _productsRepository;
 
-    //private ApplicationContext _db;
-    //private DbSet<Product> _products;
     public ProductsService(ApplicationContext applicationContext, FridgesRepository fridgesRepository, ProductsRepository productsRepository)
     {
-        //_db = applicationContext;
-        //_products = applicationContext.Products;
-
-
         _fridgesRepository = fridgesRepository;
         _productsRepository = productsRepository;
     }
 
-    public async Task<Result<List<Product>>> GetProducts(string? searchQuery)
+    public async Task<Result<List<Product>>> GetAllAsync(string? searchQuery)
     {
         try
         {
@@ -38,7 +31,7 @@ public class ProductsService
         }
     }
 
-    public async Task<Result<Product>> GetProductWithBarcode(string barcode)
+    public async Task<Result<Product>> GetByBarcodeAsync(string barcode)
     {
         try
         {
@@ -54,7 +47,7 @@ public class ProductsService
         }
     }
 
-    public async Task<Result<Product>> GetProductWithId(long id)
+    public async Task<Result<Product>> GetByIdAsync(long id)
     {
         try
         {
@@ -70,7 +63,7 @@ public class ProductsService
         }
     }
 
-    public async Task<Result<Product>> AddProduct(Product product)
+    public async Task<Result<Product>> AddAsync(Product product)
     {
         try
         {
@@ -93,7 +86,7 @@ public class ProductsService
                 productInList.IsDeleted = false;
                 productInList.Name = product.Name;
 
-                return await UpdateProduct(productInList);
+                return await UpdateAsync(productInList);
             }
 
             return Result.Fail($"Product with barcode {product.BarCode} already exists in product list.");
@@ -104,7 +97,7 @@ public class ProductsService
         }
     }
 
-    public async Task<Result<Product>> DeleteProduct(long productId)
+    public async Task<Result<Product>> DeleteByIdAsync(long productId)
     {
         try
         {
@@ -121,7 +114,7 @@ public class ProductsService
         }
     }
 
-    public async Task<Result<Product>> RestoreProduct(long productId)
+    public async Task<Result<Product>> RestoreByIdAsync(long productId)
     {
         try
         {
@@ -138,7 +131,7 @@ public class ProductsService
         }
     }
 
-    public async Task<Result<Product>> UpdateProduct(Product product)
+    public async Task<Result<Product>> UpdateAsync(Product product)
     {
         try
         {

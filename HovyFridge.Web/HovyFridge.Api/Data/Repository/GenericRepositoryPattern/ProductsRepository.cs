@@ -14,7 +14,7 @@ namespace HovyFridge.Api.Data.Repository.GenericRepositoryPattern
 
         public async Task<Product?> GetProductWithBarcode(string barcode, bool ignoreDeleted = true)
         {
-            return await _dbContext.Set<Product>().FirstOrDefaultAsync(p => p.BarCode == barcode
+            return await _dbContext.Products.FirstOrDefaultAsync(p => p.BarCode == barcode
                            && !ignoreDeleted || !p.FridgeId.HasValue && !p.IsDeleted);
         }
     }
