@@ -1,6 +1,7 @@
 ﻿using FluentResults;
 using HovyFridge.Api.Data.Entity;
 using HovyFridge.Api.Data.Repository.GenericRepositoryPattern;
+using Newtonsoft.Json;
 
 namespace HovyFridge.Api.Services
 {
@@ -96,6 +97,44 @@ namespace HovyFridge.Api.Services
             {
                 return Result.Fail(ex.Message);
             }
+        }
+
+        private async Task<Result<List<ProductSuggestion>>> InsertFromJSON(string json)
+        {
+            try
+            {
+                var insertedSuggestions = new List<ProductSuggestion>();
+                var suggestionsToInsert = JsonConvert.DeserializeObject<List<ProductSuggestion>>(json);
+
+                if (suggestionsToInsert == null || suggestionsToInsert.Count == 0)
+                    throw new FileLoadException("No suggestions in file!");
+
+                foreach (var item in suggestionsToInsert)
+                {
+                    var insertResult = await _productSuggestionsRepository.Add(item);
+                    insertedSuggestions.Add(insertResult);
+                }
+
+                return Result.Ok(insertedSuggestions);
+            }
+            catch (Exception ex)
+            {
+                return Result.Fail(ex.Message);
+            }
+        }
+
+        public async Task<Result<List<ProductSuggestion>>> InsertFromFile(IFormFile file)
+        {
+            if (file.ContentType != "application/json")
+                throw new FileLoadException("Content type of loaded file is not match application/json");
+
+            using var fileStream = file.OpenReadStream();
+
+            using var streamReader = new StreamReader(fileStream);
+
+            var fileContent = streamReader.ReadToEnd();
+
+            return await InsertFromJSON(fileContent);
         }
     }
 }

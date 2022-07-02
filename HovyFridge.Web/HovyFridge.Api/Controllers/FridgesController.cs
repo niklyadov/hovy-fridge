@@ -23,13 +23,12 @@ namespace HovyFridge.Api.Controllers
             _logger = logger;
         }
 
-        [HttpGet]
-        [Route("fridges/{id}")]
+        [HttpGet("{id}")]
         public async Task<IActionResult> GetFridge([FromRoute] long id)
         {
             var result = await _fridgesService.GetByIdAsync(id);
 
-            if(result.IsSuccess)
+            if (result.IsSuccess)
             {
                 return Ok(result.Value);
             }
@@ -38,7 +37,6 @@ namespace HovyFridge.Api.Controllers
         }
 
         [HttpPut]
-        [Route("fridges")]
         public async Task<IActionResult> UpdateFridge([FromBody] Fridge fridge)
         {
             var result = await _fridgesService.UpdateAsync(fridge);
@@ -52,7 +50,6 @@ namespace HovyFridge.Api.Controllers
         }
 
         [HttpGet]
-        [Route("fridges")]
         public async Task<IActionResult> GetFridges()
         {
             var result = await _fridgesService.GetListAsync();
@@ -66,7 +63,6 @@ namespace HovyFridge.Api.Controllers
         }
 
         [HttpPost]
-        [Route("fridges")]
         public async Task<IActionResult> AddFridge([FromBody] Fridge fridge)
         {
             var result = await _fridgesService.AddAsync(fridge);
@@ -79,8 +75,7 @@ namespace HovyFridge.Api.Controllers
             return Problem(string.Join(',', result.Errors));
         }
 
-        [HttpPut]
-        [Route("fridges/{id}/product")]
+        [HttpPut("{id}/product")]
         public async Task<IActionResult> PutProductToFridge([FromRoute] long id, [FromBody] long productId)
         {
             var result = await _fridgesService.PutProductAsync(id, productId);
@@ -93,8 +88,7 @@ namespace HovyFridge.Api.Controllers
             return Problem(string.Join(',', result.Errors));
         }
 
-        [HttpPut]
-        [Route("fridges/{id}/product/restore")]
+        [HttpPut("{id}/product/restore")]
         public async Task<IActionResult> RestoreProductInFridge([FromRoute] long id, [FromBody] long productId)
         {
             var result = await _fridgesService.RestoreProductAsync(id, productId);
@@ -107,8 +101,7 @@ namespace HovyFridge.Api.Controllers
             return Problem(string.Join(',', result.Errors));
         }
 
-        [HttpDelete]
-        [Route("fridges/{id}/product/{productId}")]
+        [HttpDelete("{id}/product/{productId}")]
         public async Task<IActionResult> RemoveProductFromFridge([FromRoute] long id, [FromRoute] long productId)
         {
             var result = await _fridgesService.RemoveProductAsync(id, productId);
@@ -121,8 +114,7 @@ namespace HovyFridge.Api.Controllers
             return Problem(string.Join(',', result.Errors));
         }
 
-        [HttpDelete]
-        [Route("fridges/{id}")]
+        [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteFridge([FromRoute] long id)
         {
             var result = await _fridgesService.DeleteByIdAsync(id);
@@ -135,8 +127,7 @@ namespace HovyFridge.Api.Controllers
             return Problem(string.Join(',', result.Errors));
         }
 
-        [HttpPut]
-        [Route("fridges/{id}/restore")]
+        [HttpPut("{id}/restore")]
         public async Task<IActionResult> RestoreFridge([FromRoute] long id)
         {
 
@@ -150,8 +141,7 @@ namespace HovyFridge.Api.Controllers
             return Problem(string.Join(',', result.Errors));
         }
 
-        [HttpGet]
-        [Route("fridges/{fridgeId}/access")]
+        [HttpGet("{fridgeId}/access")]
         public async Task<IActionResult> GetAccessLevels([FromRoute] long fridgeId)
         {
             var result = await _fridgeAccessLevelsService.GetByFridgeIdAsync(fridgeId);
@@ -164,8 +154,7 @@ namespace HovyFridge.Api.Controllers
             return Problem(string.Join(',', result.Errors));
         }
 
-        [HttpPost]
-        [Route("fridges/{fridgeId}/access")]
+        [HttpPost("{fridgeId}/access")]
         public async Task<IActionResult> AddAccessLevel([FromRoute] long fridgeId, [FromBody] FridgeAccessLevel accessLevel)
         {
             var result = await _fridgeAccessLevelsService.AddAsync(fridgeId, accessLevel);
@@ -178,8 +167,7 @@ namespace HovyFridge.Api.Controllers
             return Problem(string.Join(',', result.Errors));
         }
 
-        [HttpPut]
-        [Route("fridges/{fridgeId}/access")]
+        [HttpPut("{fridgeId}/access")]
         public async Task<IActionResult> UpdateAccessLevel([FromRoute] long fridgeId, [FromBody] FridgeAccessLevel accessLevel)
         {
             var result = await _fridgeAccessLevelsService.UpdateAsync(fridgeId, accessLevel);
@@ -192,8 +180,7 @@ namespace HovyFridge.Api.Controllers
             return Problem(string.Join(',', result.Errors));
         }
 
-        [HttpDelete]
-        [Route("fridges/{fridgeId}/access/{accessLevelId}")]
+        [HttpDelete("{fridgeId}/access/{accessLevelId}")]
         public async Task<IActionResult> DeleteAccessLevel([FromRoute] long fridgeId, [FromRoute] long accessLevelId)
         {
             var result = await _fridgeAccessLevelsService.DeleteByIdAsync(accessLevelId);

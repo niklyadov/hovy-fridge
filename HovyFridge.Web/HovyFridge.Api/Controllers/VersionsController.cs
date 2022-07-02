@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace HovyFridge.Api.Controllers
 {
     [ApiController]
+    [Route("[controller]")]
     //[ApiVersion("1.0")]
     //[Route("api/v{version:apiVersion}/[controller]")]
     public class VersionsController : BaseController
@@ -17,14 +18,14 @@ namespace HovyFridge.Api.Controllers
         }
 
         [HttpGet]
-        [Route("versions/last")]
+        [Route("last")]
         public VersionInfo GetLastVersionInfo()
         {
             return _versionsService.GetLastVersionInfo();
         }
 
         [HttpGet]
-        [Route("versions/{versionId}")]
+        [Route("{versionId}")]
         public VersionInfo GetLastVersionInfo([FromRoute] Guid versionId)
         {
             return _versionsService.GetVersionInfo(versionId);

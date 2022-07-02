@@ -4,14 +4,19 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace HovyFridge.Api.Controllers
 {
+    [ApiController]
+    //[ApiVersion("1.0")]
+    //[Route("api/v{version:apiVersion}/[controller]")]\
+    [Route("[controller]")]
     public class UsersController : BaseController
     {
-        private UsersService _usersService;
+        private readonly UsersService _usersService;
         public UsersController(UsersService usersService)
         {
             _usersService = usersService;
         }
 
+        [HttpGet]
         public async Task<IActionResult> GetUsers()
         {
             var result = await _usersService.GetAllAsync();
@@ -24,6 +29,7 @@ namespace HovyFridge.Api.Controllers
             return Problem(string.Join(',', result.Errors));
         }
 
+        [HttpGet("{id}")]
         public async Task<IActionResult> GetUserById(long id)
         {
             var result = await _usersService.GetByIdAsync(id);
@@ -36,6 +42,7 @@ namespace HovyFridge.Api.Controllers
             return Problem(string.Join(',', result.Errors));
         }
 
+        [HttpPost]
         public async Task<IActionResult> CreateUser(User user)
         {
             var result = await _usersService.AddAsync(user);
@@ -48,6 +55,7 @@ namespace HovyFridge.Api.Controllers
             return Problem(string.Join(',', result.Errors));
         }
 
+        [HttpPut]
         public async Task<IActionResult> UpdateUser(User user)
         {
             var result = await _usersService.UpdateAsync(user);
@@ -60,6 +68,7 @@ namespace HovyFridge.Api.Controllers
             return Problem(string.Join(',', result.Errors));
         }
 
+        [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteUserById(long id)
         {
             var result = await _usersService.DeleteByIdAsync(id);
@@ -72,6 +81,7 @@ namespace HovyFridge.Api.Controllers
             return Problem(string.Join(',', result.Errors));
         }
 
+        [HttpPut("{id}/restore")]
         public async Task<IActionResult> RestoreUserById(long id)
         {
             var result = await _usersService.RestoreByIdAsync(id);

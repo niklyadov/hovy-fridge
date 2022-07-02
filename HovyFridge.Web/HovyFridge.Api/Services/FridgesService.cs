@@ -2,7 +2,6 @@
 using HovyFridge.Api.Data;
 using HovyFridge.Api.Data.Entity;
 using HovyFridge.Api.Data.Repository.GenericRepositoryPattern;
-using Microsoft.EntityFrameworkCore;
 
 namespace HovyFridge.Api.Services;
 

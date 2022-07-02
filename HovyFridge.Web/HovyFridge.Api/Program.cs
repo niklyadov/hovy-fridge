@@ -16,6 +16,7 @@ builder.Services.AddScoped<FridgesRepository>();
 builder.Services.AddScoped<FridgeAccessLevelsRepository>();
 
 builder.Services.AddScoped<ProductsRepository>();
+builder.Services.AddScoped<ProductSuggestionsRepository>();
 
 builder.Services.AddScoped<RecipesRepository>();
 builder.Services.AddScoped<ShoppingListsRepository>();
@@ -53,6 +54,7 @@ if (app.Environment.IsDevelopment())
 }
 
 //app.UseAuthorization();
+app.UseHttpsRedirection();
 
 app.MapControllers();
 
