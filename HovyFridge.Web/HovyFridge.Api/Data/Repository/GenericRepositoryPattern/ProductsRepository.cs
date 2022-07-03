@@ -17,5 +17,12 @@ namespace HovyFridge.Api.Data.Repository.GenericRepositoryPattern
             return await _dbContext.Products.FirstOrDefaultAsync(p => p.BarCode == barcode
                            && !ignoreDeleted || !p.FridgeId.HasValue && !p.IsDeleted);
         }
+
+        public async Task<List<CountedGroupBy<long?>>> GetProductsGroupedByFridgeId()
+        {
+            return await _dbContext.Products
+                .GroupBy(p => p.FridgeId)
+                .Select(p => new CountedGroupBy<long?>(p.Key.HasValue ? p.Key.Value : null, p.Count())).ToListAsync();
+        }
     }
 }

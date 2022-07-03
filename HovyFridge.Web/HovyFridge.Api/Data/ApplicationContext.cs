@@ -17,8 +17,8 @@ namespace HovyFridge.Api.Data
         public ApplicationContext(DbContextOptions options) : base(options)
 #pragma warning restore CS8618
         {
-            //Database.EnsureDeleted();
-            Database.EnsureCreated();
+            Database.EnsureDeleted();
+            //Database.EnsureCreated();
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

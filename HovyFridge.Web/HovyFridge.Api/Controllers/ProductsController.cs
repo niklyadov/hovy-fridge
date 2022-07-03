@@ -149,7 +149,19 @@ namespace HovyFridge.Api.Controllers
         [HttpPost("suggestions/upload")]
         public async Task<IActionResult> UploadProductSuggestions(IFormFile file)
         {
-            var result = await _productSuggestionsService.InsertFromFile(file);
+            var result = await _productSuggestionsService.InsertFromFileAsync(file);
+            if (result.IsSuccess)
+            {
+                return Ok(result.Value);
+            }
+
+            return Problem(string.Join(',', result.Errors));
+        }
+
+        [HttpGet("statistic/fridge")]
+        public async Task<IActionResult> GetProductsGroupedByFridgeId()
+        {
+            var result = await _productsService.GetProductsGroupedByFridgeIdAsync();
             if (result.IsSuccess)
             {
                 return Ok(result.Value);

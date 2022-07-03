@@ -147,4 +147,20 @@ public class ProductsService
             return Result.Fail(ex.Message);
         }
     }
+
+
+
+    public async Task<Result<List<CountedGroupBy<long?>>>> GetProductsGroupedByFridgeIdAsync()
+    {
+        try
+        {
+            var result = await _productsRepository.GetProductsGroupedByFridgeId();
+
+            return Result.Ok(result);
+        }
+        catch (Exception ex)
+        {
+            return Result.Fail(ex.Message);
+        }
+    }
 }

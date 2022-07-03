@@ -124,7 +124,7 @@ namespace HovyFridge.Api.Services
             }
         }
 
-        public async Task<Result<List<ProductSuggestion>>> InsertFromFile(IFormFile file)
+        public async Task<Result<List<ProductSuggestion>>> InsertFromFileAsync(IFormFile file)
         {
             try
             {

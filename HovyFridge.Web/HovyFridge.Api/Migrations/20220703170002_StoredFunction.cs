@@ -4,7 +4,7 @@
 
 namespace HovyFridgeApi.Migrations
 {
-    public partial class FunctionForSearchSuggestons : Migration
+    public partial class StoredFunction : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -20,16 +20,13 @@ namespace HovyFridgeApi.Migrations
              */
 
             migrationBuilder.Sql(
-                "CREATE OR REPLACE FUNCTION search_suggestions_func (stringQuery text) RETURNS SETOF public.\"ProductSuggestion\"" +
-                "LANGUAGE SQL" +
-                "AS $$" +
-                    "SELECT * FROM public.\"ProductSuggestion\" WHERE \"Name\" LIKE '%' || stringQuery || '%';" +
-                "$$;");
+                "CREATE OR REPLACE FUNCTION search_suggestions_func (stringQuery text) RETURNS SETOF public.\"ProductSuggestion\" LANGUAGE SQL " +
+                "AS $$ SELECT * FROM public.\"ProductSuggestion\" WHERE \"Name\" LIKE '%' || stringQuery || '%'; $$;");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.Sql("DROP FUNCTION search_suggestions_func(text)");
-        } 
+        }
     }
 }

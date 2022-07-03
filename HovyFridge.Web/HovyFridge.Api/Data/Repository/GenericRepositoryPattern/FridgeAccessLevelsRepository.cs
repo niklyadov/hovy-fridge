@@ -16,7 +16,7 @@ namespace HovyFridge.Api.Data.Repository.GenericRepositoryPattern
         {
             return _dbContext.FridgeAccessLevels
                 .Where(fal => fal.FridgeId == fridgeId)
-                .Join(_dbContext.Set<User>(),
+                .Join(_dbContext.Users,
                         fal => fal.UserId, u => u.Id,
                         (fal, u) => u).ToList();
         }

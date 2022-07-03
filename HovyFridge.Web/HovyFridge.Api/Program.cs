@@ -5,12 +5,10 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.Configure<RouteOptions>(options => options.LowercaseUrls = true);
 
-builder.Services.AddDbContext<ApplicationContext>(options =>
-{
-    options.UseNpgsql("Host=127.0.0.1;Port=5432;Database=usersdb;Username=postgres;Password=root");
-});
-
+builder.Services.AddDbContext<ApplicationContext>(options => 
+    options.UseNpgsql(builder.Configuration.GetConnectionString("Default")));
 
 builder.Services.AddScoped<FridgesRepository>();
 builder.Services.AddScoped<FridgeAccessLevelsRepository>();
