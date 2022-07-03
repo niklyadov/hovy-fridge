@@ -34,7 +34,7 @@ namespace HovyFridge.Api.Data.Repository.GenericRepositoryPattern
 
         public override async Task<Fridge> Delete(Fridge fridge)
         {
-            using var transaction = _dbContext.Database.BeginTransaction();
+            using var transaction = await _dbContext.Database.BeginTransactionAsync();
             try
             {
                 foreach (var product in fridge.Products)
@@ -46,13 +46,13 @@ namespace HovyFridge.Api.Data.Repository.GenericRepositoryPattern
 
                 var deletedEntityResult = await base.Delete(fridge);
 
-                transaction.Commit();
+                await transaction.CommitAsync();
 
                 return deletedEntityResult;
             }
             catch (Exception)
             {
-                transaction.Rollback();
+                await transaction.RollbackAsync();
                 throw;
             }
         }

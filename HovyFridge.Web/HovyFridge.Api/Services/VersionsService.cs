@@ -17,12 +17,12 @@ public class VersionsService
         };
 
 
-    public VersionInfo GetVersionInfo(Guid versionId)
+    public VersionInfo? GetVersionInfo(Guid versionId)
     {
         return _versions.FirstOrDefault(v => v.Id == versionId);
     }
 
-    public VersionInfo GetLastVersionInfo()
+    public VersionInfo? GetLastVersionInfo()
     {
         return _versions.LastOrDefault();
     }

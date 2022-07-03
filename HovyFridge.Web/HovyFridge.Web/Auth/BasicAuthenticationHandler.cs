@@ -56,6 +56,11 @@ namespace HovyFridge.Web.Auth
                 return Task.FromResult(AuthenticateResult.Fail("User is not found."));
             }
 
+            if(authUser == null)
+            {
+                return Task.FromResult(AuthenticateResult.Fail("User is not found."));
+            }
+
             if (authUser.PasswordHash != authPassword)
             {
                 return Task.FromResult(AuthenticateResult.Fail("Incorrect username or password."));

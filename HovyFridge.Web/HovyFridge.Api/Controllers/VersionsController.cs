@@ -19,14 +19,14 @@ namespace HovyFridge.Api.Controllers
 
         [HttpGet]
         [Route("last")]
-        public VersionInfo GetLastVersionInfo()
+        public VersionInfo? GetLastVersionInfo()
         {
             return _versionsService.GetLastVersionInfo();
         }
 
         [HttpGet]
         [Route("{versionId}")]
-        public VersionInfo GetLastVersionInfo([FromRoute] Guid versionId)
+        public VersionInfo? GetLastVersionInfo([FromRoute] Guid versionId)
         {
             return _versionsService.GetVersionInfo(versionId);
         }

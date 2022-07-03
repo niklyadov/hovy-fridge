@@ -132,6 +132,19 @@ namespace HovyFridge.Api.Controllers
             return Problem(string.Join(',', result.Errors));
         }
 
+
+        [HttpGet("suggestions/search")]
+        public async Task<IActionResult> GetProductSuggestions([FromQuery] string searchQuery)
+        {
+            var result = await _productSuggestionsService.SearchAsync(searchQuery);
+            if (result.IsSuccess)
+            {
+                return Ok(result.Value);
+            }
+
+            return Problem(string.Join(',', result.Errors));
+        }
+
         //[RequestSizeLimit(1073741824)]
         [HttpPost("suggestions/upload")]
         public async Task<IActionResult> UploadProductSuggestions(IFormFile file)

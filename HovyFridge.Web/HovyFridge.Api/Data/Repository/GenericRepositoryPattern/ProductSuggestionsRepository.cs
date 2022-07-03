@@ -1,5 +1,7 @@
 ﻿using HovyFridge.Api.Data.Entity;
 using HovyFridge.Api.Data.Repository.GenericRepositoryPattern.Abstract;
+using Microsoft.EntityFrameworkCore;
+using System.Data.SqlClient;
 
 namespace HovyFridge.Api.Data.Repository.GenericRepositoryPattern
 {
@@ -9,6 +11,17 @@ namespace HovyFridge.Api.Data.Repository.GenericRepositoryPattern
         public ProductSuggestionsRepository(ApplicationContext dbContext) : base(dbContext)
         {
             _dbContext = dbContext;
+        }
+
+
+        public async Task<List<ProductSuggestion>> SearchProductSuggestion(string suggestionQuery)
+        {
+            //var param = new SqlParameter("@name", suggestionQuery);
+
+            var suggestionsResult = _dbContext.ProductSuggestion
+                .FromSqlRaw($"select * from search_suggestions_func('{suggestionQuery}');");
+
+            return await suggestionsResult.ToListAsync();
         }
     }
 }

@@ -2,6 +2,7 @@
 using HovyFridge.Api.Data.Entity;
 using HovyFridge.Api.Data.Repository.GenericRepositoryPattern;
 using Newtonsoft.Json;
+using System.Text.RegularExpressions;
 
 namespace HovyFridge.Api.Services
 {
@@ -125,16 +126,43 @@ namespace HovyFridge.Api.Services
 
         public async Task<Result<List<ProductSuggestion>>> InsertFromFile(IFormFile file)
         {
-            if (file.ContentType != "application/json")
-                throw new FileLoadException("Content type of loaded file is not match application/json");
+            try
+            {
+                if (file.ContentType != "application/json")
+                    throw new FileLoadException("Content type of loaded file is not match application/json");
 
-            using var fileStream = file.OpenReadStream();
+                using var fileStream = file.OpenReadStream();
 
-            using var streamReader = new StreamReader(fileStream);
+                using var streamReader = new StreamReader(fileStream);
 
-            var fileContent = streamReader.ReadToEnd();
+                var fileContent = streamReader.ReadToEnd();
 
-            return await InsertFromJSON(fileContent);
+                return await InsertFromJSON(fileContent);
+            }
+            catch (Exception ex)
+            {
+                return Result.Fail(ex.Message);
+            }
+        }
+
+        public async Task<Result<List<ProductSuggestion>>> SearchAsync(string suggestionQuery)
+        {
+            try
+            {
+                suggestionQuery = new Regex("[^a-zA-Zа-яА-Я0-9 -_]").Replace(suggestionQuery, "");
+                suggestionQuery = suggestionQuery.ToLower().Trim();
+
+                if (string.IsNullOrEmpty(suggestionQuery))
+                    throw new Exception();
+
+                var searchResult = await _productSuggestionsRepository.SearchProductSuggestion(suggestionQuery);
+
+                return Result.Ok(searchResult);
+            }
+            catch (Exception ex)
+            {
+                return Result.Fail(ex.Message);
+            }
         }
     }
 }

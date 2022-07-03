@@ -1,7 +1,7 @@
 ﻿using FluentResults;
 using HovyFridge.Api.Data;
 using HovyFridge.Api.Data.Entity;
-using Microsoft.EntityFrameworkCore;
+using HovyFridge.Api.Data.Repository.GenericRepositoryPattern;
 using System.IdentityModel.Tokens.Jwt;
 
 namespace HovyFridge.Api.Services;
@@ -9,39 +9,47 @@ namespace HovyFridge.Api.Services;
 public class AuthService
 {
     private int? _userId = null;
-    private readonly ApplicationContext _db;
-    private readonly DbSet<User>? _users;
-    private User _user;
 
-    public AuthService(ApplicationContext applicationContext)
+    private readonly UsersRepository _usersRepostiory;
+
+    public AuthService(UsersRepository usersRepostiory)
     {
-        _db = applicationContext;
-        _users = applicationContext.Users;
+        _usersRepostiory = usersRepostiory;
     }
     public Result InitInstanceWithToken(JwtSecurityToken token)
     {
-        if (!int.TryParse(token.Issuer, out int userId))
+        try
         {
-            return Result.Fail("The token is not attached on any user.");
+            if (!int.TryParse(token.Issuer, out int userId))
+                throw new Exception("The token is not attached on any user.");
+
+            _userId = userId;
+
+            return Result.Ok();
         }
-
-        _userId = userId;
-
-        return Result.Ok();
+        catch (Exception ex)
+        {
+            return Result.Fail(ex.Message);
+        }
     }
 
     public async Task<Result<User>> GetCurrentUser()
     {
-        if (_userId.HasValue && _userId.Value > 0)
+        try
         {
-            _user = await _users?.FirstOrDefaultAsync(u => u.Id == _userId.Value);
+            if (!_userId.HasValue || _userId.Value == 0)
+                throw new Exception("User id is not assigned!");
 
-            if (_user is not null)
-            {
-                return Result.Ok(_user);
-            }
+            var user = await _usersRepostiory.GetById(_userId.Value);
+
+            if (user == null)
+                throw new Exception("User is not found!");
+
+            return Result.Ok(user);
         }
-
-        return Result.Fail("User not found");
+        catch (Exception ex)
+        {
+            return Result.Fail(ex.Message);
+        }
     }
 }
