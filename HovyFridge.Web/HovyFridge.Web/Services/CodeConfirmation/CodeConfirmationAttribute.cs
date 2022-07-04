@@ -39,7 +39,7 @@ namespace HovyFridge.Web.Services.CodeConfirmation
                 confirmationToken = confirmationTokenValue.ToString();
             }
 
-            string url = $"{_configuration.Url}{context.HttpContext.Request.Path}?confirmationToken=" + "{0}";
+            string url = $"{_configuration.BaseUrl}{context.HttpContext.Request.Path}?confirmationToken=" + "{0}";
 
             var currentUser = _usersService.CurrentUser;
 

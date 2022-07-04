@@ -2,7 +2,7 @@
 {
     public class AppConfiguration
     {
-        public string Url { get; set; } = "http://localhost:5187/";
+        public string BaseUrl { get; set; } = "";
 
         public TelegramBotConfiguration TelegramBot { get; set; }
             = new TelegramBotConfiguration();

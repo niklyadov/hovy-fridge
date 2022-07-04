@@ -4,6 +4,7 @@ using HovyFridge.Web.Models;
 using HovyFridge.Web.Services;
 using HovyFridge.Web.Services.CodeConfirmation;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using System.Diagnostics;
 
 namespace HovyFridge.Web.Controllers
@@ -13,12 +14,14 @@ namespace HovyFridge.Web.Controllers
         private readonly ILogger<HomeController> _logger;
         private readonly CodeConfirmationService _confirmationService;
         private readonly UsersService _usersService;
+        private readonly AppConfiguration _appConfiguration;
 
-        public HomeController(ILogger<HomeController> logger, CodeConfirmationService confirmationService, UsersService usersService)
+        public HomeController(ILogger<HomeController> logger, CodeConfirmationService confirmationService, UsersService usersService, IOptions<AppConfiguration> options)
         {
             _logger = logger;
             _confirmationService = confirmationService;
             _usersService = usersService;
+            _appConfiguration = options.Value;
         }
 
         public IActionResult Index()
@@ -33,8 +36,10 @@ namespace HovyFridge.Web.Controllers
 
             if (currentUser is null) return Unauthorized();
 
+            var baseUrl = _appConfiguration.BaseUrl;
+
             var pageUrl = Request.Path.ToString().Trim('/');
-            pageUrl = $"http://hovyfridge.io:6800/{pageUrl}";
+                pageUrl = $"{baseUrl}{pageUrl}";
             var pageUrlWithToken = pageUrl + "?confirmationToken={0}";
 
             if (string.IsNullOrEmpty(confirmationToken))
