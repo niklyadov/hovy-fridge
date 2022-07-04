@@ -24,9 +24,9 @@ namespace HovyFridge.Api.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetProducts([FromQuery] string? searchQuery = null)
+        public async Task<IActionResult> GetProducts()
         {
-            var result = await _productsService.GetAllAsync(searchQuery);
+            var result = await _productsService.GetAllAsync();
 
             if (result.IsSuccess)
             {
@@ -121,9 +121,9 @@ namespace HovyFridge.Api.Controllers
 
 
         [HttpGet("suggestions")]
-        public async Task<IActionResult> GetProductSuggestions()
+        public async Task<IActionResult> GetProductSuggestions([FromQuery] string searchQuery)
         {
-            var result = await _productSuggestionsService.GetAllAsync();
+            var result = await _productsService.GetSuggestionsNamesAsync(searchQuery);
             if (result.IsSuccess)
             {
                 return Ok(result.Value);
@@ -134,7 +134,7 @@ namespace HovyFridge.Api.Controllers
 
 
         [HttpGet("suggestions/search")]
-        public async Task<IActionResult> GetProductSuggestions([FromQuery] string searchQuery)
+        public async Task<IActionResult> SearchSuggestions([FromQuery] string searchQuery)
         {
             var result = await _productSuggestionsService.SearchAsync(searchQuery);
             if (result.IsSuccess)
@@ -161,7 +161,7 @@ namespace HovyFridge.Api.Controllers
         [HttpGet("statistic/fridge")]
         public async Task<IActionResult> GetProductsGroupedByFridgeId()
         {
-            var result = await _productsService.GetProductsGroupedByFridgeIdAsync();
+            var result = await _productsService.GetGroupedByFridgeIdAsync();
             if (result.IsSuccess)
             {
                 return Ok(result.Value);

@@ -16,7 +16,7 @@ public class ProductsService
         _productsRepository = productsRepository;
     }
 
-    public async Task<Result<List<Product>>> GetAllAsync(string? searchQuery)
+    public async Task<Result<List<Product>>> GetAllAsync()
     {
         try
         {
@@ -153,7 +153,7 @@ public class ProductsService
     {
         try
         {
-            var result = await _productsRepository.GetProductsGroupedByFridgeId();
+            var result = await _productsRepository.GetGroupedByFridgeId();
 
             return Result.Ok(result);
         }

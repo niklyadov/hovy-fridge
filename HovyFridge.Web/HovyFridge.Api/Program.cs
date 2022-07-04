@@ -9,7 +9,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.Configure<RouteOptions>(options => options.LowercaseUrls = true);
 
 builder.Services.AddDbContext<ApplicationContext>(options =>
-    options.UseNpgsql(builder.Configuration.GetConnectionString("Default")));
+    options.UseNpgsql(builder.Configuration.GetConnectionString("Default"), 
+        b => b.MigrationsAssembly("HovyFridge.Api")));
 
 builder.Services.AddScoped<FridgesRepository>();
 builder.Services.AddScoped<FridgeAccessLevelsRepository>();

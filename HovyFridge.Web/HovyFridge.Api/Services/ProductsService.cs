@@ -16,7 +16,7 @@ public class ProductsService
         _productsRepository = productsRepository;
     }
 
-    public async Task<Result<List<Product>>> GetAllAsync(string? searchQuery)
+    public async Task<Result<List<Product>>> GetAllAsync()
     {
         try
         {
@@ -147,13 +147,28 @@ public class ProductsService
         }
     }
 
-
-
-    public async Task<Result<List<CountedGroupBy<long?>>>> GetProductsGroupedByFridgeIdAsync()
+    public async Task<Result<List<CountedGroupBy<long?>>>> GetGroupedByFridgeIdAsync()
     {
         try
         {
-            var result = await _productsRepository.GetProductsGroupedByFridgeId();
+            var result = await _productsRepository.GetGroupedByFridgeId();
+
+            return Result.Ok(result);
+        }
+        catch (Exception ex)
+        {
+            return Result.Fail(ex.Message);
+        }
+    }
+
+    public async Task<Result<List<string>>> GetSuggestionsNamesAsync(string searchQuery)
+    {
+        try
+        {
+            if (string.IsNullOrEmpty(searchQuery))
+                throw new ArgumentNullException(nameof(searchQuery));
+
+            var result = await _productsRepository.GetSuggestions(searchQuery);
 
             return Result.Ok(result);
         }

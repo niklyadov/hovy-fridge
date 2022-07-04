@@ -9,7 +9,7 @@ public class FridgesService
 {
     private readonly FridgesRepository _fridgesRepository;
     private readonly ProductsRepository _productsRepository;
-    public FridgesService(ApplicationContext applicationContext, FridgesRepository fridgesRepository, ProductsRepository productsRepository, FridgeAccessLevelsRepository fridgeAccessLevelsRepository)
+    public FridgesService(FridgesRepository fridgesRepository, ProductsRepository productsRepository, FridgeAccessLevelsRepository fridgeAccessLevelsRepository)
     {
         _fridgesRepository = fridgesRepository;
         _productsRepository = productsRepository;

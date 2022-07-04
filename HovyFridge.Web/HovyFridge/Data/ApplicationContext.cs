@@ -18,7 +18,7 @@ namespace HovyFridge.Data
 #pragma warning restore CS8618
         {
             //Database.EnsureDeleted();
-            Database.EnsureCreated();
+            //Database.EnsureCreated();
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
