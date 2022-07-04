@@ -1,0 +1,28 @@
+﻿@model HovyFridge.Web.ViewModels.RegisterUserViewModel
+
+@{
+    ViewData["Title"] = "Registration Page";
+}
+
+<h2>Регистрация в системе</h2>
+<form method="post" asp-controller="Auth" asp-action="Register">
+    <div asp-validation-summary="ModelOnly"></div>
+    <div>
+        <label asp-for="@Model.UserName"></label><br />
+        <input asp-for="@Model.UserName" />
+        <span asp-validation-for="@Model.UserName"></span>
+    </div>
+    <div>
+        <label asp-for="@Model.Password"></label><br />
+        <input asp-for="@Model.Password" />
+        <span asp-validation-for="@Model.Password"></span>
+    </div>
+    <div>
+        <label asp-for="@Model.PasswordRepeat"></label><br />
+        <input asp-for="@Model.PasswordRepeat" />
+        <span asp-validation-for="@Model.PasswordRepeat"></span>
+    </div>
+    <div>
+        <input type="submit" value="Отправить" />
+    </div>
+</form>

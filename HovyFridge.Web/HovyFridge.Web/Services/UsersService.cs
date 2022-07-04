@@ -1,6 +1,8 @@
 ﻿using FluentResults;
 using HovyFridge.Data.Entity;
 using HovyFridge.Data.Repository.GenericRepositoryPattern;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace HovyFridge.Web.Services
 {
@@ -44,11 +46,17 @@ namespace HovyFridge.Web.Services
             }
         }
 
-        public async Task<Result<User>> AddAsync(User user)
+        public async Task<Result<User>> RegisterAsync(string username, string password)
         {
             try
             {
-                var createdUser = await _usersRepository.Add(user);
+                var createdUser = new User()
+                {
+                    Name = username,
+                    PasswordHash = HashPassword(password)
+                };
+
+                createdUser = await _usersRepository.Add(createdUser);
 
                 return Result.Ok();
             }
@@ -92,7 +100,7 @@ namespace HovyFridge.Web.Services
             {
                 var createdUser = await _usersRepository.GetByUsername(username);
 
-                return Result.Ok();
+                return Result.Ok(createdUser);
             }
             catch (Exception ex)
             {
@@ -112,6 +120,19 @@ namespace HovyFridge.Web.Services
             {
                 return Result.Fail(ex.Message);
             }
+        }
+
+        public bool IsPasswordValid(string password, string passwordHash) =>
+            HashPassword(password).Equals(passwordHash);
+
+        private string HashPassword(string unhashedDataStr)
+        {
+            using var sha256 = SHA256.Create();
+            var unhashedData = Encoding.UTF8.GetBytes(unhashedDataStr);
+            var hashedData = sha256.ComputeHash(unhashedData);
+            var hashedStr = Encoding.UTF8.GetString(hashedData);
+
+            return hashedStr;
         }
     }
 }

@@ -31,18 +31,14 @@ namespace HovyFridge.Web.Auth
             Response.Headers.Add("WWW-Authenticate", "Basic");
 
             if (!Request.Headers.ContainsKey("Authorization"))
-            {
                 return await Task.FromResult(AuthenticateResult.Fail("Authorization header missing."));
-            }
 
             // Get authorization key
             var authorizationHeader = Request.Headers["Authorization"].ToString();
             var authHeaderRegex = new Regex(@"Basic (.*)");
 
             if (!authHeaderRegex.IsMatch(authorizationHeader))
-            {
                 return await Task.FromResult(AuthenticateResult.Fail("Authorization code not formatted properly."));
-            }
 
             var authBase64 = Encoding.UTF8.GetString(Convert.FromBase64String(authHeaderRegex.Replace(authorizationHeader, "$1")));
             var authSplit = authBase64.Split(Convert.ToChar(":"), 2);
@@ -53,14 +49,10 @@ namespace HovyFridge.Web.Auth
             var authUser = authUserResult.Value;
 
             if (authUser == null)
-            {
                 return await Task.FromResult(AuthenticateResult.Fail("User is not found."));
-            }
 
-            if (authUser.PasswordHash != authPassword)
-            {
+            if (!_usersService.IsPasswordValid(authPassword, authUser.PasswordHash))
                 return await Task.FromResult(AuthenticateResult.Fail("Incorrect username or password."));
-            }
 
             if (authUserResult.IsSuccess)
             {
