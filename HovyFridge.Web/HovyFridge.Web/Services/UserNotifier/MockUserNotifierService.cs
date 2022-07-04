@@ -28,7 +28,8 @@ namespace HovyFridge.Web.Services.UserNotifier
                     _logger.LogInformation($"Message for user {user}: {confirmationLink} with message {confirmationMessage}");
 
                     return Result.Ok();
-                } catch (Exception ex)
+                }
+                catch (Exception ex)
                 {
                     return Result.Fail(ex.Message);
                 }

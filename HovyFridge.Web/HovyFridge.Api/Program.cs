@@ -1,14 +1,14 @@
+using HovyFridge.Api.Services;
 using HovyFridge.Data;
 using HovyFridge.Data.Repository.GenericRepositoryPattern;
-using HovyFridge.Api.Services;
-using Microsoft.EntityFrameworkCore;
 using HovyFridge.Services.Auth;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.Configure<RouteOptions>(options => options.LowercaseUrls = true);
 
-builder.Services.AddDbContext<ApplicationContext>(options => 
+builder.Services.AddDbContext<ApplicationContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("Default")));
 
 builder.Services.AddScoped<FridgesRepository>();

@@ -1,6 +1,6 @@
-﻿using HovyFridge.Web.Services.UserNotifier;
-using HovyFridge.Data.Entity;
+﻿using HovyFridge.Data.Entity;
 using HovyFridge.Services.Auth;
+using HovyFridge.Web.Services.UserNotifier;
 
 namespace HovyFridge.Web.Services.CodeConfirmation
 {
@@ -30,7 +30,7 @@ namespace HovyFridge.Web.Services.CodeConfirmation
         {
             var confirmationToken = _jwtTokensService.GenerateNewTokenForUser(currentUser, TokenServiceName);
 
-            await _userNotifier.SendConfirmationLink(currentUser, string.Format(accessUrl, confirmationToken), 
+            await _userNotifier.SendConfirmationLink(currentUser, string.Format(accessUrl, confirmationToken),
                 $"Please click here to confirm your action (for {actionName})");
         }
     }

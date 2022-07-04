@@ -48,6 +48,6 @@ public class JwtTokensService
         return validationResult.IsValid;
     }
 
-    public JwtSecurityToken ParseToken(string jwtBase64) => 
+    public JwtSecurityToken ParseToken(string jwtBase64) =>
         new JwtSecurityToken(jwtBase64);
 }

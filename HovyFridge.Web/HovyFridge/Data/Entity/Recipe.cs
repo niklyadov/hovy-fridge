@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-
-namespace HovyFridge.Data.Entity
+﻿namespace HovyFridge.Data.Entity
 {
     public class Recipe : Entity
     {

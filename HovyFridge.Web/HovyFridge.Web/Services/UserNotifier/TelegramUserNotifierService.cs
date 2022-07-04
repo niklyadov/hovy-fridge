@@ -35,7 +35,8 @@ namespace HovyFridge.Web.Services.UserNotifier
                 await _telegramBotClient.SendTextMessageAsync(new ChatId(user.TelegramChatId), $"Hi, {user.Name}!\n{confirmationMessage}", replyMarkup: keyboard);
 
                 return Result.Ok();
-            } catch (Exception ex)
+            }
+            catch (Exception ex)
             {
                 return Result.Fail(ex.ToString());
             }

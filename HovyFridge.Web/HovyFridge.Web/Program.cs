@@ -1,7 +1,7 @@
 using HovyFridge.Data;
 using HovyFridge.Data.Repository.GenericRepositoryPattern;
-using HovyFridge.Web.Auth;
 using HovyFridge.Services.Auth;
+using HovyFridge.Web.Auth;
 using HovyFridge.Web.Models;
 using HovyFridge.Web.Services;
 using HovyFridge.Web.Services.CodeConfirmation;

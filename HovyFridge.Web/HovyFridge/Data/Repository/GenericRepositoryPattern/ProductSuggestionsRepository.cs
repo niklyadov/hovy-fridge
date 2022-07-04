@@ -1,7 +1,6 @@
 ﻿using HovyFridge.Data.Entity;
 using HovyFridge.Data.Repository.GenericRepositoryPattern.Abstract;
 using Microsoft.EntityFrameworkCore;
-using System.Data.SqlClient;
 
 namespace HovyFridge.Data.Repository.GenericRepositoryPattern
 {

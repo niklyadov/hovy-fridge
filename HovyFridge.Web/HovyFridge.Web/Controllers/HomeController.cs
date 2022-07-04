@@ -27,14 +27,14 @@ namespace HovyFridge.Web.Controllers
         }
 
         [BasicAuth(UserRole.Manager)]
-        public async Task<IActionResult> Privacy([FromQuery]string? confirmationToken)
+        public async Task<IActionResult> Privacy([FromQuery] string? confirmationToken)
         {
             var currentUser = _usersService.CurrentUser;
 
             if (currentUser is null) return Unauthorized();
 
             var pageUrl = Request.Path.ToString().Trim('/');
-                pageUrl = $"http://hovyfridge.io:6800/{pageUrl}";
+            pageUrl = $"http://hovyfridge.io:6800/{pageUrl}";
             var pageUrlWithToken = pageUrl + "?confirmationToken={0}";
 
             if (string.IsNullOrEmpty(confirmationToken))
