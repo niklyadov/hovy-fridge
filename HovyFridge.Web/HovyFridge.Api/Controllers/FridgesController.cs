@@ -1,5 +1,5 @@
-﻿using HovyFridge.Api.Data.Entity;
-using HovyFridge.Api.Services;
+﻿using HovyFridge.Api.Services;
+using HovyFridge.Data.Entity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HovyFridge.Api.Controllers

@@ -26,13 +26,13 @@ namespace HovyFridge.Web.Auth
 
         private readonly UsersService _usersService;
 
-        protected override Task<AuthenticateResult> HandleAuthenticateAsync()
+        protected override async Task<AuthenticateResult> HandleAuthenticateAsync()
         {
             Response.Headers.Add("WWW-Authenticate", "Basic");
 
             if (!Request.Headers.ContainsKey("Authorization"))
             {
-                return Task.FromResult(AuthenticateResult.Fail("Authorization header missing."));
+                return await Task.FromResult(AuthenticateResult.Fail("Authorization header missing."));
             }
 
             // Get authorization key
@@ -41,7 +41,7 @@ namespace HovyFridge.Web.Auth
 
             if (!authHeaderRegex.IsMatch(authorizationHeader))
             {
-                return Task.FromResult(AuthenticateResult.Fail("Authorization code not formatted properly."));
+                return await Task.FromResult(AuthenticateResult.Fail("Authorization code not formatted properly."));
             }
 
             var authBase64 = Encoding.UTF8.GetString(Convert.FromBase64String(authHeaderRegex.Replace(authorizationHeader, "$1")));
@@ -49,35 +49,36 @@ namespace HovyFridge.Web.Auth
             var authUsername = authSplit[0];
             var authPassword = authSplit.Length > 1 ? authSplit[1] : throw new Exception("Unable to get password");
 
-            var authUserResult = _usersService.GetUserByUsername(authUsername);
+            var authUserResult = await _usersService.GetByUsernameAsync(authUsername);
+            var authUser = authUserResult.Value;
 
-            if (!authUserResult.TryGetResult(out var authUser))
+            if (authUser == null)
             {
-                return Task.FromResult(AuthenticateResult.Fail("User is not found."));
-            }
-
-            if(authUser == null)
-            {
-                return Task.FromResult(AuthenticateResult.Fail("User is not found."));
+                return await Task.FromResult(AuthenticateResult.Fail("User is not found."));
             }
 
             if (authUser.PasswordHash != authPassword)
             {
-                return Task.FromResult(AuthenticateResult.Fail("Incorrect username or password."));
+                return await Task.FromResult(AuthenticateResult.Fail("Incorrect username or password."));
             }
 
-            var claims = new[] {
-                new Claim(ClaimTypes.Name, authUser.Name),
-                new Claim(ClaimTypes.Role, authUser.UserRole.GetName<UserRole>() ?? "")
-            };
+            if (authUserResult.IsSuccess)
+            {
+                var claims = new[] {
+                    new Claim(ClaimTypes.Name, authUser.Name),
+                    new Claim(ClaimTypes.Role, authUser.UserRole.GetName<UserRole>() ?? "")
+                };
 
-            var identity = new ClaimsIdentity(claims, Scheme.Name);
-            var principal = new ClaimsPrincipal(identity);
-            var ticket = new AuthenticationTicket(principal, Scheme.Name);
+                var identity = new ClaimsIdentity(claims, Scheme.Name);
+                var principal = new ClaimsPrincipal(identity);
+                var ticket = new AuthenticationTicket(principal, Scheme.Name);
 
-            _usersService.CurrentUser = authUser;
+                _usersService.CurrentUser = authUser;
 
-            return Task.FromResult(AuthenticateResult.Success(ticket));
+                return await Task.FromResult(AuthenticateResult.Success(ticket));
+            }
+
+            return await Task.FromResult(AuthenticateResult.Fail(string.Join(',', authUserResult.Errors)));
         }
     }
 }

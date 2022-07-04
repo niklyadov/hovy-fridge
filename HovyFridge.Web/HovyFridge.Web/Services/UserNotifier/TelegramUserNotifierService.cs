@@ -1,4 +1,4 @@
-﻿using HovyFridge.Web.Services.Common;
+﻿using FluentResults;
 using Telegram.Bot;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.ReplyMarkups;
@@ -16,23 +16,29 @@ namespace HovyFridge.Web.Services.UserNotifier
             _telegramBotClient = telegramBotClient;
         }
 
-        public async Task<ServiceResult<string>> SendConfirmationLink(Data.Entity.User user, string confirmationLink, string confirmationMessage = "Click on the button")
+        public async Task<Result<string>> SendConfirmationLink(Data.Entity.User user, string confirmationLink, string confirmationMessage = "Click on the button")
         {
-            if (user is null)
-                throw new ArgumentNullException(nameof(user));
+            try
+            {
+                if (user is null)
+                    throw new ArgumentNullException(nameof(user));
 
-            if (string.IsNullOrEmpty(confirmationLink))
-                throw new ArgumentNullException(nameof(confirmationLink));
+                if (string.IsNullOrEmpty(confirmationLink))
+                    throw new ArgumentNullException(nameof(confirmationLink));
 
-            if (string.IsNullOrEmpty(user.TelegramChatId))
-                throw new ArgumentNullException(nameof(user.TelegramChatId));
+                if (string.IsNullOrEmpty(user.TelegramChatId))
+                    throw new ArgumentNullException(nameof(user.TelegramChatId));
 
-            var keyboard = new InlineKeyboardMarkup(
-                InlineKeyboardButton.WithUrl("Click here", confirmationLink));
+                var keyboard = new InlineKeyboardMarkup(
+                    InlineKeyboardButton.WithUrl("Click here", confirmationLink));
 
-            await _telegramBotClient.SendTextMessageAsync(new ChatId(user.TelegramChatId), $"Hi, {user.Name}!\n{confirmationMessage}", replyMarkup: keyboard);
+                await _telegramBotClient.SendTextMessageAsync(new ChatId(user.TelegramChatId), $"Hi, {user.Name}!\n{confirmationMessage}", replyMarkup: keyboard);
 
-            return new ServiceResultSuccess<string>();
+                return Result.Ok();
+            } catch (Exception ex)
+            {
+                return Result.Fail(ex.ToString());
+            }
         }
     }
 }

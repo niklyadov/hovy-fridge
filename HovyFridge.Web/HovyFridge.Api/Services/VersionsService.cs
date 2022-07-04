@@ -1,4 +1,4 @@
-﻿using HovyFridge.Api.Data.Entity;
+﻿using HovyFridge.Data.Entity;
 
 namespace HovyFridge.Api.Services;
 

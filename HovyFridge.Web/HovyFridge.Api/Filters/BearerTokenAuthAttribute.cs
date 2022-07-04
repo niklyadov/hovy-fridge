@@ -1,5 +1,6 @@
 ﻿using HovyFridge.Api.Extensions;
 using HovyFridge.Api.Services;
+using HovyFridge.Services.Auth;
 using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace HovyFridge.Api.Filters

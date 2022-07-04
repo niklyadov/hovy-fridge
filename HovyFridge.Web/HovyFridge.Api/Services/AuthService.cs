@@ -1,7 +1,6 @@
 ﻿using FluentResults;
-using HovyFridge.Api.Data;
-using HovyFridge.Api.Data.Entity;
-using HovyFridge.Api.Data.Repository.GenericRepositoryPattern;
+using HovyFridge.Data.Entity;
+using HovyFridge.Data.Repository.GenericRepositoryPattern;
 using System.IdentityModel.Tokens.Jwt;
 
 namespace HovyFridge.Api.Services;

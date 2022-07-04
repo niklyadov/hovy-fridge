@@ -1,7 +1,8 @@
-using HovyFridge.Api.Data;
-using HovyFridge.Api.Data.Repository.GenericRepositoryPattern;
+using HovyFridge.Data;
+using HovyFridge.Data.Repository.GenericRepositoryPattern;
 using HovyFridge.Api.Services;
 using Microsoft.EntityFrameworkCore;
+using HovyFridge.Services.Auth;
 
 var builder = WebApplication.CreateBuilder(args);
 

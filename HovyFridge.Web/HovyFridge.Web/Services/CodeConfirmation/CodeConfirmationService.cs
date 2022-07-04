@@ -1,9 +1,6 @@
-﻿using HovyFridge.Web.Services.Common;
-using HovyFridge.Web.Models;
-using HovyFridge.Web.Services;
-using HovyFridge.Web.Services.UserNotifier;
-using HovyFridge.Services.Auth;
+﻿using HovyFridge.Web.Services.UserNotifier;
 using HovyFridge.Data.Entity;
+using HovyFridge.Services.Auth;
 
 namespace HovyFridge.Web.Services.CodeConfirmation
 {

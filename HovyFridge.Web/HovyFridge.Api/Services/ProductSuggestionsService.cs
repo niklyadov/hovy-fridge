@@ -1,6 +1,6 @@
 ﻿using FluentResults;
-using HovyFridge.Api.Data.Entity;
-using HovyFridge.Api.Data.Repository.GenericRepositoryPattern;
+using HovyFridge.Data.Entity;
+using HovyFridge.Data.Repository.GenericRepositoryPattern;
 using Newtonsoft.Json;
 using System.Text.RegularExpressions;
 

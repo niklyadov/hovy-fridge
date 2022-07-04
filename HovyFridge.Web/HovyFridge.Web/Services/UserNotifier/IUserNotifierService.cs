@@ -1,11 +1,10 @@
-﻿using HovyFridge.Data.Entity;
-using HovyFridge.Web.Models;
-using HovyFridge.Web.Services.Common;
+﻿using FluentResults;
+using HovyFridge.Data.Entity;
 
 namespace HovyFridge.Web.Services.UserNotifier
 {
     public interface IUserNotifierService
     {
-        public Task<ServiceResult<string>> SendConfirmationLink(User user, string confirmationLink, string confirmationMessage);
+        public Task<Result<string>> SendConfirmationLink(User user, string confirmationLink, string confirmationMessage);
     }
 }

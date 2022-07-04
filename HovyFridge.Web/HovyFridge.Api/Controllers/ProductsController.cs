@@ -1,4 +1,4 @@
-﻿using HovyFridge.Api.Data.Entity;
+﻿using HovyFridge.Data.Entity;
 using HovyFridge.Api.Services;
 using Microsoft.AspNetCore.Mvc;
 

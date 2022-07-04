@@ -1,29 +1,49 @@
-using HovyFridge.Services.Auth;
+using HovyFridge.Data;
+using HovyFridge.Data.Repository.GenericRepositoryPattern;
 using HovyFridge.Web.Auth;
+using HovyFridge.Services.Auth;
 using HovyFridge.Web.Models;
-using HovyFridge.Web.Repos;
 using HovyFridge.Web.Services;
 using HovyFridge.Web.Services.CodeConfirmation;
 using HovyFridge.Web.Services.UserNotifier;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.EntityFrameworkCore;
 using Telegram.Bot;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// configure app
+// App configure
 builder.Services.Configure<RouteOptions>(options => options.LowercaseUrls = true);
-var appConfiguration = builder.Configuration.GetSection("AppSettings");
-builder.Services.Configure<AppConfiguration>(appConfiguration);
+
+builder.Services.AddDbContext<ApplicationContext>(options =>
+    options.UseNpgsql(builder.Configuration.GetConnectionString("Default")));
+
+builder.Services.AddScoped<FridgesRepository>();
+builder.Services.AddScoped<FridgeAccessLevelsRepository>();
+
+builder.Services.AddScoped<ProductsRepository>();
+builder.Services.AddScoped<ProductSuggestionsRepository>();
+
+builder.Services.AddScoped<RecipesRepository>();
+builder.Services.AddScoped<ShoppingListsRepository>();
+
+builder.Services.AddScoped<UsersRepository>();
 
 // Add services to the container.
-
-// some services
-builder.Services.AddSingleton<UsersRepo>();
+builder.Services.AddScoped<AuthService>();
+builder.Services.AddScoped<ProductsService>();
+builder.Services.AddScoped<FridgesService>();
+builder.Services.AddScoped<VersionsService>();
 builder.Services.AddSingleton<JwtTokensService>();
 builder.Services.AddScoped<UsersService>();
 builder.Services.AddScoped<CodeConfirmationService>();
 builder.Services.AddScoped<IUserNotifierService, TelegramUserNotifierService>();
+builder.Services.AddScoped<FridgeAccessLevelsService>();
+builder.Services.AddScoped<ProductSuggestionsService>();
+
+var appConfiguration = builder.Configuration.GetSection("AppSettings");
+builder.Services.Configure<AppConfiguration>(appConfiguration);
 
 // add telegram bot client
 builder.Services.AddSingleton<ITelegramBotClient>(
