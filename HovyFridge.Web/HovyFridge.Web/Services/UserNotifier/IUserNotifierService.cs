@@ -6,6 +6,6 @@ namespace HovyFridge.Web.Services.UserNotifier
 {
     public interface IUserNotifierService
     {
-        public Task<ServiceResult<string>> SendConfirmationLink(User user, string confirmationLink);
+        public Task<ServiceResult<string>> SendConfirmationLink(User user, string confirmationLink, string confirmationMessage);
     }
 }

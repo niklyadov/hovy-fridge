@@ -39,7 +39,7 @@ namespace HovyFridge.Web.Controllers
 
             if (string.IsNullOrEmpty(confirmationToken))
             {
-                _confirmationService.SendConfirmationAsync(currentUser, pageUrlWithToken);
+                _confirmationService.SendConfirmationAsync(currentUser, pageUrlWithToken, "privacy page");
                 return View("NoToken");
             }
 

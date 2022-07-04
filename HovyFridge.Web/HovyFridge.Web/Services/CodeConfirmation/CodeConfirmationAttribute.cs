@@ -1,5 +1,4 @@
-﻿using HovyFridge.Web.Services.Common;
-using HovyFridge.Web.Models;
+﻿using HovyFridge.Web.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Options;
@@ -53,7 +52,6 @@ namespace HovyFridge.Web.Services.CodeConfirmation
 
             if (!confirmResult)
             {
-                //context.HttpContext.Response.StatusCode = 403;
                 var bytes = Encoding.UTF8.GetBytes("Please, check your Telegram account");
 
                 await context.HttpContext.Response.Body.WriteAsync(bytes, 0, bytes.Length);

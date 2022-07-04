@@ -1,5 +1,4 @@
 ﻿using HovyFridge.Data.Entity;
-using HovyFridge.Web.Models;
 using HovyFridge.Web.Services.Common;
 
 namespace HovyFridge.Web.Services.UserNotifier
@@ -11,21 +10,20 @@ namespace HovyFridge.Web.Services.UserNotifier
         {
             _logger = loggerFactory.CreateLogger<MockUserNotifierService>();
         }
-        public async Task<ServiceResult<string>> SendConfirmationLink(User user, string message)
+        public async Task<ServiceResult<string>> SendConfirmationLink(User user, string confirmationLink, string confirmationMessage)
         {
             return await Task.Run(() =>
             {
                 if (user is null)
-                {
                     throw new ArgumentNullException(nameof(user));
-                }
 
-                if (message is null)
-                {
-                    throw new ArgumentNullException(nameof(message));
-                }
+                if (confirmationLink is null)
+                    throw new ArgumentNullException(nameof(confirmationLink));
 
-                _logger.LogInformation($"Message for user {user}: {message}");
+                if (confirmationMessage is null)
+                    throw new ArgumentNullException(nameof(confirmationMessage));
+
+                _logger.LogInformation($"Message for user {user}: {confirmationLink} with message {confirmationMessage}");
 
                 return new ServiceResultSuccess<string>();
             });

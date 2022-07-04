@@ -16,27 +16,21 @@ namespace HovyFridge.Web.Services.UserNotifier
             _telegramBotClient = telegramBotClient;
         }
 
-        public async Task<ServiceResult<string>> SendConfirmationLink(HovyFridge.Data.Entity.User user, string confirmationLink)
+        public async Task<ServiceResult<string>> SendConfirmationLink(Data.Entity.User user, string confirmationLink, string confirmationMessage = "Click on the button")
         {
             if (user is null)
-            {
                 throw new ArgumentNullException(nameof(user));
-            }
 
             if (string.IsNullOrEmpty(confirmationLink))
-            {
                 throw new ArgumentNullException(nameof(confirmationLink));
-            }
 
             if (string.IsNullOrEmpty(user.TelegramChatId))
-            {
                 throw new ArgumentNullException(nameof(user.TelegramChatId));
-            }
 
             var keyboard = new InlineKeyboardMarkup(
                 InlineKeyboardButton.WithUrl("Click here", confirmationLink));
 
-            await _telegramBotClient.SendTextMessageAsync(new ChatId(user.TelegramChatId), $"Hi, {user.Name}!\nPlease, to give access to the page", replyMarkup: keyboard);
+            await _telegramBotClient.SendTextMessageAsync(new ChatId(user.TelegramChatId), $"Hi, {user.Name}!\n{confirmationMessage}", replyMarkup: keyboard);
 
             return new ServiceResultSuccess<string>();
         }
