@@ -9,6 +9,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HovyFridge.Api", "HovyFridg
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HovyFridge.Web", "HovyFridge.Web\HovyFridge.Web.csproj", "{48038EC5-4471-4810-A36E-2FB77E695264}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HovyFridge.TestApi.DAO", "HovyFridge.TestApi.DAO\HovyFridge.TestApi.DAO.csproj", "{51ED69AD-FFD9-4385-A342-D232B0EDE72C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HovyFridge.TestApi.QueryBuilder", "HovyFridge.TestApi.QueryBuilder\HovyFridge.TestApi.QueryBuilder.csproj", "{69C7F455-F258-424E-9CBF-54DFEC857D0C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +31,14 @@ Global
 		{48038EC5-4471-4810-A36E-2FB77E695264}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{48038EC5-4471-4810-A36E-2FB77E695264}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{48038EC5-4471-4810-A36E-2FB77E695264}.Release|Any CPU.Build.0 = Release|Any CPU
+		{51ED69AD-FFD9-4385-A342-D232B0EDE72C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{51ED69AD-FFD9-4385-A342-D232B0EDE72C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{51ED69AD-FFD9-4385-A342-D232B0EDE72C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{51ED69AD-FFD9-4385-A342-D232B0EDE72C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{69C7F455-F258-424E-9CBF-54DFEC857D0C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{69C7F455-F258-424E-9CBF-54DFEC857D0C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{69C7F455-F258-424E-9CBF-54DFEC857D0C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{69C7F455-F258-424E-9CBF-54DFEC857D0C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
