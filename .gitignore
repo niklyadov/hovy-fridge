@@ -1,4 +1,6 @@
 .vs
 .DS_Store
 HovyFridge.Web/obj/
+.idea
 HovyFridge/.idea/
+HovyFridge.Web/.idea
