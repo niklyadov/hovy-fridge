@@ -1,11 +1,11 @@
+using HovyFridge.Data;
 using HovyFridge.Data.Entity;
-using Microsoft.EntityFrameworkCore;
 
 namespace HovyFridge.TestApi.QueryBuilder.Data;
 
-public class FridgesQueryBuilder : QueryBuilder<Fridge>
+public class FridgesQueryBuilder : QueryBuilder<Fridge, ApplicationContext>
 {
-    public FridgesQueryBuilder(DbContext context) : base(context)
+    public FridgesQueryBuilder(ApplicationContext context) : base(context)
     {
     }
 }

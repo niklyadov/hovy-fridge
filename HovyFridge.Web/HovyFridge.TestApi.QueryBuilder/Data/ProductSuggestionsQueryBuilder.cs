@@ -1,11 +1,11 @@
+using HovyFridge.Data;
 using HovyFridge.Data.Entity;
-using Microsoft.EntityFrameworkCore;
 
 namespace HovyFridge.TestApi.QueryBuilder.Data;
 
-public class ProductSuggestionsQueryBuilder : QueryBuilder<ProductSuggestion>
+public class ProductSuggestionsQueryBuilder : QueryBuilder<ProductSuggestion, ApplicationContext>
 {
-    public ProductSuggestionsQueryBuilder(DbContext context) : base(context)
+    public ProductSuggestionsQueryBuilder(ApplicationContext context) : base(context)
     {
     }
 }
