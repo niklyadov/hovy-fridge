@@ -1,7 +1,6 @@
 ﻿using FluentResults;
-using HovyFridge.Data;
-using HovyFridge.Data.Entity;
 using HovyFridge.Data.Repository.GenericRepositoryPattern;
+using HovyFridge.Entity;
 
 namespace HovyFridge.Web.Services;
 

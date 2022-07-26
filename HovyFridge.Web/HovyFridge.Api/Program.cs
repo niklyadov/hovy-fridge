@@ -1,6 +1,5 @@
-using HovyFridge.Api.Services;
-using HovyFridge.Data;
-using HovyFridge.Data.Repository.GenericRepositoryPattern;
+using HovyFridge;
+using HovyFridge.GenericRepository;
 using HovyFridge.Services.Auth;
 using Microsoft.EntityFrameworkCore;
 
@@ -12,26 +11,9 @@ builder.Services.AddDbContext<ApplicationContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("Default"), 
         b => b.MigrationsAssembly("HovyFridge.Api")));
 
-builder.Services.AddScoped<FridgesRepository>();
-builder.Services.AddScoped<FridgeAccessLevelsRepository>();
 
-builder.Services.AddScoped<ProductsRepository>();
-builder.Services.AddScoped<ProductSuggestionsRepository>();
-
-builder.Services.AddScoped<RecipesRepository>();
-builder.Services.AddScoped<ShoppingListsRepository>();
-
-builder.Services.AddScoped<UsersRepository>();
-
-// Add services to the container.
-builder.Services.AddScoped<AuthService>();
-builder.Services.AddScoped<ProductsService>();
-builder.Services.AddScoped<FridgesService>();
-builder.Services.AddScoped<VersionsService>();
 builder.Services.AddScoped<JwtTokensService>();
-builder.Services.AddScoped<UsersService>();
-builder.Services.AddScoped<FridgeAccessLevelsService>();
-builder.Services.AddScoped<ProductSuggestionsService>();
+builder.Services.UseGenericRepositoryPattern();
 
 builder.Services.AddControllers();
 //builder.Services.AddApiVersioning(cfg =>

@@ -1,6 +1,6 @@
 ﻿namespace HovyFridge.Services.Auth;
 
-using HovyFridge.Data.Entity;
+using HovyFridge.Entity;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Text;

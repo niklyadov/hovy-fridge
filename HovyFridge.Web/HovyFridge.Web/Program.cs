@@ -1,4 +1,4 @@
-using HovyFridge.Data;
+using HovyFridge;
 using HovyFridge.Data.Repository.GenericRepositoryPattern;
 using HovyFridge.Services.Auth;
 using HovyFridge.Web.Auth;

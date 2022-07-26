@@ -1,5 +1,5 @@
-﻿using HovyFridge.Api.Services;
-using HovyFridge.Data.Entity;
+﻿using HovyFridge.Entity;
+using HovyFridge.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HovyFridge.Api.Controllers
@@ -10,8 +10,8 @@ namespace HovyFridge.Api.Controllers
     [Route("[controller]")]
     public class UsersController : BaseController
     {
-        private readonly UsersService _usersService;
-        public UsersController(UsersService usersService)
+        private readonly IUsersService _usersService;
+        public UsersController(IUsersService usersService)
         {
             _usersService = usersService;
         }

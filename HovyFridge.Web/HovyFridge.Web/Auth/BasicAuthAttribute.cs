@@ -1,4 +1,4 @@
-﻿using HovyFridge.Data.Entity;
+﻿using HovyFridge.Entity;
 using HovyFridge.Extensions;
 using Microsoft.AspNetCore.Authorization;
 

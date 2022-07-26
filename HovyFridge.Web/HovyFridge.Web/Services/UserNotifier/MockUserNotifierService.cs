@@ -1,5 +1,5 @@
 ﻿using FluentResults;
-using HovyFridge.Data.Entity;
+using HovyFridge.Entity;
 
 namespace HovyFridge.Web.Services.UserNotifier
 {

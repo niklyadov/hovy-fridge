@@ -1,5 +1,5 @@
-﻿using HovyFridge.Api.Services;
-using HovyFridge.Data.Entity;
+﻿using HovyFridge.Entity;
+using HovyFridge.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HovyFridge.Api.Controllers
@@ -10,12 +10,12 @@ namespace HovyFridge.Api.Controllers
     [Route("[controller]")]
     public class FridgesController : BaseController
     {
-        private readonly ProductsService _productsService;
-        private readonly FridgesService _fridgesService;
-        private readonly FridgeAccessLevelsService _fridgeAccessLevelsService;
+        private readonly IProductsService _productsService;
+        private readonly IFridgesService _fridgesService;
+        private readonly IFridgeAccessLevelsService _fridgeAccessLevelsService;
         private readonly ILogger<FridgesController> _logger;
 
-        public FridgesController(ProductsService productsService, FridgesService fridgesService, FridgeAccessLevelsService fridgeAccessLevelsService, ILogger<FridgesController> logger)
+        public FridgesController(IProductsService productsService, IFridgesService fridgesService, IFridgeAccessLevelsService fridgeAccessLevelsService, ILogger<FridgesController> logger)
         {
             _productsService = productsService;
             _fridgesService = fridgesService;

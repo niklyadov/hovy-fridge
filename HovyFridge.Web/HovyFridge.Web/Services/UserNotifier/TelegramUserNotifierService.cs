@@ -16,7 +16,7 @@ namespace HovyFridge.Web.Services.UserNotifier
             _telegramBotClient = telegramBotClient;
         }
 
-        public async Task<Result<string>> SendConfirmationLink(Data.Entity.User user, string confirmationLink, string confirmationMessage = "Click on the button")
+        public async Task<Result<string>> SendConfirmationLink(Entity.User user, string confirmationLink, string confirmationMessage = "Click on the button")
         {
             try
             {

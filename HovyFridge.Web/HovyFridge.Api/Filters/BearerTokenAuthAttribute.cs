@@ -1,5 +1,5 @@
 ﻿using HovyFridge.Api.Extensions;
-using HovyFridge.Api.Services;
+using HovyFridge.Services;
 using HovyFridge.Services.Auth;
 using Microsoft.AspNetCore.Mvc.Filters;
 
@@ -18,7 +18,7 @@ namespace HovyFridge.Api.Filters
             var svc = context.HttpContext.RequestServices;
 
             var tokensService = svc.GetRequiredService<JwtTokensService>();
-            var authService = svc.GetRequiredService<AuthService>();
+            var authService = svc.GetRequiredService<IAuthService>();
 
             var token = context.HttpContext.Request.Headers["Authorization"].ToString();
 

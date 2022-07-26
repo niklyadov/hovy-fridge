@@ -1,5 +1,5 @@
-﻿using HovyFridge.Api.Services;
-using HovyFridge.Data.Entity;
+﻿using HovyFridge.Entity;
+using HovyFridge.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HovyFridge.Api.Controllers
@@ -10,9 +10,9 @@ namespace HovyFridge.Api.Controllers
     //[Route("api/v{version:apiVersion}/[controller]")]
     public class VersionsController : BaseController
     {
-        private readonly VersionsService _versionsService;
+        private readonly IVersionsService _versionsService;
 
-        public VersionsController(VersionsService versionsService)
+        public VersionsController(IVersionsService versionsService)
         {
             _versionsService = versionsService;
         }

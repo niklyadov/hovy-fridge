@@ -1,4 +1,4 @@
-﻿using HovyFridge.Data.Entity;
+﻿using HovyFridge.Entity;
 using HovyFridge.Web.Auth;
 using HovyFridge.Web.Models;
 using HovyFridge.Web.Services;
