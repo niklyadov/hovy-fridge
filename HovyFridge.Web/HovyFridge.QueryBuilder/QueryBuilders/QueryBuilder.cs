@@ -106,13 +106,13 @@ public abstract class QueryBuilder<TEntity, TContext>
     }
 
 
-    //public QueryBuilder<IEntity, TContext> Paginate(Pagination pagination)
-    //{
-    //    var totalCount = Query.Count();
+    public QueryBuilder<TEntity, TContext> Paginate(Pagination pagination)
+    {
+        var totalCount = Query.Count();
 
-    //    return Skip(pagination.GetOffset(totalCount))
-    //        .Limit(pagination.GetLimit());
-    //}
+        return Skip(pagination.GetOffset(totalCount))
+            .Limit(pagination.ItemsPerPage);
+    }
 
     public TEntity? FirstOrDefault()
     {
@@ -143,10 +143,12 @@ public abstract class QueryBuilder<TEntity, TContext>
         return entity;
     }
 
-    public async Task UpdateAsync(ICollection<TEntity> entity)
+    public async Task<ICollection<TEntity>> UpdateAsync(ICollection<TEntity> entities)
     {
-        Context.UpdateRange(entity);
+        Context.UpdateRange(entities);
         await Context.SaveChangesAsync();
+
+        return entities;
     }
 
     public async Task<TEntity> AddAsync(TEntity entity)
@@ -172,7 +174,7 @@ public abstract class QueryBuilder<TEntity, TContext>
         return await UpdateAsync(entity);
     }
 
-    public async Task DeleteAsync(ICollection<TEntity> entities)
+    public async Task<ICollection<TEntity>> DeleteAsync(ICollection<TEntity> entities)
     {
         entities.Select(entity =>
         {
@@ -181,7 +183,12 @@ public abstract class QueryBuilder<TEntity, TContext>
             return entity;
         });
 
-        await UpdateAsync(entities);
+        return await UpdateAsync(entities);
+    }
+
+    public async Task DeleteAsync()
+    {
+        await DeleteAsync(await ToListAsync());
     }
 
     public async Task<TEntity> UndoDeleteAsync(TEntity entity)
@@ -202,6 +209,11 @@ public abstract class QueryBuilder<TEntity, TContext>
         });
 
         await UpdateAsync(entities);
+    }
+
+    public async Task UndoDeleteAsync()
+    {
+        await UndoDeleteAsync(await ToListAsync());
     }
 
     public void Dispose()
