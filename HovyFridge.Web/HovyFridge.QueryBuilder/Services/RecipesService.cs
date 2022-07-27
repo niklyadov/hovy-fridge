@@ -94,12 +94,12 @@ namespace HovyFridge.QueryBuilder.Services
         {
             try
             {
-                var recipeToUnDelete = await _recipesQueryBuilder
+                var recipeToRestore = await _recipesQueryBuilder
                     .WhereNotDeleted()
                     .WithId(id)
                     .SingleAsync();
 
-                return Result.Ok(await _recipesQueryBuilder.UndoDeleteAsync(recipeToUnDelete));
+                return Result.Ok(await _recipesQueryBuilder.UndoDeleteAsync(recipeToRestore));
             }
             catch (Exception ex)
             {

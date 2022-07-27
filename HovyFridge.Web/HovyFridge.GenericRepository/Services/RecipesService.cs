@@ -30,12 +30,12 @@ namespace HovyFridge.GenericRepository.Services
         {
             try
             {
-                var user = await _recipesRepository.GetById(id);
+                var recipe = await _recipesRepository.GetById(id);
 
-                if (user == null)
+                if (recipe == null)
                     throw new Exception("Recipe is not found!");
 
-                return Result.Ok();
+                return Result.Ok(recipe);
             }
             catch (Exception ex)
             {
@@ -49,7 +49,7 @@ namespace HovyFridge.GenericRepository.Services
             {
                 var createdRecipe = await _recipesRepository.Add(recipe);
 
-                return Result.Ok();
+                return Result.Ok(createdRecipe);
             }
             catch (Exception ex)
             {
@@ -61,9 +61,9 @@ namespace HovyFridge.GenericRepository.Services
         {
             try
             {
-                var createdRecipe = await _recipesRepository.Update(recipe);
+                var updatedRecipe = await _recipesRepository.Update(recipe);
 
-                return Result.Ok();
+                return Result.Ok(updatedRecipe);
             }
             catch (Exception ex)
             {
@@ -75,9 +75,9 @@ namespace HovyFridge.GenericRepository.Services
         {
             try
             {
-                var createdRecipe = await _recipesRepository.DeleteById(id);
+                var deletedRecipe = await _recipesRepository.DeleteById(id);
 
-                return Result.Ok();
+                return Result.Ok(deletedRecipe);
             }
             catch (Exception ex)
             {
@@ -89,9 +89,9 @@ namespace HovyFridge.GenericRepository.Services
         {
             try
             {
-                var createdRecipe = await _recipesRepository.DeleteById(id);
+                var restoredRecipe = await _recipesRepository.DeleteById(id);
 
-                return Result.Ok();
+                return Result.Ok(restoredRecipe);
             }
             catch (Exception ex)
             {

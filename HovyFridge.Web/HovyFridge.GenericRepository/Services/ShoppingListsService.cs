@@ -30,12 +30,12 @@ namespace HovyFridge.GenericRepository.Services
         {
             try
             {
-                var user = await _shoppingListsRepository.GetById(id);
+                var shoppingList = await _shoppingListsRepository.GetById(id);
 
-                if (user == null)
+                if (shoppingList == null)
                     throw new Exception("ShoppingList is not found!");
 
-                return Result.Ok();
+                return Result.Ok(shoppingList);
             }
             catch (Exception ex)
             {
@@ -49,7 +49,7 @@ namespace HovyFridge.GenericRepository.Services
             {
                 var createdShoppingList = await _shoppingListsRepository.Add(shoppingList);
 
-                return Result.Ok();
+                return Result.Ok(createdShoppingList);
             }
             catch (Exception ex)
             {
@@ -61,9 +61,9 @@ namespace HovyFridge.GenericRepository.Services
         {
             try
             {
-                var createdShoppingList = await _shoppingListsRepository.Update(shoppingList);
+                var updatedShoppingList = await _shoppingListsRepository.Update(shoppingList);
 
-                return Result.Ok();
+                return Result.Ok(updatedShoppingList);
             }
             catch (Exception ex)
             {
@@ -75,9 +75,9 @@ namespace HovyFridge.GenericRepository.Services
         {
             try
             {
-                var createdShoppingList = await _shoppingListsRepository.DeleteById(id);
+                var deletedShoppingList = await _shoppingListsRepository.DeleteById(id);
 
-                return Result.Ok();
+                return Result.Ok(deletedShoppingList);
             }
             catch (Exception ex)
             {
@@ -89,9 +89,9 @@ namespace HovyFridge.GenericRepository.Services
         {
             try
             {
-                var createdShoppingList = await _shoppingListsRepository.DeleteById(id);
+                var restoredShoppingList = await _shoppingListsRepository.DeleteById(id);
 
-                return Result.Ok();
+                return Result.Ok(restoredShoppingList);
             }
             catch (Exception ex)
             {
