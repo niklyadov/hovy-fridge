@@ -90,7 +90,7 @@ public class FridgesService : IFridgesService
                 BarCode = product.BarCode,
                 Name = product.Name,
                 IsDeleted = false,
-                CreatedTimestamp = new DateTimeOffset(DateTime.UtcNow).ToUnixTimeSeconds()
+                CreatedDateTime = DateTime.UtcNow
             };
 
             newProduct = await _productsRepository.Add(newProduct);

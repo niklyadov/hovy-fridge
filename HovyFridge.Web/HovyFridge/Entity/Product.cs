@@ -16,8 +16,8 @@ namespace HovyFridge.Entity
         public int UnitValue { get; set; } = 0;
         [NotMapped]
         public int UnitCurrentValue => UnitValue * Amount / 100;
-        public long? CreatedTimestamp { get; set; }
-        public long? LastEditedTimestamp { get; set; }
+        public DateTime? CreatedDateTime { get; set; }
+        public DateTime? LastEditedDateTime { get; set; }
         public long? OwnerId { get; set; }
     }
 }
