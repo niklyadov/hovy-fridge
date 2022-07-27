@@ -1,30 +1,31 @@
 ﻿using FluentResults;
 using HovyFridge.Entity;
-using HovyFridge.QueryBuilder.Repository;
+using HovyFridge.QueryBuilder.QueryBuilders;
 using HovyFridge.Services;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace HovyFridge.QueryBuilder.Services
 {
     public class FridgeAccessLevelsService : IFridgeAccessLevelsService
     {
-        private FridgeAccessLevelsRepository _fridgeAccessLevelsRepository;
-        private FridgesRepository _fridgesRepository;
-        public FridgeAccessLevelsService(FridgeAccessLevelsRepository fridgeAccessLevelsRepository, FridgesRepository fridgesRepository)
+        private readonly FridgeAccessLevelsQueryBuilder _fridgeAccessLevelsQueryBuilder;
+        private readonly FridgesQueryBuilder _fridgesQueryBuilder;
+        public FridgeAccessLevelsService(IServiceProvider serviceProvider)
         {
-            _fridgeAccessLevelsRepository = fridgeAccessLevelsRepository;
-            _fridgesRepository = fridgesRepository;
+            _fridgeAccessLevelsQueryBuilder = serviceProvider.GetRequiredService<FridgeAccessLevelsQueryBuilder>();
+            _fridgesQueryBuilder = serviceProvider.GetRequiredService<FridgesQueryBuilder>();
         }
 
         public async Task<Result<List<FridgeAccessLevel>>> GetByFridgeIdAsync(long fridgeId)
         {
             try
             {
-                var fridge = await _fridgesRepository.GetById(fridgeId);
+                var fridge = await _fridgesQueryBuilder.WithId(fridgeId).SingleAsync();
 
                 if (fridge == null)
                     throw new Exception($"Fridge with id {fridgeId} is not found!");
 
-                var accessLevels = await _fridgeAccessLevelsRepository.GetByFridgeIdAsync(fridgeId);
+                var accessLevels = await _fridgeAccessLevelsQueryBuilder.WithFridgeId(fridgeId).ToListAsync();
 
                 return Result.Ok(accessLevels);
 
@@ -39,14 +40,14 @@ namespace HovyFridge.QueryBuilder.Services
         {
             try
             {
-                var accessLevel = await _fridgeAccessLevelsRepository.GetByFridgeIdAsync(fridgeId);
+                var accessLevel = await _fridgeAccessLevelsQueryBuilder.WithFridgeId(fridgeId).ToListAsync();
 
                 if (accessLevel.Count > 0)
                     throw new Exception($"Fridge access level with id {accessLevel} already exists for fridge with id {fridgeId}!");
 
-                var addedAccessLevelResult = await _fridgeAccessLevelsRepository.Add(newAccessLevel);
+                await _fridgeAccessLevelsQueryBuilder.AddAsync(newAccessLevel);
 
-                return Result.Ok(addedAccessLevelResult);
+                return Result.Ok(newAccessLevel);
             }
             catch (Exception ex)
             {
@@ -58,14 +59,14 @@ namespace HovyFridge.QueryBuilder.Services
         {
             try
             {
-                var accessLevel = await _fridgeAccessLevelsRepository.GetByFridgeIdAsync(fridgeId);
+                var accessLevel = await _fridgeAccessLevelsQueryBuilder.WithFridgeId(fridgeId).ToListAsync();
 
                 if (accessLevel.Count > 0)
                     throw new Exception($"Fridge access level with id {accessLevel} already exists for fridge with id {fridgeId}!");
 
-                var updatedAccessLevelResult = await _fridgeAccessLevelsRepository.Update(updatedAccessLevel);
+                await _fridgeAccessLevelsQueryBuilder.UpdateAsync(updatedAccessLevel);
 
-                return Result.Ok(updatedAccessLevelResult);
+                return Result.Ok(updatedAccessLevel);
             }
             catch (Exception ex)
             {
@@ -77,14 +78,14 @@ namespace HovyFridge.QueryBuilder.Services
         {
             try
             {
-                var accessLevel = await _fridgeAccessLevelsRepository.GetById(accessLevelId);
+                var accessLevel = await _fridgeAccessLevelsQueryBuilder.WithId(accessLevelId).SingleAsync();
 
                 if (accessLevel == null)
                     throw new Exception($"Fridge access level with id {accessLevelId} is not found!");
 
-                var addedAccessLevelResult = await _fridgeAccessLevelsRepository.Delete(accessLevel);
+                await _fridgeAccessLevelsQueryBuilder.DeleteAsync(accessLevel);
 
-                return Result.Ok(addedAccessLevelResult);
+                return Result.Ok(accessLevel);
 
             }
             catch (Exception ex)

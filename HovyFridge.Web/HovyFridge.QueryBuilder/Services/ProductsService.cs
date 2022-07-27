@@ -1,26 +1,26 @@
 ﻿using FluentResults;
 using HovyFridge.Entity;
-using HovyFridge.QueryBuilder.Repository;
+using HovyFridge.QueryBuilder.QueryBuilders;
 using HovyFridge.Services;
 
 namespace HovyFridge.QueryBuilder.Services;
 
 public class ProductsService : IProductsService
 {
-    private readonly FridgesRepository _fridgesRepository;
-    private readonly ProductsRepository _productsRepository;
+    private readonly ProductsQueryBuilder _productsQueryBuilder;
 
-    public ProductsService(ApplicationContext applicationContext, FridgesRepository fridgesRepository, ProductsRepository productsRepository)
+    public ProductsService(ProductsQueryBuilder productsQueryBuilder)
     {
-        _fridgesRepository = fridgesRepository;
-        _productsRepository = productsRepository;
+        _productsQueryBuilder = productsQueryBuilder;
     }
 
     public async Task<Result<List<Product>>> GetAllAsync()
     {
         try
         {
-            var products = await _productsRepository.GetAll();
+            var products = await _productsQueryBuilder
+                .WhereNotDeleted()
+                .ToListAsync();
 
             return Result.Ok(products);
         }
@@ -34,7 +34,10 @@ public class ProductsService : IProductsService
     {
         try
         {
-            var product = await _productsRepository.GetProductWithBarcode(barcode);
+            var product = await _productsQueryBuilder
+                .WithBarcode(barcode)
+                .WhereNotDeleted()
+                .FirstOrDefaultAsync();
 
             if (product == null) return Result.Fail("Product is not found");
 
@@ -50,7 +53,9 @@ public class ProductsService : IProductsService
     {
         try
         {
-            var product = await _productsRepository.GetById(id);
+            var product = await _productsQueryBuilder
+                .WithId(id)
+                .FirstOrDefaultAsync();
 
             if (product == null) return Result.Fail("Product is not found");
 
@@ -66,7 +71,10 @@ public class ProductsService : IProductsService
     {
         try
         {
-            var productInList = await _productsRepository.GetProductWithBarcode(product.BarCode);
+            var productInList = await _productsQueryBuilder
+                .WithBarcode(product.BarCode)
+                .WhereNotDeleted()
+                .FirstOrDefaultAsync();
 
             if (productInList == null)
             {
@@ -74,7 +82,7 @@ public class ProductsService : IProductsService
                 if (product.FridgeId == 0)
                     product.FridgeId = null;
 
-                await _productsRepository.Add(product);
+                await _productsQueryBuilder.AddAsync(product);
 
                 return Result.Ok(product);
             }
@@ -100,12 +108,12 @@ public class ProductsService : IProductsService
     {
         try
         {
-            var product = await _productsRepository.DeleteById(productId);
+            var product = await _productsQueryBuilder
+                .WhereNotDeleted()
+                .WithId(productId)
+                .SingleAsync();
 
-            if (product == null)
-                return Result.Fail($"Product with id {productId} is not found");
-
-            return Result.Ok(product);
+            return Result.Ok(await _productsQueryBuilder.DeleteAsync(product));
         }
         catch (Exception ex)
         {
@@ -117,12 +125,12 @@ public class ProductsService : IProductsService
     {
         try
         {
-            var product = await _productsRepository.RestoreById(productId);
+            var product = await _productsQueryBuilder
+                .WhereDeleted()
+                .WithId(productId)
+                .SingleAsync();
 
-            if (product == null)
-                return Result.Fail($"Product with id {productId} is not found");
-
-            return Result.Ok(product);
+            return Result.Ok(await _productsQueryBuilder.UndoDeleteAsync(product));
         }
         catch (Exception ex)
         {
@@ -137,7 +145,7 @@ public class ProductsService : IProductsService
             if (product.FridgeId == 0)
                 product.FridgeId = null;
 
-            var updatedProduct = await _productsRepository.Update(product);
+            var updatedProduct = await _productsQueryBuilder.UpdateAsync(product);
 
             return Result.Ok(updatedProduct);
         }
@@ -151,7 +159,7 @@ public class ProductsService : IProductsService
     {
         try
         {
-            var result = await _productsRepository.GetGroupedByFridgeId();
+            var result = await _productsQueryBuilder.GetGroupedByFridgeIdAsync();
 
             return Result.Ok(result);
         }
@@ -168,7 +176,7 @@ public class ProductsService : IProductsService
             if (string.IsNullOrEmpty(searchQuery))
                 throw new ArgumentNullException(nameof(searchQuery));
 
-            var result = await _productsRepository.GetSuggestions(searchQuery);
+            var result = await _productsQueryBuilder.GetSuggestionsAsync(searchQuery);
 
             return Result.Ok(result);
         }

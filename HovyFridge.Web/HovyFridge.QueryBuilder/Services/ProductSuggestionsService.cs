@@ -1,6 +1,6 @@
 ﻿using FluentResults;
 using HovyFridge.Entity;
-using HovyFridge.QueryBuilder.Repository;
+using HovyFridge.QueryBuilder.QueryBuilders;
 using HovyFridge.Services;
 using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
@@ -10,18 +10,18 @@ namespace HovyFridge.QueryBuilder.Services
 {
     public class ProductSuggestionsService : IProductSuggestionsService
     {
-        private readonly ProductSuggestionsRepository _productSuggestionsRepository;
+        private readonly ProductSuggestionsQueryBuilder _productSuggestionsQueryBuilder;
 
-        public ProductSuggestionsService(ProductSuggestionsRepository productSuggestionsRepository)
+        public ProductSuggestionsService(ProductSuggestionsQueryBuilder productSuggestionsQueryBuilder)
         {
-            _productSuggestionsRepository = productSuggestionsRepository;
+            _productSuggestionsQueryBuilder = productSuggestionsQueryBuilder;
         }
 
         public async Task<Result<List<ProductSuggestion>>> GetAllAsync()
         {
             try
             {
-                return Result.Ok(await _productSuggestionsRepository.GetAll());
+                return Result.Ok(await _productSuggestionsQueryBuilder.WhereNotDeleted().ToListAsync());
             }
             catch (Exception ex)
             {
@@ -33,9 +33,12 @@ namespace HovyFridge.QueryBuilder.Services
         {
             try
             {
-                var ProductSuggestion = await _productSuggestionsRepository.GetById(id);
+                var productSuggestion = await _productSuggestionsQueryBuilder
+                    .WhereNotDeleted()
+                    .WithId(id)
+                    .FirstOrDefaultAsync();
 
-                if (ProductSuggestion == null)
+                if (productSuggestion == null)
                     throw new Exception("ProductSuggestion is not found!");
 
                 return Result.Ok();
@@ -50,7 +53,7 @@ namespace HovyFridge.QueryBuilder.Services
         {
             try
             {
-                var createdProductSuggestion = await _productSuggestionsRepository.Add(ProductSuggestion);
+                var createdProductSuggestion = await _productSuggestionsQueryBuilder.AddAsync(ProductSuggestion);
 
                 return Result.Ok();
             }
@@ -64,7 +67,7 @@ namespace HovyFridge.QueryBuilder.Services
         {
             try
             {
-                var createdProductSuggestion = await _productSuggestionsRepository.Update(ProductSuggestion);
+                var createdProductSuggestion = await _productSuggestionsQueryBuilder.UpdateAsync(ProductSuggestion);
 
                 return Result.Ok();
             }
@@ -78,7 +81,8 @@ namespace HovyFridge.QueryBuilder.Services
         {
             try
             {
-                var createdProductSuggestion = await _productSuggestionsRepository.DeleteById(id);
+                var suggestionToDelete = await _productSuggestionsQueryBuilder.WhereNotDeleted().WithId(id).SingleAsync();
+                var createdProductSuggestion = await _productSuggestionsQueryBuilder.DeleteAsync(suggestionToDelete);
 
                 return Result.Ok();
             }
@@ -92,7 +96,8 @@ namespace HovyFridge.QueryBuilder.Services
         {
             try
             {
-                var createdProductSuggestion = await _productSuggestionsRepository.DeleteById(id);
+                var suggestionToUnDelete = await _productSuggestionsQueryBuilder.WhereDeleted().WithId(id).SingleAsync();
+                var createdProductSuggestion = await _productSuggestionsQueryBuilder.UndoDeleteAsync(suggestionToUnDelete);
 
                 return Result.Ok();
             }
@@ -114,7 +119,7 @@ namespace HovyFridge.QueryBuilder.Services
 
                 foreach (var item in suggestionsToInsert)
                 {
-                    var insertResult = await _productSuggestionsRepository.Add(item);
+                    var insertResult = await _productSuggestionsQueryBuilder.AddAsync(item);
                     insertedSuggestions.Add(insertResult);
                 }
 
@@ -157,7 +162,10 @@ namespace HovyFridge.QueryBuilder.Services
                 if (string.IsNullOrEmpty(suggestionQuery))
                     throw new Exception();
 
-                var searchResult = await _productSuggestionsRepository.SearchProductSuggestion(suggestionQuery);
+                var searchResult = await _productSuggestionsQueryBuilder
+                    .SearchQuery(suggestionQuery)
+                    .WhereNotDeleted()
+                    .ToListAsync();
 
                 return Result.Ok(searchResult);
             }

@@ -1,24 +1,28 @@
 ﻿using FluentResults;
 using HovyFridge.Entity;
-using HovyFridge.QueryBuilder.Repository;
+using HovyFridge.QueryBuilder.QueryBuilders;
 using HovyFridge.Services;
 
 namespace HovyFridge.QueryBuilder.Services
 {
     public class UsersService : IUsersService
     {
-        private UsersRepository _usersRepository;
+        private UsersQueryBuilder _usersQueryBuilder;
 
-        public UsersService(UsersRepository usersRepository)
+        public UsersService(UsersQueryBuilder usersQueryBuilder)
         {
-            _usersRepository = usersRepository;
+            _usersQueryBuilder = usersQueryBuilder;
         }
 
         public async Task<Result<List<User>>> GetAllAsync()
         {
             try
             {
-                return Result.Ok(await _usersRepository.GetAll());
+                var usersList = await _usersQueryBuilder
+                    .WhereNotDeleted()
+                    .ToListAsync();
+
+                return Result.Ok(usersList);
             }
             catch (Exception ex)
             {
@@ -30,7 +34,10 @@ namespace HovyFridge.QueryBuilder.Services
         {
             try
             {
-                var user = await _usersRepository.GetById(id);
+                var user = await _usersQueryBuilder
+                    .WhereNotDeleted()
+                    .WithId(id)
+                    .FirstOrDefaultAsync();
 
                 if (user == null)
                     throw new Exception("User is not found!");
@@ -47,7 +54,7 @@ namespace HovyFridge.QueryBuilder.Services
         {
             try
             {
-                var createdUser = await _usersRepository.Add(user);
+                var createdUser = await _usersQueryBuilder.AddAsync(user);
 
                 return Result.Ok();
             }
@@ -61,7 +68,7 @@ namespace HovyFridge.QueryBuilder.Services
         {
             try
             {
-                var createdUser = await _usersRepository.Update(user);
+                var createdUser = await _usersQueryBuilder.UpdateAsync(user);
 
                 return Result.Ok();
             }
@@ -75,7 +82,15 @@ namespace HovyFridge.QueryBuilder.Services
         {
             try
             {
-                var createdUser = await _usersRepository.DeleteById(id);
+                var user = await _usersQueryBuilder
+                    .WhereNotDeleted()
+                    .WithId(id)
+                    .FirstOrDefaultAsync();
+
+                if (user == null)
+                    throw new Exception("User is not found!");
+
+                var deletedUser = await _usersQueryBuilder.DeleteAsync(user);
 
                 return Result.Ok();
             }
@@ -89,7 +104,15 @@ namespace HovyFridge.QueryBuilder.Services
         {
             try
             {
-                var createdUser = await _usersRepository.DeleteById(id);
+                var user = await _usersQueryBuilder
+                    .WhereDeleted()
+                    .WithId(id)
+                    .FirstOrDefaultAsync();
+
+                if (user == null)
+                    throw new Exception("User is not found!");
+
+                var restoredUser = await _usersQueryBuilder.UndoDeleteAsync(user);
 
                 return Result.Ok();
             }

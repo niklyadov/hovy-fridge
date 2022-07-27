@@ -1,5 +1,6 @@
 ﻿using FluentResults;
 using HovyFridge.Entity;
+using HovyFridge.QueryBuilder.QueryBuilders;
 using HovyFridge.QueryBuilder.Repository;
 using HovyFridge.Services;
 
@@ -7,19 +8,19 @@ namespace HovyFridge.QueryBuilder.Services;
 
 public class FridgesService : IFridgesService
 {
-    private readonly FridgesRepository _fridgesRepository;
-    private readonly ProductsRepository _productsRepository;
-    public FridgesService(FridgesRepository fridgesRepository, ProductsRepository productsRepository, FridgeAccessLevelsRepository fridgeAccessLevelsRepository)
+    private readonly FridgesQueryBuilder _fridgesQueryBuilder;
+    private readonly ProductsQueryBuilder _productsQueryBuilder;
+    public FridgesService(FridgesQueryBuilder fridgesQueryBuilder, ProductsQueryBuilder productsQueryBuilder, FridgeAccessLevelsRepository fridgeAccessLevelsRepository)
     {
-        _fridgesRepository = fridgesRepository;
-        _productsRepository = productsRepository;
+        _fridgesQueryBuilder = fridgesQueryBuilder;
+        _productsQueryBuilder = productsQueryBuilder;
     }
 
     public async Task<Result<Fridge>> GetByIdAsync(long id)
     {
         try
         {
-            var fridge = await _fridgesRepository.GetById(id);
+            var fridge = await _fridgesQueryBuilder.WithId(id).SingleAsync();
 
             if (fridge == null)
                 return Result.Fail($"Fridge with id {id} is not found!");
@@ -39,8 +40,8 @@ public class FridgesService : IFridgesService
     {
         try
         {
-            var updatedFridge = await _fridgesRepository.Update(fridge);
-
+            await _fridgesQueryBuilder.UpdateAsync(fridge);
+            var updatedFridge = await _fridgesQueryBuilder.WithId(fridge.Id).SingleAsync();
             return Result.Ok(updatedFridge);
         }
         catch (Exception ex)
@@ -54,7 +55,7 @@ public class FridgesService : IFridgesService
     {
         try
         {
-            return Result.Ok(await _fridgesRepository.GetAll());
+            return Result.Ok(await _fridgesQueryBuilder.ToListAsync());
         }
         catch (Exception ex)
         {
@@ -66,7 +67,7 @@ public class FridgesService : IFridgesService
     {
         try
         {
-            return Result.Ok(await _fridgesRepository.Add(fridge));
+            return Result.Ok(await _fridgesQueryBuilder.AddAsync(fridge));
         }
         catch (Exception ex)
         {
@@ -78,8 +79,8 @@ public class FridgesService : IFridgesService
     {
         try
         {
-            var fridge = await _fridgesRepository.GetById(id);
-            var product = await _productsRepository.GetById(productId);
+            var fridge = await _fridgesQueryBuilder.WithId(id).SingleAsync();
+            var product = await _productsQueryBuilder.WithId(productId).SingleAsync();
 
             if (fridge == null) throw new InvalidOperationException("Fridge is not found!");
             if (product == null) throw new InvalidOperationException("Product is not found!");
@@ -93,11 +94,11 @@ public class FridgesService : IFridgesService
                 CreatedDateTime = DateTime.UtcNow
             };
 
-            newProduct = await _productsRepository.Add(newProduct);
+            newProduct = await _productsQueryBuilder.AddAsync(newProduct);
 
             fridge.Products.Add(newProduct);
 
-            await _fridgesRepository.Update(fridge);
+            await _fridgesQueryBuilder.UpdateAsync(fridge);
 
             return Result.Ok(newProduct);
         }
@@ -111,13 +112,13 @@ public class FridgesService : IFridgesService
     {
         try
         {
-            var fridge = await _fridgesRepository.GetById(id);
-            var product = await _productsRepository.GetById(productId);
+            var fridge = await _fridgesQueryBuilder.WithId(id).SingleAsync();
+            var product = await _productsQueryBuilder.WithId(productId).SingleAsync();
 
             if (fridge == null) throw new InvalidOperationException("Fridge is not found!");
             if (product == null) throw new InvalidOperationException("Product is not found!");
 
-            var deletedProduct = await _productsRepository.Delete(product);
+            var deletedProduct = await _productsQueryBuilder.DeleteAsync(product);
 
             return Result.Ok(deletedProduct);
         }
@@ -131,13 +132,13 @@ public class FridgesService : IFridgesService
     {
         try
         {
-            var fridge = await _fridgesRepository.GetById(id);
-            var product = await _productsRepository.GetById(productId);
+            var fridge = await _fridgesQueryBuilder.WithId(id).SingleAsync();
+            var product = await _productsQueryBuilder.WithId(productId).SingleAsync();
 
             if (fridge == null) throw new InvalidOperationException("Fridge is not found!");
             if (product == null) throw new InvalidOperationException("Product is not found!");
 
-            var restoredProduct = await _productsRepository.Restore(product);
+            var restoredProduct = await _productsQueryBuilder.UndoDeleteAsync(product);
 
             return Result.Ok(restoredProduct);
         }
@@ -151,7 +152,14 @@ public class FridgesService : IFridgesService
     {
         try
         {
-            return Result.Ok(await _fridgesRepository.DeleteById(fridgeId));
+            var fridge = await _fridgesQueryBuilder
+                .WithId(fridgeId)
+                .WhereNotDeleted()
+                .SingleAsync();
+
+            var deletedFridge = await _fridgesQueryBuilder.DeleteAsync(fridge);
+
+            return Result.Ok();
         }
         catch (Exception ex)
         {
@@ -163,9 +171,14 @@ public class FridgesService : IFridgesService
     {
         try
         {
-            var fridge = await _fridgesRepository.RestoreById(fridgeId);
+            var fridge = await _fridgesQueryBuilder
+                .WithId(fridgeId)
+                .WhereDeleted()
+                .SingleAsync();
 
-            return Result.Ok(fridge);
+            var deletedFridge = await _fridgesQueryBuilder.UndoDeleteAsync(fridge);
+
+            return Result.Ok(deletedFridge);
         }
         catch (Exception ex)
         {

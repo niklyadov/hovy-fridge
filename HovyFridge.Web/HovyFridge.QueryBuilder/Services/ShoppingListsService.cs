@@ -1,23 +1,27 @@
 ﻿using FluentResults;
 using HovyFridge.Entity;
-using HovyFridge.QueryBuilder.Repository;
+using HovyFridge.QueryBuilder.QueryBuilders;
 
 namespace HovyFridge.QueryBuilder.Services
 {
     public class ShoppingListsService
     {
-        private ShoppingListsRepository _shoppingListsRepository;
+        private ShoppingListsQueryBuilder _shoppingListsQueryBuilder;
 
-        public ShoppingListsService(ShoppingListsRepository usersRepository)
+        public ShoppingListsService(ShoppingListsQueryBuilder usersQueryBuilder)
         {
-            _shoppingListsRepository = usersRepository;
+            _shoppingListsQueryBuilder = usersQueryBuilder;
         }
 
         public async Task<Result<List<ShoppingList>>> GetAllAsync()
         {
             try
             {
-                return Result.Ok(await _shoppingListsRepository.GetAll());
+                var shoppingLists = await _shoppingListsQueryBuilder
+                    .WhereNotDeleted()
+                    .ToListAsync();
+
+                return Result.Ok(shoppingLists);
             }
             catch (Exception ex)
             {
@@ -29,10 +33,13 @@ namespace HovyFridge.QueryBuilder.Services
         {
             try
             {
-                var user = await _shoppingListsRepository.GetById(id);
+                var shoppingList = await _shoppingListsQueryBuilder
+                    .WhereNotDeleted()
+                    .WithId(id)
+                    .SingleAsync();
 
-                if (user == null)
-                    throw new Exception("User is not found!");
+                if (shoppingList == null)
+                    throw new Exception("Shopping List is not found!");
 
                 return Result.Ok();
             }
@@ -46,9 +53,7 @@ namespace HovyFridge.QueryBuilder.Services
         {
             try
             {
-                var createdUser = await _shoppingListsRepository.Add(shoppingList);
-
-                return Result.Ok();
+                return Result.Ok(await _shoppingListsQueryBuilder.AddAsync(shoppingList));
             }
             catch (Exception ex)
             {
@@ -60,9 +65,7 @@ namespace HovyFridge.QueryBuilder.Services
         {
             try
             {
-                var createdUser = await _shoppingListsRepository.Update(shoppingList);
-
-                return Result.Ok();
+                return Result.Ok(await _shoppingListsQueryBuilder.UpdateAsync(shoppingList));
             }
             catch (Exception ex)
             {
@@ -74,9 +77,14 @@ namespace HovyFridge.QueryBuilder.Services
         {
             try
             {
-                var createdUser = await _shoppingListsRepository.DeleteById(id);
+                var shoppingListToDelete = await _shoppingListsQueryBuilder
+                    .WhereNotDeleted()
+                    .WithId(id)
+                    .SingleAsync();
 
-                return Result.Ok();
+                var deletedRecipe = await _shoppingListsQueryBuilder.DeleteAsync(shoppingListToDelete);
+
+                return Result.Ok(deletedRecipe);
             }
             catch (Exception ex)
             {
@@ -88,9 +96,14 @@ namespace HovyFridge.QueryBuilder.Services
         {
             try
             {
-                var createdUser = await _shoppingListsRepository.DeleteById(id);
+                var shoppingListToUnDelete = await _shoppingListsQueryBuilder
+                    .WhereNotDeleted()
+                    .WithId(id)
+                    .SingleAsync();
 
-                return Result.Ok();
+                var unDeletedshoppingList = await _shoppingListsQueryBuilder.UndoDeleteAsync(shoppingListToUnDelete);
+
+                return Result.Ok(unDeletedshoppingList);
             }
             catch (Exception ex)
             {

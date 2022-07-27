@@ -1,23 +1,27 @@
 ﻿using FluentResults;
 using HovyFridge.Entity;
-using HovyFridge.QueryBuilder.Repository;
+using HovyFridge.QueryBuilder.QueryBuilders;
 
 namespace HovyFridge.QueryBuilder.Services
 {
     public class RecipesService
     {
-        private RecipesRepository _recipesRepository;
+        private readonly RecipesQueryBuilder _recipesQueryBuilder;
 
-        public RecipesService(RecipesRepository usersRepository)
+        public RecipesService(RecipesQueryBuilder recipesQueryBuilder)
         {
-            _recipesRepository = usersRepository;
+            _recipesQueryBuilder = recipesQueryBuilder;
         }
 
         public async Task<Result<List<Recipe>>> GetAllAsync()
         {
             try
             {
-                return Result.Ok(await _recipesRepository.GetAll());
+                var recipesList = await _recipesQueryBuilder
+                    .WhereNotDeleted()
+                    .ToListAsync();
+
+                return Result.Ok(recipesList);
             }
             catch (Exception ex)
             {
@@ -29,10 +33,13 @@ namespace HovyFridge.QueryBuilder.Services
         {
             try
             {
-                var user = await _recipesRepository.GetById(id);
+                var recipe = await _recipesQueryBuilder
+                    .WhereNotDeleted()
+                    .WithId(id)
+                    .SingleAsync();
 
-                if (user == null)
-                    throw new Exception("User is not found!");
+                if (recipe == null)
+                    throw new Exception("Recipe is not found!");
 
                 return Result.Ok();
             }
@@ -46,9 +53,7 @@ namespace HovyFridge.QueryBuilder.Services
         {
             try
             {
-                var createdUser = await _recipesRepository.Add(recipe);
-
-                return Result.Ok();
+                return Result.Ok(await _recipesQueryBuilder.AddAsync(recipe));
             }
             catch (Exception ex)
             {
@@ -60,9 +65,7 @@ namespace HovyFridge.QueryBuilder.Services
         {
             try
             {
-                var createdUser = await _recipesRepository.Update(recipe);
-
-                return Result.Ok();
+                return Result.Ok(await _recipesQueryBuilder.UpdateAsync(recipe));
             }
             catch (Exception ex)
             {
@@ -74,9 +77,12 @@ namespace HovyFridge.QueryBuilder.Services
         {
             try
             {
-                var createdUser = await _recipesRepository.DeleteById(id);
+                var recipeToDelete = await _recipesQueryBuilder
+                    .WhereNotDeleted()
+                    .WithId(id)
+                    .SingleAsync();
 
-                return Result.Ok();
+                return Result.Ok(await _recipesQueryBuilder.DeleteAsync(recipeToDelete));
             }
             catch (Exception ex)
             {
@@ -88,9 +94,12 @@ namespace HovyFridge.QueryBuilder.Services
         {
             try
             {
-                var createdUser = await _recipesRepository.DeleteById(id);
+                var recipeToUnDelete = await _recipesQueryBuilder
+                    .WhereNotDeleted()
+                    .WithId(id)
+                    .SingleAsync();
 
-                return Result.Ok();
+                return Result.Ok(await _recipesQueryBuilder.UndoDeleteAsync(recipeToUnDelete));
             }
             catch (Exception ex)
             {
