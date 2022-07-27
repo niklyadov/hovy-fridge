@@ -82,9 +82,9 @@ namespace HovyFridge.GenericRepository.Services
                 if (accessLevel == null)
                     throw new Exception($"Fridge access level with id {accessLevelId} is not found!");
 
-                var addedAccessLevelResult = await _fridgeAccessLevelsRepository.Delete(accessLevel);
+                var deletedAccessLevelResult = await _fridgeAccessLevelsRepository.Delete(accessLevel);
 
-                return Result.Ok(addedAccessLevelResult);
+                return Result.Ok(deletedAccessLevelResult);
 
             }
             catch (Exception ex)

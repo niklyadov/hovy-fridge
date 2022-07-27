@@ -33,12 +33,12 @@ namespace HovyFridge.GenericRepository.Services
         {
             try
             {
-                var ProductSuggestion = await _productSuggestionsRepository.GetById(id);
+                var productSuggestion = await _productSuggestionsRepository.GetById(id);
 
-                if (ProductSuggestion == null)
+                if (productSuggestion == null)
                     throw new Exception("ProductSuggestion is not found!");
 
-                return Result.Ok();
+                return Result.Ok(productSuggestion);
             }
             catch (Exception ex)
             {
@@ -52,7 +52,7 @@ namespace HovyFridge.GenericRepository.Services
             {
                 var createdProductSuggestion = await _productSuggestionsRepository.Add(ProductSuggestion);
 
-                return Result.Ok();
+                return Result.Ok(createdProductSuggestion);
             }
             catch (Exception ex)
             {
@@ -64,9 +64,9 @@ namespace HovyFridge.GenericRepository.Services
         {
             try
             {
-                var createdProductSuggestion = await _productSuggestionsRepository.Update(ProductSuggestion);
+                var updatedProductSuggestion = await _productSuggestionsRepository.Update(ProductSuggestion);
 
-                return Result.Ok();
+                return Result.Ok(updatedProductSuggestion);
             }
             catch (Exception ex)
             {
@@ -78,9 +78,9 @@ namespace HovyFridge.GenericRepository.Services
         {
             try
             {
-                var createdProductSuggestion = await _productSuggestionsRepository.DeleteById(id);
+                var deletedProductSuggestion = await _productSuggestionsRepository.DeleteById(id);
 
-                return Result.Ok();
+                return Result.Ok(deletedProductSuggestion);
             }
             catch (Exception ex)
             {
@@ -92,9 +92,9 @@ namespace HovyFridge.GenericRepository.Services
         {
             try
             {
-                var createdProductSuggestion = await _productSuggestionsRepository.DeleteById(id);
+                var restoredProductSuggestion = await _productSuggestionsRepository.DeleteById(id);
 
-                return Result.Ok();
+                return Result.Ok(restoredProductSuggestion);
             }
             catch (Exception ex)
             {

@@ -9,9 +9,9 @@ namespace HovyFridge.GenericRepository.Services
     {
         private RecipesRepository _recipesRepository;
 
-        public RecipesService(RecipesRepository usersRepository)
+        public RecipesService(RecipesRepository recipesRepository)
         {
-            _recipesRepository = usersRepository;
+            _recipesRepository = recipesRepository;
         }
 
         public async Task<Result<List<Recipe>>> GetAllAsync()
@@ -33,7 +33,7 @@ namespace HovyFridge.GenericRepository.Services
                 var user = await _recipesRepository.GetById(id);
 
                 if (user == null)
-                    throw new Exception("User is not found!");
+                    throw new Exception("Recipe is not found!");
 
                 return Result.Ok();
             }
@@ -47,7 +47,7 @@ namespace HovyFridge.GenericRepository.Services
         {
             try
             {
-                var createdUser = await _recipesRepository.Add(recipe);
+                var createdRecipe = await _recipesRepository.Add(recipe);
 
                 return Result.Ok();
             }
@@ -61,7 +61,7 @@ namespace HovyFridge.GenericRepository.Services
         {
             try
             {
-                var createdUser = await _recipesRepository.Update(recipe);
+                var createdRecipe = await _recipesRepository.Update(recipe);
 
                 return Result.Ok();
             }
@@ -75,7 +75,7 @@ namespace HovyFridge.GenericRepository.Services
         {
             try
             {
-                var createdUser = await _recipesRepository.DeleteById(id);
+                var createdRecipe = await _recipesRepository.DeleteById(id);
 
                 return Result.Ok();
             }
@@ -89,7 +89,7 @@ namespace HovyFridge.GenericRepository.Services
         {
             try
             {
-                var createdUser = await _recipesRepository.DeleteById(id);
+                var createdRecipe = await _recipesRepository.DeleteById(id);
 
                 return Result.Ok();
             }

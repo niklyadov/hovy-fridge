@@ -55,7 +55,7 @@ namespace HovyFridge.QueryBuilder.Services
             {
                 var createdProductSuggestion = await _productSuggestionsQueryBuilder.AddAsync(ProductSuggestion);
 
-                return Result.Ok();
+                return Result.Ok(createdProductSuggestion);
             }
             catch (Exception ex)
             {
@@ -67,9 +67,9 @@ namespace HovyFridge.QueryBuilder.Services
         {
             try
             {
-                var createdProductSuggestion = await _productSuggestionsQueryBuilder.UpdateAsync(ProductSuggestion);
+                var updatedProductSuggestion = await _productSuggestionsQueryBuilder.UpdateAsync(ProductSuggestion);
 
-                return Result.Ok();
+                return Result.Ok(updatedProductSuggestion);
             }
             catch (Exception ex)
             {
@@ -82,9 +82,9 @@ namespace HovyFridge.QueryBuilder.Services
             try
             {
                 var suggestionToDelete = await _productSuggestionsQueryBuilder.WhereNotDeleted().WithId(id).SingleAsync();
-                var createdProductSuggestion = await _productSuggestionsQueryBuilder.DeleteAsync(suggestionToDelete);
+                var deletedProductSuggestion = await _productSuggestionsQueryBuilder.DeleteAsync(suggestionToDelete);
 
-                return Result.Ok();
+                return Result.Ok(deletedProductSuggestion);
             }
             catch (Exception ex)
             {
@@ -96,10 +96,10 @@ namespace HovyFridge.QueryBuilder.Services
         {
             try
             {
-                var suggestionToUnDelete = await _productSuggestionsQueryBuilder.WhereDeleted().WithId(id).SingleAsync();
-                var createdProductSuggestion = await _productSuggestionsQueryBuilder.UndoDeleteAsync(suggestionToUnDelete);
+                var suggestionToRestore = await _productSuggestionsQueryBuilder.WhereDeleted().WithId(id).SingleAsync();
+                var restoredProductSuggestion = await _productSuggestionsQueryBuilder.UndoDeleteAsync(suggestionToRestore);
 
-                return Result.Ok();
+                return Result.Ok(restoredProductSuggestion);
             }
             catch (Exception ex)
             {

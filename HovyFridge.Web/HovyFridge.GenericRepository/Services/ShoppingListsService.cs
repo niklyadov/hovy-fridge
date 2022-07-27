@@ -9,9 +9,9 @@ namespace HovyFridge.GenericRepository.Services
     {
         private ShoppingListsRepository _shoppingListsRepository;
 
-        public ShoppingListsService(ShoppingListsRepository usersRepository)
+        public ShoppingListsService(ShoppingListsRepository shoppingListsRepository)
         {
-            _shoppingListsRepository = usersRepository;
+            _shoppingListsRepository = shoppingListsRepository;
         }
 
         public async Task<Result<List<ShoppingList>>> GetAllAsync()
@@ -33,7 +33,7 @@ namespace HovyFridge.GenericRepository.Services
                 var user = await _shoppingListsRepository.GetById(id);
 
                 if (user == null)
-                    throw new Exception("User is not found!");
+                    throw new Exception("ShoppingList is not found!");
 
                 return Result.Ok();
             }
@@ -47,7 +47,7 @@ namespace HovyFridge.GenericRepository.Services
         {
             try
             {
-                var createdUser = await _shoppingListsRepository.Add(shoppingList);
+                var createdShoppingList = await _shoppingListsRepository.Add(shoppingList);
 
                 return Result.Ok();
             }
@@ -61,7 +61,7 @@ namespace HovyFridge.GenericRepository.Services
         {
             try
             {
-                var createdUser = await _shoppingListsRepository.Update(shoppingList);
+                var createdShoppingList = await _shoppingListsRepository.Update(shoppingList);
 
                 return Result.Ok();
             }
@@ -75,7 +75,7 @@ namespace HovyFridge.GenericRepository.Services
         {
             try
             {
-                var createdUser = await _shoppingListsRepository.DeleteById(id);
+                var createdShoppingList = await _shoppingListsRepository.DeleteById(id);
 
                 return Result.Ok();
             }
@@ -89,7 +89,7 @@ namespace HovyFridge.GenericRepository.Services
         {
             try
             {
-                var createdUser = await _shoppingListsRepository.DeleteById(id);
+                var createdShoppingList = await _shoppingListsRepository.DeleteById(id);
 
                 return Result.Ok();
             }

@@ -96,14 +96,15 @@ namespace HovyFridge.QueryBuilder.Services
         {
             try
             {
-                var shoppingListToUnDelete = await _shoppingListsQueryBuilder
+                var shoppingListToRestore = await _shoppingListsQueryBuilder
                     .WhereNotDeleted()
                     .WithId(id)
                     .SingleAsync();
 
-                var unDeletedshoppingList = await _shoppingListsQueryBuilder.UndoDeleteAsync(shoppingListToUnDelete);
+                var restoredShoppingList = await _shoppingListsQueryBuilder
+                    .UndoDeleteAsync(shoppingListToRestore);
 
-                return Result.Ok(unDeletedshoppingList);
+                return Result.Ok(restoredShoppingList);
             }
             catch (Exception ex)
             {
