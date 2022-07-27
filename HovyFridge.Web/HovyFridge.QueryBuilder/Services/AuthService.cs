@@ -1,6 +1,6 @@
 ﻿using FluentResults;
 using HovyFridge.Entity;
-using HovyFridge.QueryBuilder.Repository;
+using HovyFridge.QueryBuilder.QueryBuilders;
 using HovyFridge.Services;
 using System.IdentityModel.Tokens.Jwt;
 
@@ -10,9 +10,9 @@ public class AuthService : IAuthService
 {
     private int? _userId = null;
 
-    private readonly UsersRepository _usersRepostiory;
+    private readonly UsersQueryBuilder _usersRepostiory;
 
-    public AuthService(UsersRepository usersRepostiory)
+    public AuthService(UsersQueryBuilder usersRepostiory)
     {
         _usersRepostiory = usersRepostiory;
     }
@@ -40,7 +40,9 @@ public class AuthService : IAuthService
             if (!_userId.HasValue || _userId.Value == 0)
                 throw new Exception("User id is not assigned!");
 
-            var user = await _usersRepostiory.GetById(_userId.Value);
+            var user = await _usersRepostiory
+                .WithId(_userId.Value)
+                .FirstOrDefaultAsync();
 
             if (user == null)
                 throw new Exception("User is not found!");

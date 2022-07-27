@@ -23,7 +23,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\HovyFridge.DAO\HovyFridge.DAO.csproj" />
     <ProjectReference Include="..\HovyFridge.GenericRepository\HovyFridge.GenericRepository.csproj" />
     <ProjectReference Include="..\HovyFridge.QueryBuilder\HovyFridge.QueryBuilder.csproj" />
     <ProjectReference Include="..\HovyFridge\HovyFridge.csproj" />

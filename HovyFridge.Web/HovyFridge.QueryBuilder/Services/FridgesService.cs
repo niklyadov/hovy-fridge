@@ -1,7 +1,6 @@
 ﻿using FluentResults;
 using HovyFridge.Entity;
 using HovyFridge.QueryBuilder.QueryBuilders;
-using HovyFridge.QueryBuilder.Repository;
 using HovyFridge.Services;
 
 namespace HovyFridge.QueryBuilder.Services;
@@ -10,7 +9,7 @@ public class FridgesService : IFridgesService
 {
     private readonly FridgesQueryBuilder _fridgesQueryBuilder;
     private readonly ProductsQueryBuilder _productsQueryBuilder;
-    public FridgesService(FridgesQueryBuilder fridgesQueryBuilder, ProductsQueryBuilder productsQueryBuilder, FridgeAccessLevelsRepository fridgeAccessLevelsRepository)
+    public FridgesService(FridgesQueryBuilder fridgesQueryBuilder, ProductsQueryBuilder productsQueryBuilder)
     {
         _fridgesQueryBuilder = fridgesQueryBuilder;
         _productsQueryBuilder = productsQueryBuilder;
@@ -81,10 +80,6 @@ public class FridgesService : IFridgesService
         {
             var fridge = await _fridgesQueryBuilder.WithId(id).SingleAsync();
             var product = await _productsQueryBuilder.WithId(productId).SingleAsync();
-
-            if (fridge == null) throw new InvalidOperationException("Fridge is not found!");
-            if (product == null) throw new InvalidOperationException("Product is not found!");
-
             var newProduct = new Product()
             {
                 FridgeId = id,
@@ -114,10 +109,6 @@ public class FridgesService : IFridgesService
         {
             var fridge = await _fridgesQueryBuilder.WithId(id).SingleAsync();
             var product = await _productsQueryBuilder.WithId(productId).SingleAsync();
-
-            if (fridge == null) throw new InvalidOperationException("Fridge is not found!");
-            if (product == null) throw new InvalidOperationException("Product is not found!");
-
             var deletedProduct = await _productsQueryBuilder.DeleteAsync(product);
 
             return Result.Ok(deletedProduct);
@@ -134,10 +125,6 @@ public class FridgesService : IFridgesService
         {
             var fridge = await _fridgesQueryBuilder.WithId(id).SingleAsync();
             var product = await _productsQueryBuilder.WithId(productId).SingleAsync();
-
-            if (fridge == null) throw new InvalidOperationException("Fridge is not found!");
-            if (product == null) throw new InvalidOperationException("Product is not found!");
-
             var restoredProduct = await _productsQueryBuilder.UndoDeleteAsync(product);
 
             return Result.Ok(restoredProduct);

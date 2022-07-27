@@ -1,5 +1,5 @@
 using HovyFridge;
-using HovyFridge.GenericRepository;
+using HovyFridge.QueryBuilder;
 using HovyFridge.Services.Auth;
 using Microsoft.EntityFrameworkCore;
 
@@ -8,12 +8,14 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.Configure<RouteOptions>(options => options.LowercaseUrls = true);
 
 builder.Services.AddDbContext<ApplicationContext>(options =>
-    options.UseNpgsql(builder.Configuration.GetConnectionString("Default"), 
+    options.UseNpgsql(builder.Configuration.GetConnectionString("Default"),
         b => b.MigrationsAssembly("HovyFridge.Api")));
 
 
 builder.Services.AddScoped<JwtTokensService>();
-builder.Services.UseGenericRepositoryPattern();
+
+//builder.Services.UseGenericRepositoryPattern();
+builder.Services.UseQueryBuilderPattern();
 
 builder.Services.AddControllers();
 //builder.Services.AddApiVersioning(cfg =>

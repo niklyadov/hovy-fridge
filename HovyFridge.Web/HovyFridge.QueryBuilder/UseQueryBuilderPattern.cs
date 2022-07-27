@@ -1,5 +1,4 @@
 ﻿using HovyFridge.QueryBuilder.QueryBuilders;
-using HovyFridge.QueryBuilder.Repository;
 using HovyFridge.QueryBuilder.Services;
 using HovyFridge.Services;
 using Microsoft.Extensions.DependencyInjection;
@@ -10,15 +9,6 @@ namespace HovyFridge.QueryBuilder
     {
         public static void UseQueryBuilderPattern(this IServiceCollection services)
         {
-
-            // Generic Repositories.
-            services.AddScoped<FridgesRepository>();
-            services.AddScoped<FridgeAccessLevelsRepository>();
-            services.AddScoped<ProductsRepository>();
-            services.AddScoped<ProductSuggestionsRepository>();
-            services.AddScoped<RecipesRepository>();
-            services.AddScoped<ShoppingListsRepository>();
-            services.AddScoped<UsersRepository>();
 
             // Query Builders.
             services.AddScoped<FridgesQueryBuilder>();
