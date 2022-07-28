@@ -58,6 +58,7 @@ namespace HovyFridge.GenericRepository.Repository.Abstract
                 throw new Exception($"Entity with id {id} is not found!");
 
             entity.IsDeleted = true;
+            entity.DeletedDateTime = DateTime.UtcNow;
 
             return await Update(entity);
         }
@@ -68,6 +69,7 @@ namespace HovyFridge.GenericRepository.Repository.Abstract
                 throw new ArgumentNullException($"Entity with was null");
 
             entity.IsDeleted = true;
+            entity.DeletedDateTime = DateTime.UtcNow;
 
             return await Update(entity);
         }
@@ -80,6 +82,7 @@ namespace HovyFridge.GenericRepository.Repository.Abstract
                 throw new Exception($"Entity with id {id} is not found!");
 
             entity.IsDeleted = false;
+            entity.DeletedDateTime = null;
 
             return await Update(entity);
         }
@@ -90,6 +93,7 @@ namespace HovyFridge.GenericRepository.Repository.Abstract
                 throw new ArgumentNullException($"Entity with was null");
 
             entity.IsDeleted = false;
+            entity.DeletedDateTime = null;
 
             return await Update(entity);
         }

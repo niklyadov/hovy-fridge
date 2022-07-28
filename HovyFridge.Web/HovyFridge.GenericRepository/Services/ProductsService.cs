@@ -7,12 +7,10 @@ namespace HovyFridge.GenericRepository.Services;
 
 public class ProductsService : IProductsService
 {
-    private readonly FridgesRepository _fridgesRepository;
     private readonly ProductsRepository _productsRepository;
 
-    public ProductsService(ApplicationContext applicationContext, FridgesRepository fridgesRepository, ProductsRepository productsRepository)
+    public ProductsService(ProductsRepository productsRepository)
     {
-        _fridgesRepository = fridgesRepository;
         _productsRepository = productsRepository;
     }
 
