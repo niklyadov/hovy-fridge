@@ -14,12 +14,14 @@ namespace HovyFridge.GenericRepository.Repository
         public override Task<List<Fridge>> GetAll(bool ignoreDeleted = true)
         {
             return _dbContext.Fridges.Include(f => f.Products)
-                .Where(f => !ignoreDeleted || !f.IsDeleted).Select(o => new Fridge()
+                .Where(f => !ignoreDeleted || !f.IsDeleted)
+                .Select(o => new Fridge()
                 {
                     Id = o.Id,
                     IsDeleted = o.IsDeleted,
                     Name = o.Name,
-                    Products = new List<Product>()
+                    Products = new List<Product>(), 
+                    ProductsAmount = o.Products.Count
                 }).ToListAsync();
         }
 

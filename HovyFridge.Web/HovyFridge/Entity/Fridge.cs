@@ -11,7 +11,7 @@ namespace HovyFridge.Entity
         public List<Product> Products { get; set; } = new List<Product>();
 
         [NotMapped]
-        public int ProductsAmount => Products.Count;
+        public int ProductsAmount { get; set; }
         public long? OwnerId { get; set; }
     }
 }
