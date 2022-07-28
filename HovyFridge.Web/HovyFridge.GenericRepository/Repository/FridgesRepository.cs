@@ -19,8 +19,7 @@ namespace HovyFridge.GenericRepository.Repository
                     Id = o.Id,
                     IsDeleted = o.IsDeleted,
                     Name = o.Name,
-                    Products = new List<Product>(),
-                    ProductsAmount = o.Products.Where(p => !p.IsDeleted).ToList().Count
+                    Products = new List<Product>()
                 }).ToListAsync();
         }
 
