@@ -8,12 +8,21 @@ namespace HovyFridge.QueryBuilder.Services
 {
     public class FridgeAccessLevelsService : IFridgeAccessLevelsService
     {
-        private readonly FridgeAccessLevelsQueryBuilder _fridgeAccessLevelsQueryBuilder;
-        private readonly FridgesQueryBuilder _fridgesQueryBuilder;
-        public FridgeAccessLevelsService(IServiceProvider serviceProvider)
+        private readonly ApplicationContext _context;
+
+        private FridgesQueryBuilder _fridgesQueryBuilder
         {
-            _fridgeAccessLevelsQueryBuilder = serviceProvider.GetRequiredService<FridgeAccessLevelsQueryBuilder>();
-            _fridgesQueryBuilder = serviceProvider.GetRequiredService<FridgesQueryBuilder>();
+            get => new FridgesQueryBuilder(_context);
+        }
+
+        private FridgeAccessLevelsQueryBuilder _fridgeAccessLevelsQueryBuilder
+        {
+            get => new FridgeAccessLevelsQueryBuilder(_context);
+        }
+
+        public FridgeAccessLevelsService(ApplicationContext context)
+        {
+            _context = context;
         }
 
         public async Task<Result<List<FridgeAccessLevel>>> GetByFridgeIdAsync(long fridgeId)

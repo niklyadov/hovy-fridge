@@ -10,11 +10,16 @@ namespace HovyFridge.QueryBuilder.Services
 {
     public class ProductSuggestionsService : IProductSuggestionsService
     {
-        private readonly ProductSuggestionsQueryBuilder _productSuggestionsQueryBuilder;
+        private readonly ApplicationContext _context;
 
-        public ProductSuggestionsService(ProductSuggestionsQueryBuilder productSuggestionsQueryBuilder)
+        private ProductSuggestionsQueryBuilder _productSuggestionsQueryBuilder
         {
-            _productSuggestionsQueryBuilder = productSuggestionsQueryBuilder;
+            get => new ProductSuggestionsQueryBuilder(_context);
+        }
+
+        public ProductSuggestionsService(ApplicationContext context)
+        {
+            _context = context;
         }
 
         public async Task<Result<List<ProductSuggestion>>> GetAllAsync()

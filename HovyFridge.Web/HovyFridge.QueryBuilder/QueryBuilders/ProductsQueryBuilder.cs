@@ -9,7 +9,7 @@ public class ProductsQueryBuilder : QueryBuilder<Product, ApplicationContext>
     {
     }
 
-    public QueryBuilder<Product, ApplicationContext> WithBarcode(string? barcode)
+    public ProductsQueryBuilder WithBarcode(string? barcode)
     {
         Query = Query.Where(p => !string.IsNullOrEmpty(p.BarCode));
 
@@ -19,14 +19,14 @@ public class ProductsQueryBuilder : QueryBuilder<Product, ApplicationContext>
         return this;
     }
 
-    public QueryBuilder<Product, ApplicationContext> WithOwnerId(long ownerUserId)
+    public ProductsQueryBuilder WithOwnerId(long ownerUserId)
     {
         Query = Query.Where(p => p.OwnerId == ownerUserId);
 
         return this;
     }
 
-    public QueryBuilder<Product, ApplicationContext> WithOwner(User ownerUser)
+    public ProductsQueryBuilder WithOwner(User ownerUser)
     {
         if (ownerUser.Id == 0)
             throw new InvalidOperationException("Valid user owner id is not provided");

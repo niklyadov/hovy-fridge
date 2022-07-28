@@ -6,11 +6,16 @@ namespace HovyFridge.QueryBuilder.Services
 {
     public class RecipesService
     {
-        private readonly RecipesQueryBuilder _recipesQueryBuilder;
+        private readonly ApplicationContext _context;
 
-        public RecipesService(RecipesQueryBuilder recipesQueryBuilder)
+        private RecipesQueryBuilder _recipesQueryBuilder
         {
-            _recipesQueryBuilder = recipesQueryBuilder;
+            get => new RecipesQueryBuilder(_context);
+        }
+
+        public RecipesService(ApplicationContext context)
+        {
+            _context = context;
         }
 
         public async Task<Result<List<Recipe>>> GetAllAsync()

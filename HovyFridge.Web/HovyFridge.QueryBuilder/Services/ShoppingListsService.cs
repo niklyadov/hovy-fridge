@@ -6,11 +6,16 @@ namespace HovyFridge.QueryBuilder.Services
 {
     public class ShoppingListsService
     {
-        private ShoppingListsQueryBuilder _shoppingListsQueryBuilder;
+        private readonly ApplicationContext _context;
 
-        public ShoppingListsService(ShoppingListsQueryBuilder usersQueryBuilder)
+        private ShoppingListsQueryBuilder _shoppingListsQueryBuilder
         {
-            _shoppingListsQueryBuilder = usersQueryBuilder;
+            get => new ShoppingListsQueryBuilder(_context);
+        }
+
+        public ShoppingListsService(ApplicationContext context)
+        {
+            _context = context;
         }
 
         public async Task<Result<List<ShoppingList>>> GetAllAsync()

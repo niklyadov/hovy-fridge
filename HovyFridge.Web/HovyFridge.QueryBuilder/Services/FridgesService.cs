@@ -7,19 +7,29 @@ namespace HovyFridge.QueryBuilder.Services;
 
 public class FridgesService : IFridgesService
 {
-    private readonly FridgesQueryBuilder _fridgesQueryBuilder;
-    private readonly ProductsQueryBuilder _productsQueryBuilder;
-    public FridgesService(FridgesQueryBuilder fridgesQueryBuilder, ProductsQueryBuilder productsQueryBuilder)
+    private readonly ApplicationContext _context;
+
+    private FridgesQueryBuilder _fridgesQueryBuilder { 
+        get => new FridgesQueryBuilder(_context); 
+    }
+
+    private ProductsQueryBuilder _productsQueryBuilder { 
+        get => new ProductsQueryBuilder(_context); 
+    }
+
+    public FridgesService (ApplicationContext context)
     {
-        _fridgesQueryBuilder = fridgesQueryBuilder;
-        _productsQueryBuilder = productsQueryBuilder;
+        _context = context;
     }
 
     public async Task<Result<Fridge>> GetByIdAsync(long id)
     {
         try
         {
-            var fridge = await _fridgesQueryBuilder.WithId(id).SingleAsync();
+            var fridge = await _fridgesQueryBuilder
+                .IncludeProducts()
+                .WithId(id)
+                .FirstOrDefaultAsync();
 
             if (fridge == null)
                 return Result.Fail($"Fridge with id {id} is not found!");
@@ -78,8 +88,14 @@ public class FridgesService : IFridgesService
     {
         try
         {
-            var fridge = await _fridgesQueryBuilder.WithId(id).SingleAsync();
-            var product = await _productsQueryBuilder.WithId(productId).SingleAsync();
+            var fridge = await _fridgesQueryBuilder
+                .WithId(id)
+                .SingleAsync();
+
+            var product = await _productsQueryBuilder
+                .WithId(productId)
+                .SingleAsync();
+
             var newProduct = new Product()
             {
                 FridgeId = id,
@@ -141,12 +157,12 @@ public class FridgesService : IFridgesService
         {
             var fridge = await _fridgesQueryBuilder
                 .WithId(fridgeId)
-                .WhereNotDeleted()
+                //.WhereNotDeleted()
                 .SingleAsync();
 
             var deletedFridge = await _fridgesQueryBuilder.DeleteAsync(fridge);
 
-            return Result.Ok();
+            return Result.Ok(deletedFridge);
         }
         catch (Exception ex)
         {
@@ -160,12 +176,13 @@ public class FridgesService : IFridgesService
         {
             var fridge = await _fridgesQueryBuilder
                 .WithId(fridgeId)
-                .WhereDeleted()
+                //.WhereDeleted()
                 .SingleAsync();
 
-            var deletedFridge = await _fridgesQueryBuilder.UndoDeleteAsync(fridge);
+            var restoredFridge = await _fridgesQueryBuilder
+                .UndoDeleteAsync(fridge);
 
-            return Result.Ok(deletedFridge);
+            return Result.Ok(restoredFridge);
         }
         catch (Exception ex)
         {

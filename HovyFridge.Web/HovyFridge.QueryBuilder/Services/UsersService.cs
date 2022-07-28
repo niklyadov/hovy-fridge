@@ -7,11 +7,16 @@ namespace HovyFridge.QueryBuilder.Services
 {
     public class UsersService : IUsersService
     {
-        private UsersQueryBuilder _usersQueryBuilder;
+        private readonly ApplicationContext _context;
 
-        public UsersService(UsersQueryBuilder usersQueryBuilder)
+        private UsersQueryBuilder _usersQueryBuilder
         {
-            _usersQueryBuilder = usersQueryBuilder;
+            get => new UsersQueryBuilder(_context);
+        }
+
+        public UsersService(ApplicationContext context)
+        {
+            _context = context;
         }
 
         public async Task<Result<List<User>>> GetAllAsync()
